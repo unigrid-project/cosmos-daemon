@@ -1,0 +1,7 @@
+syntax = "proto3";
+package cosmosdaemon.cosmosdaemon;
+
+option go_package = "cosmos-daemon/x/cosmosdaemon/types";
+
+// Msg defines the Msg service.
+service Msg {}
