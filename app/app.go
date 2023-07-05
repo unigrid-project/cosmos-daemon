@@ -113,6 +113,7 @@ import (
 	cosmosdaemonmodule "cosmos-daemon/x/cosmosdaemon"
 	cosmosdaemonmodulekeeper "cosmos-daemon/x/cosmosdaemon/keeper"
 	cosmosdaemonmoduletypes "cosmos-daemon/x/cosmosdaemon/types"
+
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	appparams "cosmos-daemon/app/params"
@@ -120,7 +121,7 @@ import (
 )
 
 const (
-	AccountAddressPrefix = "cosmos"
+	AccountAddressPrefix = "unigrid"
 	Name                 = "cosmos-daemon"
 )
 
