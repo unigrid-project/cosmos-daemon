@@ -110,13 +110,14 @@ import (
 	ibctm "github.com/cosmos/ibc-go/v7/modules/light-clients/07-tendermint"
 	"github.com/spf13/cast"
 
-	cosmosdaemonmodule "cosmos-daemon/x/cosmosdaemon"
-	cosmosdaemonmodulekeeper "cosmos-daemon/x/cosmosdaemon/keeper"
-	cosmosdaemonmoduletypes "cosmos-daemon/x/cosmosdaemon/types"
+	cosmosdaemonmodule "github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon"
+	cosmosdaemonmodulekeeper "github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/keeper"
+	cosmosdaemonmoduletypes "github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/types"
+
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
-	appparams "cosmos-daemon/app/params"
-	"cosmos-daemon/docs"
+	appparams "github.com/unigrid-project/cosmos-daemon/app/params"
+	"github.com/unigrid-project/cosmos-daemon/docs"
 )
 
 const (

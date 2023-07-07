@@ -1,4 +1,4 @@
-module cosmos-daemon
+module github.com/unigrid-project/cosmos-daemon
 
 go 1.19
 

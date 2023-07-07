@@ -3,11 +3,11 @@ package cosmosdaemon_test
 import (
 	"testing"
 
-	keepertest "cosmos-daemon/testutil/keeper"
-	"cosmos-daemon/testutil/nullify"
-	"cosmos-daemon/x/cosmosdaemon"
-	"cosmos-daemon/x/cosmosdaemon/types"
 	"github.com/stretchr/testify/require"
+	keepertest "github.com/unigrid-project/cosmos-daemon/testutil/keeper"
+	"github.com/unigrid-project/cosmos-daemon/testutil/nullify"
+	"github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon"
+	"github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/types"
 )
 
 func TestGenesis(t *testing.T) {

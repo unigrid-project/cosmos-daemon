@@ -1,8 +1,8 @@
 package keeper
 
 import (
-	"cosmos-daemon/x/cosmosdaemon/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/types"
 )
 
 // GetParams get all parameters as types.Params

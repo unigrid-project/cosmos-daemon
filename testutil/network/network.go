@@ -18,7 +18,7 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/stretchr/testify/require"
 
-	"cosmos-daemon/app"
+	"github.com/unigrid-project/cosmos-daemon/app"
 )
 
 type (

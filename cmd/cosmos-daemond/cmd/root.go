@@ -36,10 +36,11 @@ import (
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
+
 	// this line is used by starport scaffolding # root/moduleImport
 
-	"cosmos-daemon/app"
-	appparams "cosmos-daemon/app/params"
+	"github.com/unigrid-project/cosmos-daemon/app"
+	appparams "github.com/unigrid-project/cosmos-daemon/app/params"
 )
 
 // NewRootCmd creates a new root command for a Cosmos SDK application

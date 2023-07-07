@@ -3,9 +3,9 @@ package keeper_test
 import (
 	"testing"
 
-	testkeeper "cosmos-daemon/testutil/keeper"
-	"cosmos-daemon/x/cosmosdaemon/types"
 	"github.com/stretchr/testify/require"
+	testkeeper "github.com/unigrid-project/cosmos-daemon/testutil/keeper"
+	"github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/types"
 )
 
 func TestGetParams(t *testing.T) {

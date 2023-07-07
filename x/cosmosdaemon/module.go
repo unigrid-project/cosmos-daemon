@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+
 	// this line is used by starport scaffolding # 1
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -11,9 +12,10 @@ import (
 
 	abci "github.com/cometbft/cometbft/abci/types"
 
-	"cosmos-daemon/x/cosmosdaemon/client/cli"
-	"cosmos-daemon/x/cosmosdaemon/keeper"
-	"cosmos-daemon/x/cosmosdaemon/types"
+	"github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/client/cli"
+	"github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/keeper"
+	"github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/types"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"

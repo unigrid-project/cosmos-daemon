@@ -10,7 +10,7 @@ import (
 	// "github.com/cosmos/cosmos-sdk/client/flags"
 	// sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"cosmos-daemon/x/cosmosdaemon/types"
+	"github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/types"
 )
 
 // GetQueryCmd returns the cli query commands for this module
