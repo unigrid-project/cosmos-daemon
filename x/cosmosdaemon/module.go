@@ -24,8 +24,9 @@ import (
 )
 
 var (
-	_ module.AppModule      = AppModule{}
-	_ module.AppModuleBasic = AppModuleBasic{}
+	_           module.AppModule      = AppModule{}
+	_           module.AppModuleBasic = AppModuleBasic{}
+	paramsCache                       = &types.ParamCache{}
 )
 
 // ----------------------------------------------------------------------------
@@ -104,6 +105,8 @@ func NewAppModule(
 	accountKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
 ) AppModule {
+	paramsCache = types.GetCache()
+
 	return AppModule{
 		AppModuleBasic: NewAppModuleBasic(cdc),
 		keeper:         keeper,
@@ -142,7 +145,28 @@ func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.Raw
 func (AppModule) ConsensusVersion() uint64 { return 1 }
 
 // BeginBlock contains the logic that is automatically triggered at the beginning of each block
-func (am AppModule) BeginBlock(_ sdk.Context, _ abci.RequestBeginBlock) {}
+func (am AppModule) BeginBlock(ctx sdk.Context, _ abci.RequestBeginBlock) {
+	ugdParams, err := paramsCache.GetUgdParams()
+
+	if err == nil {
+		a := types.StringToUint(ugdParams.Amount)
+		mb := types.StringToUint(ugdParams.MaxBytes)
+		mg := types.StringToUint(ugdParams.MaxGas)
+		mr := types.StringToUint(ugdParams.MaxRate)
+		r := types.StringToUint(ugdParams.Rate)
+
+		params := types.Params{
+			Denom:    ugdParams.Denom,
+			Amount:   a,
+			Rate:     r,
+			MaxRate:  mr,
+			MaxBytes: mb,
+			MaxGas:   mg,
+		}
+		am.keeper.SetParams(ctx, params)
+	}
+
+}
 
 // EndBlock contains the logic that is automatically triggered at the end of each block
 func (am AppModule) EndBlock(_ sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
