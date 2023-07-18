@@ -3,10 +3,9 @@ package cosmosdaemon.cosmosdaemon;
 
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "cosmos/base/query/v1beta1/pagination.proto";
 import "cosmosdaemon/cosmosdaemon/params.proto";
 
-option go_package = "cosmos-daemon/x/cosmosdaemon/types";
+option go_package = "github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/types";
 
 // Query defines the gRPC querier service.
 service Query {

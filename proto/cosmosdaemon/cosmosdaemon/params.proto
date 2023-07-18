@@ -3,10 +3,17 @@ package cosmosdaemon.cosmosdaemon;
 
 import "gogoproto/gogo.proto";
 
-option go_package = "cosmos-daemon/x/cosmosdaemon/types";
+option go_package = "github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/types";
 
 // Params defines the parameters for the module.
 message Params {
   option (gogoproto.goproto_stringer) = false;
-  
+  option (gogoproto.equal) = true;
+
+  string denom = 1 ;
+  uint64 amount = 2 ;
+  uint64 maxRate = 3 ;
+  uint64 rate = 4 ;
+  uint64 maxBytes = 5;
+  uint64 maxGas = 6;
 }

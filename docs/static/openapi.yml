@@ -34936,6 +34936,24 @@ paths:
               params:
                 description: params holds all the parameters of this module.
                 type: object
+                properties:
+                  denom:
+                    type: string
+                  amount:
+                    type: string
+                    format: uint64
+                  maxRate:
+                    type: string
+                    format: uint64
+                  rate:
+                    type: string
+                    format: uint64
+                  maxBytes:
+                    type: string
+                    format: uint64
+                  maxGas:
+                    type: string
+                    format: uint64
             description: >-
               QueryParamsResponse is response type for the Query/Params RPC
               method.
@@ -70569,6 +70587,24 @@ definitions:
     description: Period defines a length of time and amount of coins that will vest.
   cosmosdaemon.cosmosdaemon.Params:
     type: object
+    properties:
+      denom:
+        type: string
+      amount:
+        type: string
+        format: uint64
+      maxRate:
+        type: string
+        format: uint64
+      rate:
+        type: string
+        format: uint64
+      maxBytes:
+        type: string
+        format: uint64
+      maxGas:
+        type: string
+        format: uint64
     description: Params defines the parameters for the module.
   cosmosdaemon.cosmosdaemon.QueryParamsResponse:
     type: object
@@ -70576,6 +70612,24 @@ definitions:
       params:
         description: params holds all the parameters of this module.
         type: object
+        properties:
+          denom:
+            type: string
+          amount:
+            type: string
+            format: uint64
+          maxRate:
+            type: string
+            format: uint64
+          rate:
+            type: string
+            format: uint64
+          maxBytes:
+            type: string
+            format: uint64
+          maxGas:
+            type: string
+            format: uint64
     description: QueryParamsResponse is response type for the Query/Params RPC method.
   ibc.applications.interchain_accounts.controller.v1.MsgRegisterInterchainAccountResponse:
     type: object

@@ -14,6 +14,11 @@ const (
 	MemStoreKey = "mem_cosmosdaemon"
 )
 
+var (
+	// ParamsKey is the prefix for params key
+	ParamsKey = []byte{0x00}
+)
+
 func KeyPrefix(p string) []byte {
 	return []byte(p)
 }
