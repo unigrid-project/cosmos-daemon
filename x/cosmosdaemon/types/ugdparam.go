@@ -57,7 +57,7 @@ type ParamCache struct {
 }
 
 const (
-	cacheUpdateInterval = 1 * time.Minute
+	cacheUpdateInterval = 10 * time.Minute
 )
 
 var pcg = NewCache()
