@@ -71,9 +71,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/group"
 	groupkeeper "github.com/cosmos/cosmos-sdk/x/group/keeper"
 	groupmodule "github.com/cosmos/cosmos-sdk/x/group/module"
-	"github.com/cosmos/cosmos-sdk/x/mint"
-	mintkeeper "github.com/cosmos/cosmos-sdk/x/mint/keeper"
-	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	"github.com/cosmos/cosmos-sdk/x/params"
 	paramsclient "github.com/cosmos/cosmos-sdk/x/params/client"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
@@ -109,10 +106,18 @@ import (
 	solomachine "github.com/cosmos/ibc-go/v7/modules/light-clients/06-solomachine"
 	ibctm "github.com/cosmos/ibc-go/v7/modules/light-clients/07-tendermint"
 	"github.com/spf13/cast"
+	mintmodule "github.com/unigrid-project/cosmos-sdk-ugdmint/x/ugdmint"
+	mintkeeper "github.com/unigrid-project/cosmos-sdk-ugdmint/x/ugdmint/keeper"
+	minttypes "github.com/unigrid-project/cosmos-sdk-ugdmint/x/ugdmint/types"
 
 	cosmosdaemonmodule "cosmos-daemon/x/cosmosdaemon"
 	cosmosdaemonmodulekeeper "cosmos-daemon/x/cosmosdaemon/keeper"
 	cosmosdaemonmoduletypes "cosmos-daemon/x/cosmosdaemon/types"
+
+	ugdvestingmodule "github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting/x/ugdvesting"
+	ugdvestingante "github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting/x/ugdvesting/ante"
+	ugdvestingmodulekeeper "github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting/x/ugdvesting/keeper"
+	ugdvestingmoduletypes "github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting/x/ugdvesting/types"
 
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
@@ -122,7 +127,7 @@ import (
 
 const (
 	AccountAddressPrefix = "unigrid"
-	Name                 = "cosmos-daemon"
+	Name                 = "UnigridChain"
 )
 
 // this line is used by starport scaffolding # stargate/wasm/app/enabledProposals
@@ -157,7 +162,7 @@ var (
 		bank.AppModuleBasic{},
 		capability.AppModuleBasic{},
 		staking.AppModuleBasic{},
-		mint.AppModuleBasic{},
+		mintmodule.AppModuleBasic{},
 		distr.AppModuleBasic{},
 		gov.NewAppModuleBasic(getGovProposalHandlers()),
 		params.AppModuleBasic{},
@@ -175,6 +180,7 @@ var (
 		vesting.AppModuleBasic{},
 		consensus.AppModuleBasic{},
 		cosmosdaemonmodule.AppModuleBasic{},
+		ugdvestingmodule.AppModuleBasic{},
 		// this line is used by starport scaffolding # stargate/app/moduleBasic
 	)
 
@@ -244,6 +250,7 @@ type App struct {
 	FeeGrantKeeper        feegrantkeeper.Keeper
 	GroupKeeper           groupkeeper.Keeper
 	ConsensusParamsKeeper consensusparamkeeper.Keeper
+	UgdvestingKeeper      ugdvestingmodulekeeper.Keeper
 
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
@@ -297,7 +304,7 @@ func New(
 		govtypes.StoreKey, paramstypes.StoreKey, ibcexported.StoreKey, upgradetypes.StoreKey,
 		feegrant.StoreKey, evidencetypes.StoreKey, ibctransfertypes.StoreKey, icahosttypes.StoreKey,
 		capabilitytypes.StoreKey, group.StoreKey, icacontrollertypes.StoreKey, consensusparamtypes.StoreKey,
-		cosmosdaemonmoduletypes.StoreKey,
+		cosmosdaemonmoduletypes.StoreKey, ugdvestingmoduletypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -520,6 +527,20 @@ func New(
 		),
 	)
 
+	/*app.UgdvestingKeeper = *ugdvestingmodulekeeper.NewKeeper(
+		appCodec,
+		keys[ugdvestingmoduletypes.StoreKey],
+		keys[ugdvestingmoduletypes.MemStoreKey],
+		app.GetSubspace(ugdvestingmoduletypes.ModuleName),
+	)*/
+
+	app.UgdvestingKeeper = *ugdvestingmodulekeeper.NewKeeper(
+		appCodec,
+		keys[ugdvestingmoduletypes.StoreKey],
+		memKeys[ugdvestingmoduletypes.MemStoreKey],
+		app.GetSubspace(ugdvestingmoduletypes.ModuleName),
+	)
+
 	app.CosmosdaemonKeeper = *cosmosdaemonmodulekeeper.NewKeeper(
 		appCodec,
 		keys[cosmosdaemonmoduletypes.StoreKey],
@@ -578,7 +599,7 @@ func New(
 		feegrantmodule.NewAppModule(appCodec, app.AccountKeeper, app.BankKeeper, app.FeeGrantKeeper, app.interfaceRegistry),
 		groupmodule.NewAppModule(appCodec, app.GroupKeeper, app.AccountKeeper, app.BankKeeper, app.interfaceRegistry),
 		gov.NewAppModule(appCodec, &app.GovKeeper, app.AccountKeeper, app.BankKeeper, app.GetSubspace(govtypes.ModuleName)),
-		mint.NewAppModule(appCodec, app.MintKeeper, app.AccountKeeper, nil, app.GetSubspace(minttypes.ModuleName)),
+		mintmodule.NewAppModule(appCodec, app.MintKeeper, app.AccountKeeper, nil, app.GetSubspace(minttypes.ModuleName)),
 		slashing.NewAppModule(appCodec, app.SlashingKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper, app.GetSubspace(slashingtypes.ModuleName)),
 		distr.NewAppModule(appCodec, app.DistrKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper, app.GetSubspace(distrtypes.ModuleName)),
 		staking.NewAppModule(appCodec, app.StakingKeeper, app.AccountKeeper, app.BankKeeper, app.GetSubspace(stakingtypes.ModuleName)),
@@ -589,6 +610,8 @@ func New(
 		params.NewAppModule(app.ParamsKeeper),
 		transferModule,
 		icaModule,
+		ugdvestingmodule.NewAppModule(appCodec, app.UgdvestingKeeper, app.AccountKeeper, app.BankKeeper),
+
 		cosmosdaemonModule,
 		// this line is used by starport scaffolding # stargate/app/appModule
 
@@ -622,6 +645,7 @@ func New(
 		paramstypes.ModuleName,
 		vestingtypes.ModuleName,
 		consensusparamtypes.ModuleName,
+		ugdvestingmoduletypes.ModuleName,
 		cosmosdaemonmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	)
@@ -648,6 +672,7 @@ func New(
 		upgradetypes.ModuleName,
 		vestingtypes.ModuleName,
 		consensusparamtypes.ModuleName,
+		ugdvestingmoduletypes.ModuleName,
 		cosmosdaemonmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	)
@@ -679,6 +704,7 @@ func New(
 		upgradetypes.ModuleName,
 		vestingtypes.ModuleName,
 		consensusparamtypes.ModuleName,
+		ugdvestingmoduletypes.ModuleName,
 		cosmosdaemonmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
@@ -712,7 +738,7 @@ func New(
 	app.MountMemoryStores(memKeys)
 
 	// initialize BaseApp
-	anteHandler, err := ante.NewAnteHandler(
+	anteHandler, err := ugdvestingante.NewAnteHandler(
 		ante.HandlerOptions{
 			AccountKeeper:   app.AccountKeeper,
 			BankKeeper:      app.BankKeeper,
@@ -904,6 +930,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(ibcexported.ModuleName)
 	paramsKeeper.Subspace(icacontrollertypes.SubModuleName)
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
+	paramsKeeper.Subspace(ugdvestingmoduletypes.ModuleName)
 	paramsKeeper.Subspace(cosmosdaemonmoduletypes.ModuleName)
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
 

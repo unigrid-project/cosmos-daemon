@@ -17,6 +17,8 @@ require (
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.8.2
+	github.com/unigrid-project/cosmos-sdk-ugdmint v0.0.22
+	github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting v0.0.4
 	google.golang.org/genproto v0.0.0-20230306155012-7f2fa6fef1f4
 	google.golang.org/grpc v1.55.0
 	gopkg.in/yaml.v2 v2.4.0
@@ -134,6 +136,7 @@ require (
 	github.com/rs/cors v1.8.3 // indirect
 	github.com/rs/zerolog v1.29.1 // indirect
 	github.com/sasha-s/go-deadlock v0.3.1 // indirect
+	github.com/sosodev/duration v1.1.0 // indirect
 	github.com/spf13/afero v1.9.3 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/viper v1.15.0 // indirect
