@@ -6,6 +6,8 @@ import (
 	"cosmos-daemon/app"
 )
 
+var HedgehogUrl string
+
 func initSDKConfig() {
 	// Set prefixes
 	accountPubKeyPrefix := app.AccountAddressPrefix + "pub"

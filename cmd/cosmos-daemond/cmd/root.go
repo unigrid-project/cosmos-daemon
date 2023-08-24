@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -36,6 +37,7 @@ import (
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
+
 	// this line is used by starport scaffolding # root/moduleImport
 
 	"cosmos-daemon/app"
@@ -59,6 +61,8 @@ func NewRootCmd() (*cobra.Command, appparams.EncodingConfig) {
 		Use:   app.Name + "d",
 		Short: "Start cosmosdaemon node",
 		PersistentPreRunE: func(cmd *cobra.Command, _ []string) error {
+			// Print the value of the hedgehog flag
+			fmt.Println("Hedgehog URL:", HedgehogUrl)
 			// set the default command outputs
 			cmd.SetOut(cmd.OutOrStdout())
 			cmd.SetErr(cmd.ErrOrStderr())
@@ -82,6 +86,8 @@ func NewRootCmd() (*cobra.Command, appparams.EncodingConfig) {
 			)
 		},
 	}
+	// param for the hedgehog url to be passed at startup
+	rootCmd.PersistentFlags().StringVar(&HedgehogUrl, "hedgehog", "", "Pass the Hedgehog URL")
 
 	initRootCmd(rootCmd, encodingConfig)
 	overwriteFlagDefaults(rootCmd, map[string]string{
