@@ -127,7 +127,7 @@ import (
 
 const (
 	AccountAddressPrefix = "unigrid"
-	Name                 = "UnigridChain"
+	Name                 = "cosmos-daemon"
 )
 
 // this line is used by starport scaffolding # stargate/wasm/app/enabledProposals
