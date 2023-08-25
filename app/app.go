@@ -746,6 +746,7 @@ func New(
 			FeegrantKeeper:  app.FeeGrantKeeper,
 			SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
 		},
+		app.UgdvestingKeeper,
 	)
 	if err != nil {
 		panic(fmt.Errorf("failed to create AnteHandler: %w", err))

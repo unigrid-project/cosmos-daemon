@@ -37,12 +37,15 @@ import (
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
+	"github.com/spf13/viper"
 
 	// this line is used by starport scaffolding # root/moduleImport
 
 	"cosmos-daemon/app"
 	appparams "cosmos-daemon/app/params"
 )
+
+const DefaultHedgehogUrl = "https://127.0.0.1:52884"
 
 // NewRootCmd creates a new root command for a Cosmos SDK application
 func NewRootCmd() (*cobra.Command, appparams.EncodingConfig) {
@@ -96,6 +99,48 @@ func NewRootCmd() (*cobra.Command, appparams.EncodingConfig) {
 	})
 
 	return rootCmd, encodingConfig
+}
+
+// InitializeConfig reads the hedgehog configuration file and ENV variables if set.
+// if there is no flag or config we use DefaultHedgehogUrl
+func InitializeConfig(home string) {
+	viper.SetConfigName("hedgehog")
+	viper.SetConfigType("toml")
+	configPath := filepath.Join(home, "config")
+	viper.AddConfigPath(configPath)
+
+	// Print the full path of the file it's looking for
+	fullPath := filepath.Join(configPath, "hedgehog.toml")
+	fmt.Println("Searching for config file at:", fullPath)
+
+	err := viper.ReadInConfig()
+	if err != nil {
+		// Check if the error is due to the file not being found
+		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+			// Config file not found; ignore or handle as desired
+			fmt.Println("Warning: Hedgehog Config file not found. Using default settings.")
+		} else {
+			// Some other error occurred; handle or print it
+			fmt.Printf("Error reading config file: %s", err)
+			return
+		}
+	}
+
+	// If HedgehogUrl flag value is set, prioritize it over the configuration file value
+	if HedgehogUrl != "" {
+		viper.Set("hedgehog.hedgehog_url", HedgehogUrl)
+	}
+
+	// Get the value of hedgehog_url
+	hedgehogURL := viper.GetString("hedgehog.hedgehog_url")
+
+	// If hedgehogURL is empty, set it to the default value
+	if hedgehogURL == "" {
+		hedgehogURL = DefaultHedgehogUrl
+		viper.Set("hedgehog.hedgehog_url", DefaultHedgehogUrl) // Set the default value in viper
+	}
+
+	fmt.Println("Hedgehog URL:", viper.GetString("hedgehog.hedgehog_url"))
 }
 
 // initTendermintConfig helps to override default Tendermint Config values.
@@ -254,6 +299,8 @@ func (a appCreator) newApp(
 	}
 
 	homeDir := cast.ToString(appOpts.Get(flags.FlagHome))
+
+	InitializeConfig(homeDir)
 	chainID := cast.ToString(appOpts.Get(flags.FlagChainID))
 	if chainID == "" {
 		// fallback to genesis chain-id
