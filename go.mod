@@ -17,7 +17,7 @@ require (
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.8.2
-	github.com/unigrid-project/cosmos-sdk-ugdmint v0.0.23
+	github.com/unigrid-project/cosmos-sdk-ugdmint v0.0.25
 	github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting v0.0.4
 	google.golang.org/genproto v0.0.0-20230306155012-7f2fa6fef1f4
 	google.golang.org/grpc v1.55.0
