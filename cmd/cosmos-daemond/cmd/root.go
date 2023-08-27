@@ -91,7 +91,7 @@ func NewRootCmd() (*cobra.Command, appparams.EncodingConfig) {
 	}
 	// param for the hedgehog url to be passed at startup
 	rootCmd.PersistentFlags().StringVar(&HedgehogUrl, "hedgehog", "", "Pass the Hedgehog URL")
-	fmt.Println("Value of --hedgehog flag:", HedgehogUrl)
+	//fmt.Println("Value of --hedgehog flag:", HedgehogUrl)
 
 	viper.BindPFlag("hedgehog.hedgehog_url", rootCmd.PersistentFlags().Lookup("hedgehog"))
 

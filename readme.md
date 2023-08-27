@@ -29,8 +29,8 @@ The frontend app is built using the `@starport/vue` and `@starport/vuex` package
 To release a new version of your blockchain, create and push a new tag with `v` prefix. A new draft release with the configured targets will be created.
 
 ```
-git tag v0.1
-git push origin v0.1
+git tag v0.0.1
+git push origin v0.0.1
 ```
 
 After a draft release is created, make your final changes from the release page and publish it.

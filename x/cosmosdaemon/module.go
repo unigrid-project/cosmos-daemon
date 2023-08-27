@@ -7,10 +7,9 @@ import (
 
 	// this line is used by starport scaffolding # 1
 
+	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
-
-	abci "github.com/cometbft/cometbft/abci/types"
 
 	"cosmos-daemon/x/cosmosdaemon/client/cli"
 	"cosmos-daemon/x/cosmosdaemon/keeper"
