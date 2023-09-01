@@ -29,7 +29,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/cosmos/cosmos-sdk/version"
 	"github.com/cosmos/cosmos-sdk/x/auth"
-	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	authsims "github.com/cosmos/cosmos-sdk/x/auth/simulation"
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
@@ -115,7 +114,6 @@ import (
 	cosmosdaemonmoduletypes "cosmos-daemon/x/cosmosdaemon/types"
 
 	ugdvestingmodule "github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting/x/ugdvesting"
-	ugdvestingante "github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting/x/ugdvesting/ante"
 	ugdvestingmodulekeeper "github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting/x/ugdvesting/keeper"
 	ugdvestingmoduletypes "github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting/x/ugdvesting/types"
 
@@ -541,6 +539,7 @@ func New(
 		keys[ugdvestingmoduletypes.StoreKey],
 		memKeys[ugdvestingmoduletypes.MemStoreKey],
 		app.GetSubspace(ugdvestingmoduletypes.ModuleName),
+		app.BankKeeper, // Assuming you have initialized the BankKeeper in your app
 	)
 
 	app.CosmosdaemonKeeper = *cosmosdaemonmodulekeeper.NewKeeper(
@@ -738,23 +737,6 @@ func New(
 	app.MountKVStores(keys)
 	app.MountTransientStores(tkeys)
 	app.MountMemoryStores(memKeys)
-
-	// initialize BaseApp
-	anteHandler, err := ugdvestingante.NewAnteHandler(
-		ante.HandlerOptions{
-			AccountKeeper:   app.AccountKeeper,
-			BankKeeper:      app.BankKeeper,
-			SignModeHandler: encodingConfig.TxConfig.SignModeHandler(),
-			FeegrantKeeper:  app.FeeGrantKeeper,
-			SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
-		},
-		app.UgdvestingKeeper,
-	)
-	if err != nil {
-		panic(fmt.Errorf("failed to create AnteHandler: %w", err))
-	}
-
-	app.SetAnteHandler(anteHandler)
 	app.SetInitChainer(app.InitChainer)
 	app.SetBeginBlocker(app.BeginBlocker)
 	app.SetEndBlocker(app.EndBlocker)

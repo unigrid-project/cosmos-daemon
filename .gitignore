@@ -7,3 +7,4 @@ release/
 go.work
 go.work.sum
 go.work.backup
+stress_test.log
