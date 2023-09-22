@@ -2,7 +2,6 @@ package app
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -113,6 +112,10 @@ import (
 	cosmosdaemonmodulekeeper "cosmos-daemon/x/cosmosdaemon/keeper"
 	cosmosdaemonmoduletypes "cosmos-daemon/x/cosmosdaemon/types"
 
+	gridnodemodule "github.com/unigrid-project/cosmos-sdk-gridnode/x/gridnode"
+	gridnodekeeper "github.com/unigrid-project/cosmos-sdk-gridnode/x/gridnode/keeper"
+	gridnodetypes "github.com/unigrid-project/cosmos-sdk-gridnode/x/gridnode/types"
+
 	ugdvestingmodule "github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting/x/ugdvesting"
 	ugdvestingmodulekeeper "github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting/x/ugdvesting/keeper"
 	ugdvestingmoduletypes "github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting/x/ugdvesting/types"
@@ -179,6 +182,7 @@ var (
 		consensus.AppModuleBasic{},
 		cosmosdaemonmodule.AppModuleBasic{},
 		ugdvestingmodule.AppModuleBasic{},
+		gridnodemodule.AppModuleBasic{},
 		// this line is used by starport scaffolding # stargate/app/moduleBasic
 	)
 
@@ -187,6 +191,7 @@ var (
 		authtypes.FeeCollectorName:     nil,
 		distrtypes.ModuleName:          nil,
 		icatypes.ModuleName:            nil,
+		gridnodetypes.ModuleName:       nil,
 		minttypes.ModuleName:           {authtypes.Minter},
 		stakingtypes.BondedPoolName:    {authtypes.Burner, authtypes.Staking},
 		stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
@@ -248,8 +253,8 @@ type App struct {
 	FeeGrantKeeper        feegrantkeeper.Keeper
 	GroupKeeper           groupkeeper.Keeper
 	ConsensusParamsKeeper consensusparamkeeper.Keeper
-	UgdvestingKeeper      ugdvestingmodulekeeper.Keeper
-
+	UgdvestingKeeper      *ugdvestingmodulekeeper.Keeper
+	GridnodeKeeper        *gridnodekeeper.Keeper
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
 	ScopedTransferKeeper capabilitykeeper.ScopedKeeper
@@ -521,6 +526,8 @@ func New(
 		AddRoute(ibcclienttypes.RouterKey, ibcclient.NewClientProposalHandler(app.IBCKeeper.ClientKeeper))
 	govKeeper.SetLegacyRouter(govRouter)
 
+	//app.MsgServiceRouter().RegisterService(&gridnodemsgtypes.GridnodeMsg_ServiceDesc, gridnodekeeper.NewMsgServerImpl(*app.GridnodeKeeper))
+
 	app.GovKeeper = *govKeeper.SetHooks(
 		govtypes.NewMultiGovHooks(
 		// register the governance hooks
@@ -534,12 +541,21 @@ func New(
 		app.GetSubspace(ugdvestingmoduletypes.ModuleName),
 	)*/
 
-	app.UgdvestingKeeper = *ugdvestingmodulekeeper.NewKeeper(
+	app.UgdvestingKeeper = ugdvestingmodulekeeper.NewKeeper(
 		appCodec,
 		keys[ugdvestingmoduletypes.StoreKey],
 		memKeys[ugdvestingmoduletypes.MemStoreKey],
 		app.GetSubspace(ugdvestingmoduletypes.ModuleName),
-		app.BankKeeper, // Assuming you have initialized the BankKeeper in your app
+		app.BankKeeper,
+		app.AccountKeeper,
+	)
+
+	app.GridnodeKeeper = gridnodekeeper.NewKeeper(
+		app.appCodec.(codec.BinaryCodec), // Cast to BinaryCodec if possible
+		app.keys[gridnodetypes.StoreKey],
+		app.keys[gridnodetypes.RouterKey], // You need to determine what this second key is
+		app.GetSubspace(gridnodetypes.ModuleName),
+		app.BankKeeper,
 	)
 
 	app.CosmosdaemonKeeper = *cosmosdaemonmodulekeeper.NewKeeper(
@@ -612,7 +628,7 @@ func New(
 		transferModule,
 		icaModule,
 		ugdvestingmodule.NewAppModule(appCodec, app.UgdvestingKeeper, app.AccountKeeper, app.BankKeeper),
-
+		gridnodemodule.NewAppModule(app.appCodec, *app.GridnodeKeeper, app.AccountKeeper, app.BankKeeper),
 		cosmosdaemonModule,
 		// this line is used by starport scaffolding # stargate/app/appModule
 
@@ -648,6 +664,7 @@ func New(
 		consensusparamtypes.ModuleName,
 		ugdvestingmoduletypes.ModuleName,
 		cosmosdaemonmoduletypes.ModuleName,
+		gridnodetypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	)
 
@@ -675,6 +692,7 @@ func New(
 		consensusparamtypes.ModuleName,
 		ugdvestingmoduletypes.ModuleName,
 		cosmosdaemonmoduletypes.ModuleName,
+		gridnodetypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	)
 
@@ -707,6 +725,7 @@ func New(
 		consensusparamtypes.ModuleName,
 		ugdvestingmoduletypes.ModuleName,
 		cosmosdaemonmoduletypes.ModuleName,
+		gridnodetypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 	app.mm.SetOrderInitGenesis(genesisModuleOrder...)
@@ -759,7 +778,7 @@ func (app *App) Name() string { return app.BaseApp.Name() }
 
 // BeginBlocker application updates every begin block
 func (app *App) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) abci.ResponseBeginBlock {
-	fmt.Println("BeginBlock")
+	//fmt.Println("BeginBlock")
 	return app.mm.BeginBlock(ctx, req)
 }
 

@@ -95,7 +95,8 @@ def stress_test_concurrent(password, duration=10, num_threads=30):
     # Start threads for sending transactions
     threads = []
     for _ in range(num_threads):
-        t = threading.Thread(target=send_tokens_threaded, args=(password, duration))
+        t = threading.Thread(target=send_tokens_threaded,
+                             args=(password, duration))
         threads.append(t)
         t.start()
 
