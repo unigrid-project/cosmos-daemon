@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	"cosmos-daemon/x/cosmosdaemon/types"
+	"github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/types"
 )
 
 type msgServer struct {

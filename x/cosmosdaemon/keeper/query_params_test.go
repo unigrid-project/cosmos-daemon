@@ -3,10 +3,11 @@ package keeper_test
 import (
 	"testing"
 
-	testkeeper "cosmos-daemon/testutil/keeper"
-	"cosmos-daemon/x/cosmosdaemon/types"
+	testkeeper "github.com/unigrid-project/cosmos-daemon/testutil/keeper"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
+	"github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/types"
 )
 
 func TestParamsQuery(t *testing.T) {

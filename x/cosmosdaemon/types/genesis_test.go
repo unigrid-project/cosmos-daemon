@@ -3,8 +3,8 @@ package types_test
 import (
 	"testing"
 
-	"cosmos-daemon/x/cosmosdaemon/types"
 	"github.com/stretchr/testify/require"
+	"github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/types"
 )
 
 func TestGenesisState_Validate(t *testing.T) {

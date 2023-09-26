@@ -108,9 +108,9 @@ import (
 	mintkeeper "github.com/unigrid-project/cosmos-sdk-ugdmint/x/ugdmint/keeper"
 	minttypes "github.com/unigrid-project/cosmos-sdk-ugdmint/x/ugdmint/types"
 
-	cosmosdaemonmodule "cosmos-daemon/x/cosmosdaemon"
-	cosmosdaemonmodulekeeper "cosmos-daemon/x/cosmosdaemon/keeper"
-	cosmosdaemonmoduletypes "cosmos-daemon/x/cosmosdaemon/types"
+	cosmosdaemonmodule "github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon"
+	cosmosdaemonmodulekeeper "github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/keeper"
+	cosmosdaemonmoduletypes "github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/types"
 
 	gridnodemodule "github.com/unigrid-project/cosmos-sdk-gridnode/x/gridnode"
 	gridnodekeeper "github.com/unigrid-project/cosmos-sdk-gridnode/x/gridnode/keeper"
@@ -122,8 +122,8 @@ import (
 
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
-	appparams "cosmos-daemon/app/params"
-	"cosmos-daemon/docs"
+	appparams "github.com/unigrid-project/cosmos-daemon/app/params"
+	"github.com/unigrid-project/cosmos-daemon/docs"
 )
 
 const (
