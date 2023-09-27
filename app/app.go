@@ -526,8 +526,6 @@ func New(
 		AddRoute(ibcclienttypes.RouterKey, ibcclient.NewClientProposalHandler(app.IBCKeeper.ClientKeeper))
 	govKeeper.SetLegacyRouter(govRouter)
 
-	//app.MsgServiceRouter().RegisterService(&gridnodemsgtypes.GridnodeMsg_ServiceDesc, gridnodekeeper.NewMsgServerImpl(*app.GridnodeKeeper))
-
 	app.GovKeeper = *govKeeper.SetHooks(
 		govtypes.NewMultiGovHooks(
 		// register the governance hooks
@@ -557,6 +555,12 @@ func New(
 		app.GetSubspace(gridnodetypes.ModuleName),
 		app.BankKeeper,
 	)
+
+	// Create an instance of your message service server implementation
+	msgServer := gridnodekeeper.NewMsgServerImpl(app.GridnodeKeeper)
+
+	// Register your service implementation with the gRPC server
+	gridnodetypes.RegisterGridnodeMsgServer(app.GRPCQueryRouter(), msgServer)
 
 	app.CosmosdaemonKeeper = *cosmosdaemonmodulekeeper.NewKeeper(
 		appCodec,
@@ -752,6 +756,8 @@ func New(
 	app.sm = module.NewSimulationManagerFromAppModules(app.mm.Modules, overrideModules)
 	app.sm.RegisterStoreDecoders()
 
+	app.MsgServiceRouter().RegisterService(&gridnodetypes.GridnodeMsg_ServiceDesc, app.mm.Modules[gridnodetypes.ModuleName])
+
 	// initialize stores
 	app.MountKVStores(keys)
 	app.MountTransientStores(tkeys)
@@ -937,6 +943,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
 	paramsKeeper.Subspace(ugdvestingmoduletypes.ModuleName)
 	paramsKeeper.Subspace(cosmosdaemonmoduletypes.ModuleName)
+	paramsKeeper.Subspace(gridnodetypes.ModuleName)
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
 
 	return paramsKeeper

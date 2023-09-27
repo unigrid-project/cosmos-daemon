@@ -70702,14 +70702,30 @@ definitions:
         description: params holds all the parameters of this module.
         type: object
     description: QueryParamsResponse is response type for the Query/Params RPC method.
-  cosmossdkgridnode.gridnode.MsgDelegateTokensResponse:
+  cosmossdkgridnode.gridnode.MsgDelegateResponse:
     type: object
+    description: MsgDelegateResponse defines the Msg/Delegate response type.
+  cosmossdkgridnode.gridnode.MsgGridnodeDelegateResponse:
+    type: object
+    properties:
+      tx_hash:
+        type: string
+        title: Transaction hash of the delegated tokens operation
+      status:
+        type: string
+        title: Status of the operation, e.g., "success" or "failure"
     description: >-
-      MsgDelegateTokensResponse is the response type for the Msg/DelegateTokens
-      RPC method.
-
-
-      Typically, this might include a transaction hash or other response data.
+      MsgGridnodeDelegateResponse is the response type for the
+      Msg/DelegateTokens RPC method.
+  cosmossdkgridnode.gridnode.MsgGridnodeUndelegateResponse:
+    type: object
+    properties:
+      tx_hash:
+        type: string
+        title: Transaction hash of the delegated tokens operation
+      status:
+        type: string
+        title: Status of the operation, e.g., "success" or "failure"
   cosmossdkgridnode.gridnode.Params:
     type: object
     description: Params defines the parameters for the module.
