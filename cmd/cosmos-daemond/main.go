@@ -6,8 +6,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/server"
 	svrcmd "github.com/cosmos/cosmos-sdk/server/cmd"
 
-	"cosmos-daemon/app"
-	"cosmos-daemon/cmd/cosmos-daemond/cmd"
+	"github.com/unigrid-project/cosmos-daemon/app"
+	"github.com/unigrid-project/cosmos-daemon/cmd/cosmos-daemond/cmd"
 )
 
 func main() {

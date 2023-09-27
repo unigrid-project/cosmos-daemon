@@ -3,7 +3,7 @@ package cosmosdaemon.cosmosdaemon;
 
 import "gogoproto/gogo.proto";
 
-option go_package = "cosmos-daemon/x/cosmosdaemon/types";
+option go_package = "github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/types";
 
 // Params defines the parameters for the module.
 message Params {

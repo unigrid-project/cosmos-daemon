@@ -3,7 +3,7 @@ package cmd
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"cosmos-daemon/app"
+	"github.com/unigrid-project/cosmos-daemon/app"
 )
 
 var HedgehogUrl string

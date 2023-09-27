@@ -42,8 +42,8 @@ import (
 
 	// this line is used by starport scaffolding # root/moduleImport
 
-	"cosmos-daemon/app"
-	appparams "cosmos-daemon/app/params"
+	"github.com/unigrid-project/cosmos-daemon/app"
+	appparams "github.com/unigrid-project/cosmos-daemon/app/params"
 )
 
 const DefaultHedgehogUrl = "https://127.0.0.1:52884"

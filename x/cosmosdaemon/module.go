@@ -11,9 +11,9 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 
-	"cosmos-daemon/x/cosmosdaemon/client/cli"
-	"cosmos-daemon/x/cosmosdaemon/keeper"
-	"cosmos-daemon/x/cosmosdaemon/types"
+	"github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/client/cli"
+	"github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/keeper"
+	"github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/types"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"

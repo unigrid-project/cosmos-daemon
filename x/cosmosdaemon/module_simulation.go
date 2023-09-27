@@ -3,14 +3,15 @@ package cosmosdaemon
 import (
 	"math/rand"
 
-	"cosmos-daemon/testutil/sample"
-	cosmosdaemonsimulation "cosmos-daemon/x/cosmosdaemon/simulation"
-	"cosmos-daemon/x/cosmosdaemon/types"
+	"github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/types"
+
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
+	"github.com/unigrid-project/cosmos-daemon/testutil/sample"
+	cosmosdaemonsimulation "github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/simulation"
 )
 
 // avoid unused import issue
