@@ -1,7 +1,18 @@
 syntax = "proto3";
+
 package cosmosdaemon.cosmosdaemon;
 
 option go_package = "github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/types";
 
 // Msg defines the Msg service.
-service Msg {}
+service Msg {
+  rpc Delegate (MsgDelegate) returns (MsgDelegateResponse);
+}
+message MsgDelegate {
+  string creator   = 1;
+  string delegator = 2;
+  uint64 amount    = 3;
+}
+
+message MsgDelegateResponse {}
+

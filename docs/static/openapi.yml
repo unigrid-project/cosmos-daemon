@@ -70692,6 +70692,8 @@ definitions:
             NOTE: The amount field is an Int which implements the custom method
             signatures required by gogoproto.
     description: Period defines a length of time and amount of coins that will vest.
+  cosmosdaemon.cosmosdaemon.MsgDelegateResponse:
+    type: object
   cosmosdaemon.cosmosdaemon.Params:
     type: object
     description: Params defines the parameters for the module.
