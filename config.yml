@@ -23,3 +23,9 @@ genesis:
     staking:
       params:
         bond_denom: "ugd"
+    gov:
+      params:
+        voting_period: "120s"
+        min_deposit:
+          - amount: "1000000"
+            denom: "ugd"
