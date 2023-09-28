@@ -1,4 +1,5 @@
 syntax = "proto3";
+
 package cosmosdaemon.cosmosdaemon;
 
 import "gogoproto/gogo.proto";
@@ -9,17 +10,32 @@ option go_package = "github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/typ
 
 // Query defines the gRPC querier service.
 service Query {
+  
   // Parameters queries the parameters of the module.
-  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+  rpc Params (QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/cosmos-daemon/cosmosdaemon/params";
+  
+  }
+  
+  // Queries a list of DelegatedAmount items.
+  rpc DelegatedAmount (QueryDelegatedAmountRequest) returns (QueryDelegatedAmountResponse) {
+    option (google.api.http).get = "/unigrid-project/cosmos-daemon/cosmosdaemon/delegated_amount/{delegatorAddress}";
+  
   }
 }
-
 // QueryParamsRequest is request type for the Query/Params RPC method.
 message QueryParamsRequest {}
 
 // QueryParamsResponse is response type for the Query/Params RPC method.
 message QueryParamsResponse {
+  
   // params holds all the parameters of this module.
   Params params = 1 [(gogoproto.nullable) = false];
 }
+
+message QueryDelegatedAmountRequest {
+  string delegatorAddress = 1;
+}
+
+message QueryDelegatedAmountResponse {}
+

@@ -34959,6 +34959,40 @@ paths:
                   additionalProperties: {}
       tags:
         - Query
+  /unigrid-project/cosmos-daemon/cosmosdaemon/delegated_amount/{delegatorAddress}:
+    get:
+      summary: Queries a list of DelegatedAmount items.
+      operationId: CosmosdaemonCosmosdaemonDelegatedAmount
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: delegatorAddress
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
   /unigrid-project/cosmos-sdk-gridnode/gridnode/delegated-amount/{delegator_address}:
     get:
       summary: DelegatedAmount queries the amount delegated by a specific account.
@@ -70695,6 +70729,8 @@ definitions:
   cosmosdaemon.cosmosdaemon.Params:
     type: object
     description: Params defines the parameters for the module.
+  cosmosdaemon.cosmosdaemon.QueryDelegatedAmountResponse:
+    type: object
   cosmosdaemon.cosmosdaemon.QueryParamsResponse:
     type: object
     properties:
