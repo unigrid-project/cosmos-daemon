@@ -188,15 +188,17 @@ var (
 
 	// module account permissions
 	maccPerms = map[string][]string{
-		authtypes.FeeCollectorName:     nil,
-		distrtypes.ModuleName:          nil,
-		icatypes.ModuleName:            nil,
-		gridnodetypes.ModuleName:       nil,
+		authtypes.FeeCollectorName: nil,
+		distrtypes.ModuleName:      nil,
+		icatypes.ModuleName:        nil,
+		//gridnodetypes.ModuleName:       nil,
 		minttypes.ModuleName:           {authtypes.Minter},
 		stakingtypes.BondedPoolName:    {authtypes.Burner, authtypes.Staking},
 		stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
 		govtypes.ModuleName:            {authtypes.Burner},
 		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
+		// add gridnode module account permissions
+		gridnodetypes.ModuleName: {authtypes.Minter, authtypes.Burner},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )
@@ -309,7 +311,7 @@ func New(
 		govtypes.StoreKey, paramstypes.StoreKey, ibcexported.StoreKey, upgradetypes.StoreKey,
 		feegrant.StoreKey, evidencetypes.StoreKey, ibctransfertypes.StoreKey, icahosttypes.StoreKey,
 		capabilitytypes.StoreKey, group.StoreKey, icacontrollertypes.StoreKey, consensusparamtypes.StoreKey,
-		cosmosdaemonmoduletypes.StoreKey, ugdvestingmoduletypes.StoreKey,
+		cosmosdaemonmoduletypes.StoreKey, ugdvestingmoduletypes.StoreKey, gridnodetypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -556,12 +558,6 @@ func New(
 		app.BankKeeper,
 	)
 
-	// Create an instance of your message service server implementation
-	msgServer := gridnodekeeper.NewMsgServerImpl(app.GridnodeKeeper)
-
-	// Register your service implementation with the gRPC server
-	gridnodetypes.RegisterGridnodeMsgServer(app.GRPCQueryRouter(), msgServer)
-
 	app.CosmosdaemonKeeper = *cosmosdaemonmodulekeeper.NewKeeper(
 		appCodec,
 		keys[cosmosdaemonmoduletypes.StoreKey],
@@ -756,7 +752,7 @@ func New(
 	app.sm = module.NewSimulationManagerFromAppModules(app.mm.Modules, overrideModules)
 	app.sm.RegisterStoreDecoders()
 
-	app.MsgServiceRouter().RegisterService(&gridnodetypes.GridnodeMsg_ServiceDesc, app.mm.Modules[gridnodetypes.ModuleName])
+	//app.MsgServiceRouter().RegisterService(&gridnodetypes.GridnodeMsg_ServiceDesc, app.mm.Modules[gridnodetypes.ModuleName])
 
 	// initialize stores
 	app.MountKVStores(keys)
@@ -799,6 +795,14 @@ func (app *App) InitChainer(ctx sdk.Context, req abci.RequestInitChain) abci.Res
 	if err := json.Unmarshal(req.AppStateBytes, &genesisState); err != nil {
 		panic(err)
 	}
+
+	// Check if the module account already exists
+	if app.AccountKeeper.GetModuleAccount(ctx, gridnodetypes.ModuleName) == nil {
+		// Create and set gridnode module account
+		gridnodeMacc := authtypes.NewEmptyModuleAccount(gridnodetypes.ModuleName, maccPerms[gridnodetypes.ModuleName]...)
+		app.AccountKeeper.SetModuleAccount(ctx, gridnodeMacc)
+	}
+
 	app.UpgradeKeeper.SetModuleVersionMap(ctx, app.mm.GetVersionMap())
 	return app.mm.InitGenesis(ctx, app.appCodec, genesisState)
 }
@@ -943,7 +947,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
 	paramsKeeper.Subspace(ugdvestingmoduletypes.ModuleName)
 	paramsKeeper.Subspace(cosmosdaemonmoduletypes.ModuleName)
-	paramsKeeper.Subspace(gridnodetypes.ModuleName)
+	//paramsKeeper.Subspace(gridnodetypes.ModuleName)
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
 
 	return paramsKeeper
