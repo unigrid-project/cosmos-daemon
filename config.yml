@@ -2,11 +2,11 @@ version: 1
 accounts:
 - name: alice
   coins:
-  - 200000000ugd
+  - 200000000000000ugd
   cointype: 88888888
 - name: bob
   coins:
-  - 100000000ugd
+  - 200000000000000ugd
   cointype: 88888888
 client:
   openapi:
