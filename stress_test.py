@@ -6,7 +6,7 @@ import threading
 
 init(autoreset=True)
 
-DAEMON_PATH = "/home/evan/go/bin/cosmos-daemond"
+DAEMON_PATH = "/home/evan/go/bin/paxd"
 LOG_FILE = "stress_test.log"
 FROM_ADDRESS = "unigrid1attpyzmtq9k4r42gkglnx0edgukjh969jrsmn8"
 TO_ADDRESS = "unigrid1xeq4qwyhxfukx0xyultta0r882ev86jjs4yvtc"

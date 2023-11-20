@@ -13,11 +13,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	typesparams "github.com/cosmos/cosmos-sdk/x/params/types"
 	"github.com/stretchr/testify/require"
-	"github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/keeper"
-	"github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/types"
+	"github.com/unigrid-project/pax/x/pax/keeper"
+	"github.com/unigrid-project/pax/x/pax/types"
 )
 
-func CosmosdaemonKeeper(t testing.TB) (*keeper.Keeper, sdk.Context) {
+func PaxKeeper(t testing.TB) (*keeper.Keeper, sdk.Context) {
 	storeKey := sdk.NewKVStoreKey(types.StoreKey)
 	memStoreKey := storetypes.NewMemoryStoreKey(types.MemStoreKey)
 
@@ -34,7 +34,7 @@ func CosmosdaemonKeeper(t testing.TB) (*keeper.Keeper, sdk.Context) {
 		types.Amino,
 		storeKey,
 		memStoreKey,
-		"CosmosdaemonParams",
+		"PaxParams",
 	)
 	k := keeper.NewKeeper(
 		cdc,

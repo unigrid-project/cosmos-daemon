@@ -1,4 +1,4 @@
-module github.com/unigrid-project/cosmos-daemon
+module github.com/unigrid-project/pax
 
 go 1.19
 
@@ -18,8 +18,8 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.16.0
 	github.com/stretchr/testify v1.8.4
-	github.com/unigrid-project/cosmos-sdk-gridnode v0.0.105
-	github.com/unigrid-project/cosmos-sdk-ugdmint v0.0.63
+	github.com/unigrid-project/cosmos-sdk-gridnode v0.0.1
+	github.com/unigrid-project/cosmos-sdk-ugdmint v0.0.70
 	github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting v0.0.50
 	google.golang.org/genproto/googleapis/api v0.0.0-20230822172742-b8732ec3820d
 	google.golang.org/grpc v1.58.0

@@ -1,0 +1,7 @@
+syntax = "proto3";
+package pax.pax;
+
+option go_package = "github.com/unigrid-project/pax/x/pax/types";
+
+// Msg defines the Msg service.
+service Msg {}

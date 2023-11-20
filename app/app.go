@@ -108,9 +108,9 @@ import (
 	mintkeeper "github.com/unigrid-project/cosmos-sdk-ugdmint/x/ugdmint/keeper"
 	minttypes "github.com/unigrid-project/cosmos-sdk-ugdmint/x/ugdmint/types"
 
-	cosmosdaemonmodule "github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon"
-	cosmosdaemonmodulekeeper "github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/keeper"
-	cosmosdaemonmoduletypes "github.com/unigrid-project/cosmos-daemon/x/cosmosdaemon/types"
+	paxmodule "github.com/unigrid-project/pax/x/pax"
+	paxmodulekeeper "github.com/unigrid-project/pax/x/pax/keeper"
+	paxmoduletypes "github.com/unigrid-project/pax/x/pax/types"
 
 	gridnodemodule "github.com/unigrid-project/cosmos-sdk-gridnode/x/gridnode"
 	gridnodekeeper "github.com/unigrid-project/cosmos-sdk-gridnode/x/gridnode/keeper"
@@ -122,13 +122,13 @@ import (
 
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
-	appparams "github.com/unigrid-project/cosmos-daemon/app/params"
-	"github.com/unigrid-project/cosmos-daemon/docs"
+	appparams "github.com/unigrid-project/pax/app/params"
+	"github.com/unigrid-project/pax/docs"
 )
 
 const (
 	AccountAddressPrefix = "unigrid"
-	Name                 = "cosmos-daemon"
+	Name                 = "pax"
 )
 
 // this line is used by starport scaffolding # stargate/wasm/app/enabledProposals
@@ -180,7 +180,7 @@ var (
 		ica.AppModuleBasic{},
 		vesting.AppModuleBasic{},
 		consensus.AppModuleBasic{},
-		cosmosdaemonmodule.AppModuleBasic{},
+		paxmodule.AppModuleBasic{},
 		ugdvestingmodule.AppModuleBasic{},
 		gridnodemodule.AppModuleBasic{},
 		// this line is used by starport scaffolding # stargate/app/moduleBasic
@@ -262,7 +262,7 @@ type App struct {
 	ScopedTransferKeeper capabilitykeeper.ScopedKeeper
 	ScopedICAHostKeeper  capabilitykeeper.ScopedKeeper
 
-	CosmosdaemonKeeper cosmosdaemonmodulekeeper.Keeper
+	PaxKeeper paxmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// mm is the module manager
@@ -311,7 +311,7 @@ func New(
 		govtypes.StoreKey, paramstypes.StoreKey, ibcexported.StoreKey, upgradetypes.StoreKey,
 		feegrant.StoreKey, evidencetypes.StoreKey, ibctransfertypes.StoreKey, icahosttypes.StoreKey,
 		capabilitytypes.StoreKey, group.StoreKey, icacontrollertypes.StoreKey, consensusparamtypes.StoreKey,
-		cosmosdaemonmoduletypes.StoreKey, ugdvestingmoduletypes.StoreKey, gridnodetypes.StoreKey,
+		paxmoduletypes.StoreKey, ugdvestingmoduletypes.StoreKey, gridnodetypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -558,13 +558,13 @@ func New(
 		app.BankKeeper,
 	)
 
-	app.CosmosdaemonKeeper = *cosmosdaemonmodulekeeper.NewKeeper(
+	app.PaxKeeper = *paxmodulekeeper.NewKeeper(
 		appCodec,
-		keys[cosmosdaemonmoduletypes.StoreKey],
-		keys[cosmosdaemonmoduletypes.MemStoreKey],
-		app.GetSubspace(cosmosdaemonmoduletypes.ModuleName),
+		keys[paxmoduletypes.StoreKey],
+		keys[paxmoduletypes.MemStoreKey],
+		app.GetSubspace(paxmoduletypes.ModuleName),
 	)
-	cosmosdaemonModule := cosmosdaemonmodule.NewAppModule(appCodec, app.CosmosdaemonKeeper, app.AccountKeeper, app.BankKeeper)
+	paxModule := paxmodule.NewAppModule(appCodec, app.PaxKeeper, app.AccountKeeper, app.BankKeeper)
 
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
@@ -629,7 +629,7 @@ func New(
 		icaModule,
 		ugdvestingmodule.NewAppModule(appCodec, app.UgdvestingKeeper, app.AccountKeeper, app.BankKeeper),
 		gridnodemodule.NewAppModule(app.appCodec, *app.GridnodeKeeper, app.AccountKeeper, app.BankKeeper),
-		cosmosdaemonModule,
+		paxModule,
 		// this line is used by starport scaffolding # stargate/app/appModule
 
 		crisis.NewAppModule(app.CrisisKeeper, skipGenesisInvariants, app.GetSubspace(crisistypes.ModuleName)), // always be last to make sure that it checks for all invariants and not only part of them
@@ -663,7 +663,7 @@ func New(
 		vestingtypes.ModuleName,
 		consensusparamtypes.ModuleName,
 		ugdvestingmoduletypes.ModuleName,
-		cosmosdaemonmoduletypes.ModuleName,
+		paxmoduletypes.ModuleName,
 		gridnodetypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	)
@@ -691,7 +691,7 @@ func New(
 		vestingtypes.ModuleName,
 		consensusparamtypes.ModuleName,
 		ugdvestingmoduletypes.ModuleName,
-		cosmosdaemonmoduletypes.ModuleName,
+		paxmoduletypes.ModuleName,
 		gridnodetypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	)
@@ -724,7 +724,7 @@ func New(
 		vestingtypes.ModuleName,
 		consensusparamtypes.ModuleName,
 		ugdvestingmoduletypes.ModuleName,
-		cosmosdaemonmoduletypes.ModuleName,
+		paxmoduletypes.ModuleName,
 		gridnodetypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
@@ -946,7 +946,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(icacontrollertypes.SubModuleName)
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
 	paramsKeeper.Subspace(ugdvestingmoduletypes.ModuleName)
-	paramsKeeper.Subspace(cosmosdaemonmoduletypes.ModuleName)
+	paramsKeeper.Subspace(paxmoduletypes.ModuleName)
 	//paramsKeeper.Subspace(gridnodetypes.ModuleName)
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
 
