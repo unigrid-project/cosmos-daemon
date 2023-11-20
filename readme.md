@@ -20,11 +20,11 @@ to be comfortable:
 
 - Quad Core or larger AMD or Intel (amd64) CPU
   - ARM CPUs like the Apple M1 are not supported at this time.
-- 64GB RAM (A lot can be in swap)
+- 64GB RAM (can use swap)
 - 1TB NVMe Storage
 - 100MBPS bidirectional internet connection
 
-You can run Pax on lower-spec hardware for each component, but you
+You can run Pax on lower-spec hardware, but you
 may find that it is not highly performant or prone to crashing.
 
 ## Documentation
