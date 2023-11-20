@@ -1,4 +1,5 @@
-Pax - Cosmos SDK network for Unigrid © The Unigrid Foundation
+Pax - Cosmos SDK network for Unigrid 
+© The Unigrid Foundation
 =========================================
 <img align="top" width="auto" height="auto" src="docs/pax.png" alt="Pax">
 
