@@ -35,6 +35,6 @@ For the most up to date documentation please visit
 ## Joining the Testnet
 
 [Please visit the official instructions on how to join the Testnet
-here.](https://docs.unigrid.org/networks/join-testnet)
+here.](https://docs.unigrid.org/docs/testnet/validator/)
 
 Your commitment to running a Pax node is greatly appreciated! By participating in our network, you're playing a key role in fostering a robust and healthy blockchain community. Your support is instrumental in advancing our shared vision of a decentralized, efficient, and secure digital ecosystem. Thank you for being an essential part of this transformative journey!
