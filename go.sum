@@ -949,8 +949,8 @@ github.com/ugorji/go/codec v1.2.7 h1:YPXUKf7fYbp/y8xloBqZOw2qaVggbfwMlI8WM3wZUJ0
 github.com/ulikunitz/xz v0.5.10/go.mod h1:nbz6k7qbPmH4IRqmfOplQw/tblSgqTqBwxkY0oWt/14=
 github.com/ulikunitz/xz v0.5.11 h1:kpFauv27b6ynzBNT/Xy+1k+fK4WswhN/6PN5WhFAGw8=
 github.com/ulikunitz/xz v0.5.11/go.mod h1:nbz6k7qbPmH4IRqmfOplQw/tblSgqTqBwxkY0oWt/14=
-github.com/unigrid-project/cosmos-sdk-gridnode v0.0.1 h1:xR3Dz+OK5myqvW4GFXvV3Le0aZgFO0g+1QcOBlHUCxQ=
-github.com/unigrid-project/cosmos-sdk-gridnode v0.0.1/go.mod h1:Bv5NjdLpJ2qjR8Oi18FfM1jhwzDYvOK2ihrIAv/p+cA=
+github.com/unigrid-project/cosmos-sdk-gridnode v0.0.2 h1:yiH9yH8VnONITKdiPaXinOGOq256HvfOJ5TOF0cKZX8=
+github.com/unigrid-project/cosmos-sdk-gridnode v0.0.2/go.mod h1:Bv5NjdLpJ2qjR8Oi18FfM1jhwzDYvOK2ihrIAv/p+cA=
 github.com/unigrid-project/cosmos-sdk-ugdmint v0.0.70 h1:zkRGd202q4padGyX0pWkjOh1g1I4VKvDfMdY3LBPxho=
 github.com/unigrid-project/cosmos-sdk-ugdmint v0.0.70/go.mod h1:IQBurErJi44DZiaCMkG6sMXJNR9JRple25CBuurJf9M=
 github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting v0.0.50 h1:GBfDlXPDsj2zTtH/ZOPBtiGIvcdhipmBI++ENGBa880=

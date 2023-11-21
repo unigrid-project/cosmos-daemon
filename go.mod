@@ -18,7 +18,7 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.16.0
 	github.com/stretchr/testify v1.8.4
-	github.com/unigrid-project/cosmos-sdk-gridnode v0.0.1
+	github.com/unigrid-project/cosmos-sdk-gridnode v0.0.2
 	github.com/unigrid-project/cosmos-sdk-ugdmint v0.0.70
 	github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting v0.0.50
 	google.golang.org/genproto/googleapis/api v0.0.0-20230822172742-b8732ec3820d
