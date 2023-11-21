@@ -19,7 +19,7 @@ require (
 	github.com/spf13/viper v1.16.0
 	github.com/stretchr/testify v1.8.4
 	github.com/unigrid-project/cosmos-sdk-gridnode v0.0.2
-	github.com/unigrid-project/cosmos-sdk-ugdmint v0.0.72
+	github.com/unigrid-project/cosmos-sdk-ugdmint v0.0.73
 	github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting v0.0.50
 	google.golang.org/genproto/googleapis/api v0.0.0-20230822172742-b8732ec3820d
 	google.golang.org/grpc v1.59.0
@@ -179,5 +179,7 @@ require (
 	pgregory.net/rapid v0.5.5 // indirect
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )
+
+//replace github.com/unigrid-project/cosmos-sdk-ugdmint => /home/evan/work/cosmos-sdk-ugdmint
 
 replace github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
