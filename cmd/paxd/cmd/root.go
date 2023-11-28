@@ -48,6 +48,9 @@ import (
 
 const DefaultHedgehogUrl = "https://82.208.23.218:39886"
 
+// testing localhost hedgehog
+//const DefaultHedgehogUrl = "https://127.0.0.1:39886"
+
 // NewRootCmd creates a new root command for a Cosmos SDK application
 func NewRootCmd() (*cobra.Command, appparams.EncodingConfig) {
 	encodingConfig := app.MakeEncodingConfig()

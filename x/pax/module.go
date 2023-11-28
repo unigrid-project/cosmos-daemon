@@ -2,14 +2,19 @@ package pax
 
 import (
 	"context"
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
+	"io"
+	"net/http"
+	"time"
 
 	// this line is used by starport scaffolding # 1
 
 	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 
 	"github.com/unigrid-project/pax/x/pax/client/cli"
 	"github.com/unigrid-project/pax/x/pax/keeper"
@@ -141,11 +146,96 @@ func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.Raw
 func (AppModule) ConsensusVersion() uint64 { return 1 }
 
 // BeginBlock contains the logic that is automatically triggered at the beginning of each block
-func (am AppModule) BeginBlock(_ sdk.Context, _ abci.RequestBeginBlock) {
-	fmt.Println("BeginBlock")
+func (am AppModule) BeginBlock(ctx sdk.Context, _ abci.RequestBeginBlock) {
+	hedgehogUrl := viper.GetString("hedgehog.hedgehog_url") + "/gridnode/collateral"
+	hedgehogAvailable := isConnectedToHedgehog(hedgehogUrl)
+
+	if !hedgehogAvailable {
+		// Start a timer
+		timer := time.NewTimer(2 * time.Hour) // 2 hours until we panic and shutdown the node
+
+		// Set up deferred panic handling
+		defer func() {
+			if r := recover(); r != nil {
+				// Wait for either the timer to expire or the server to become available
+				select {
+				case <-timer.C:
+					// Timer expired, re-panic
+					panic(r)
+				case available := <-checkHedgehogAvailability(hedgehogUrl, timer.C):
+					if available {
+						fmt.Println("Recovered from panic: Hedgehog server is now available.")
+					} else {
+						// Server did not become available in time, re-panic
+						panic(r)
+					}
+				}
+			}
+		}()
+
+		// Trigger panic
+		panic("Hedgehog is not available. Node is shutting down.")
+	}
+
+	fmt.Println("Hedgehog is available.")
+}
+
+// checkHedgehogAvailability continuously checks if the Hedgehog server becomes available
+// and returns a boolean value through a channel when the server is available or the timer expires.
+func checkHedgehogAvailability(hedgehogUrl string, timerC <-chan time.Time) <-chan bool {
+	availabilityChan := make(chan bool)
+	go func() {
+		defer close(availabilityChan)
+		for {
+			select {
+			case <-timerC:
+				fmt.Println("Timer expired in monitoring goroutine")
+				availabilityChan <- false
+				return
+			default:
+				if isConnectedToHedgehog(hedgehogUrl) {
+					fmt.Println("Hedgehog server became available")
+					availabilityChan <- true
+					return
+				}
+				fmt.Println("Checking Hedgehog availability...")
+				time.Sleep(5 * time.Second) // check interval, adjust as needed
+			}
+		}
+	}()
+	return availabilityChan
 }
 
 // EndBlock contains the logic that is automatically triggered at the end of each block
 func (am AppModule) EndBlock(_ sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
 	return []abci.ValidatorUpdate{}
+}
+
+// isConnectedToHedgehog performs an HTTP GET request to check the connectivity with the Hedgehog server.
+func isConnectedToHedgehog(serverUrl string) bool {
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true}, // Note: Only use InsecureSkipVerify for testing.
+	}
+	client := &http.Client{Transport: tr}
+	response, err := client.Get(serverUrl)
+
+	if err != nil {
+		// Handle error and return false to indicate that the Hedgehog server is not connected
+		if err == io.EOF {
+			fmt.Println("Received empty response from hedgehog server.")
+		} else {
+			fmt.Println("Error accessing hedgehog:", err.Error())
+		}
+		return false
+	}
+	defer response.Body.Close()
+
+	// Check if the HTTP status is 200 OK
+	if response.StatusCode == http.StatusOK {
+		fmt.Printf("Received OK response from hedgehog server: %d\n", response.StatusCode)
+		return true
+	}
+	fmt.Printf("Received non-OK response from hedgehog server: %d\n", response.StatusCode)
+
+	return false
 }
