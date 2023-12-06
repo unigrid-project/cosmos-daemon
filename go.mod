@@ -18,12 +18,21 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.16.0
 	github.com/stretchr/testify v1.8.4
-	github.com/unigrid-project/cosmos-sdk-gridnode v0.0.2
-	github.com/unigrid-project/cosmos-sdk-ugdmint v0.0.73
-	github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting v0.0.50
+	github.com/unigrid-project/cosmos-sdk-common v0.0.3
+	github.com/unigrid-project/cosmos-sdk-gridnode v0.0.3
+	github.com/unigrid-project/cosmos-sdk-ugdmint v0.0.75
+	github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting v0.0.52
 	google.golang.org/genproto/googleapis/api v0.0.0-20230822172742-b8732ec3820d
 	google.golang.org/grpc v1.59.0
 	gopkg.in/yaml.v2 v2.4.0
+)
+
+require (
+	github.com/google/s2a-go v0.1.4 // indirect
+	github.com/google/uuid v1.3.1 // indirect
+	github.com/googleapis/enterprise-certificate-proxy v0.2.3 // indirect
+	github.com/googleapis/gax-go/v2 v2.11.0 // indirect
+	github.com/gorilla/handlers v1.5.1 // indirect
 )
 
 require (
@@ -92,12 +101,7 @@ require (
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/btree v1.1.2 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
-	github.com/google/orderedcode v0.0.1 // indirect
-	github.com/google/s2a-go v0.1.4 // indirect
-	github.com/google/uuid v1.3.1 // indirect
-	github.com/googleapis/enterprise-certificate-proxy v0.2.3 // indirect
-	github.com/googleapis/gax-go/v2 v2.11.0 // indirect
-	github.com/gorilla/handlers v1.5.1 // indirect
+	github.com/google/orderedcode v0.0.1 // indirect; indirectgithub.com/unigrid-project/cosmos-sdk-gridnode v0.0.2
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0 // indirect
 	github.com/gsterjov/go-libsecret v0.0.0-20161001094733-a6f4afe4910c // indirect
@@ -181,5 +185,6 @@ require (
 )
 
 //replace github.com/unigrid-project/cosmos-sdk-ugdmint => /home/evan/work/cosmos-sdk-ugdmint
+//replace github.com/unigrid-project/cosmos-sdk-gridnode => /home/evan/work/cosmos-sdk-gridnode
 
 replace github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7

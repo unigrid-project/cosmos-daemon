@@ -2,7 +2,6 @@ package pax
 
 import (
 	"context"
-	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -16,6 +15,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
+	"github.com/unigrid-project/cosmos-sdk-common/common/httpclient"
 	"github.com/unigrid-project/pax/x/pax/client/cli"
 	"github.com/unigrid-project/pax/x/pax/keeper"
 	"github.com/unigrid-project/pax/x/pax/types"
@@ -147,7 +147,7 @@ func (AppModule) ConsensusVersion() uint64 { return 1 }
 
 // BeginBlock contains the logic that is automatically triggered at the beginning of each block
 func (am AppModule) BeginBlock(ctx sdk.Context, _ abci.RequestBeginBlock) {
-	hedgehogUrl := viper.GetString("hedgehog.hedgehog_url") + "/gridnode/collateral"
+	hedgehogUrl := viper.GetString("hedgehog.hedgehog_url") + "/gridspork"
 	hedgehogAvailable := isConnectedToHedgehog(hedgehogUrl)
 
 	if !hedgehogAvailable {
@@ -213,28 +213,28 @@ func (am AppModule) EndBlock(_ sdk.Context, _ abci.RequestEndBlock) []abci.Valid
 
 // isConnectedToHedgehog performs an HTTP GET request to check the connectivity with the Hedgehog server.
 func isConnectedToHedgehog(serverUrl string) bool {
-	tr := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true}, // Note: Only use InsecureSkipVerify for testing.
-	}
-	client := &http.Client{Transport: tr}
-	response, err := client.Get(serverUrl)
+
+	response, err := httpclient.Client.Get(serverUrl)
 
 	if err != nil {
-		// Handle error and return false to indicate that the Hedgehog server is not connected
-		if err == io.EOF {
-			fmt.Println("Received empty response from hedgehog server.")
-		} else {
-			fmt.Println("Error accessing hedgehog:", err.Error())
-		}
+		fmt.Println("Error accessing hedgehog:", err.Error())
 		return false
 	}
 	defer response.Body.Close()
+
+	// Read and discard the response body
+	_, err = io.ReadAll(response.Body)
+	if err != nil {
+		fmt.Println("Error reading response body:", err.Error())
+		return false
+	}
 
 	// Check if the HTTP status is 200 OK
 	if response.StatusCode == http.StatusOK {
 		fmt.Printf("Received OK response from hedgehog server: %d\n", response.StatusCode)
 		return true
 	}
+
 	fmt.Printf("Received non-OK response from hedgehog server: %d\n", response.StatusCode)
 
 	return false
