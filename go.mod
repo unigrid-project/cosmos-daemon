@@ -18,7 +18,7 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.16.0
 	github.com/stretchr/testify v1.8.4
-	github.com/unigrid-project/cosmos-sdk-common v0.0.3
+	github.com/unigrid-project/cosmos-sdk-common v0.0.6
 	github.com/unigrid-project/cosmos-sdk-gridnode v0.0.3
 	github.com/unigrid-project/cosmos-sdk-ugdmint v0.0.75
 	github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting v0.0.52
