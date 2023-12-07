@@ -956,10 +956,16 @@ github.com/unigrid-project/cosmos-sdk-common v0.0.6 h1:nvAShtDWIYd1wbtgRW2CknrgO
 github.com/unigrid-project/cosmos-sdk-common v0.0.6/go.mod h1:40cAkSp62OjHTtGMdUYQUMwzUEndl6va3uz9asDJl5Q=
 github.com/unigrid-project/cosmos-sdk-gridnode v0.0.3 h1:WEN8NGIoTO7vd7SINjEcY9Dk+AhoBhRu1wYnTJFzZOU=
 github.com/unigrid-project/cosmos-sdk-gridnode v0.0.3/go.mod h1:7hD9X+fNyCCvPFpFzqrLTISE+Pexz3hy5wNZ5hO2Wzs=
+github.com/unigrid-project/cosmos-sdk-gridnode v0.0.4 h1:h/VN2P0BKw7LRJO3iVL1Ch6my31BnTpFabZX77QKmos=
+github.com/unigrid-project/cosmos-sdk-gridnode v0.0.4/go.mod h1:I+9t5emSbHmsUL5gDAEBexkBcJjGm+1vGwsAj2zKjTA=
 github.com/unigrid-project/cosmos-sdk-ugdmint v0.0.75 h1:SOckE6e28c52ZR9XqmaAbmDbgYFBMASHYjEJjkfYwXE=
 github.com/unigrid-project/cosmos-sdk-ugdmint v0.0.75/go.mod h1:My01Nl0yy1DG62t9ZQ+77cOC6xBJpmH98ds3p2L82pw=
+github.com/unigrid-project/cosmos-sdk-ugdmint v0.0.76 h1:raZCFpmQBuZkznUwtVzc30zjspIr9rC33fPEpZrsUb4=
+github.com/unigrid-project/cosmos-sdk-ugdmint v0.0.76/go.mod h1:rYjOAHuMG+lpcvIcFuWJ9Nvc44jW7+lFMuTHK87svzc=
 github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting v0.0.52 h1:beF8jc0UBOxFsktIf+M6LJDAlqBg1UPHBnufvwwLyQI=
 github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting v0.0.52/go.mod h1:RTiKAB35OddRRmblAuFM0+ZyWcgqaQfv16+XJ/mqvSM=
+github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting v0.0.53 h1:Yjj4WwcU9PBXajhQKIdEjcRTEYzvvY5rtR3sUe7gGjg=
+github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting v0.0.53/go.mod h1:7k3OwNTnR36XtgJx1gnV6pzizx/wiqqSFuOhXg75/5A=
 github.com/urfave/cli v1.20.0/go.mod h1:70zkFmudgCuE/ngEzBv17Jvp/497gISqfk5gWijbERA=
 github.com/urfave/cli v1.22.1/go.mod h1:Gos4lmkARVdJ6EkW0WaNv/tZAAMe9V7XWyB60NtXRu0=
 github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2/go.mod h1:UETIi67q53MR2AWcXfiuqkDkRtnGDLqkBTpCHuJHxtU=
