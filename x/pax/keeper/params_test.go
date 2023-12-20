@@ -12,7 +12,6 @@ func TestGetParams(t *testing.T) {
 	k, ctx := testkeeper.PaxKeeper(t)
 	params := types.DefaultParams()
 
-	k.SetParams(ctx, params)
-
+	require.NoError(t, k.SetParams(ctx, params))
 	require.EqualValues(t, params, k.GetParams(ctx))
 }

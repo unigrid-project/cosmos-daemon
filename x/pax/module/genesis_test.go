@@ -4,9 +4,9 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	keepertest "github.com/unigrid-project/pax/testutil/keeper"
-	"github.com/unigrid-project/pax/testutil/nullify"
-	"github.com/unigrid-project/pax/x/pax"
+	keepertest "pax/testutil/keeper"
+	"pax/testutil/nullify"
+	"github.com/unigrid-project/pax/x/pax/module"
 	"github.com/unigrid-project/pax/x/pax/types"
 )
 
@@ -18,8 +18,8 @@ func TestGenesis(t *testing.T) {
 	}
 
 	k, ctx := keepertest.PaxKeeper(t)
-	pax.InitGenesis(ctx, *k, genesisState)
-	got := pax.ExportGenesis(ctx, *k)
+	pax.InitGenesis(ctx, k, genesisState)
+	got := pax.ExportGenesis(ctx, k)
 	require.NotNil(t, got)
 
 	nullify.Fill(&genesisState)
