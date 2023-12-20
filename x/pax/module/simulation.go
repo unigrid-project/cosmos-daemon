@@ -3,24 +3,23 @@ package pax
 import (
 	"math/rand"
 
-	"github.com/unigrid-project/pax/x/pax/types"
-
-	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
+
 	"github.com/unigrid-project/pax/testutil/sample"
 	paxsimulation "github.com/unigrid-project/pax/x/pax/simulation"
+	"github.com/unigrid-project/pax/x/pax/types"
 )
 
 // avoid unused import issue
 var (
-	_ = sample.AccAddress
 	_ = paxsimulation.FindAccount
-	_ = simulation.MsgEntryKind
-	_ = baseapp.Paramspace
 	_ = rand.Rand{}
+	_ = sample.AccAddress
+	_ = sdk.AccAddress{}
+	_ = simulation.MsgEntryKind
 )
 
 const (
@@ -41,7 +40,7 @@ func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
 }
 
 // RegisterStoreDecoder registers a decoder.
-func (am AppModule) RegisterStoreDecoder(_ sdk.StoreDecoderRegistry) {}
+func (am AppModule) RegisterStoreDecoder(_ simtypes.StoreDecoderRegistry) {}
 
 // ProposalContents doesn't return any content functions for governance proposals.
 func (AppModule) ProposalContents(_ module.SimulationState) []simtypes.WeightedProposalContent {

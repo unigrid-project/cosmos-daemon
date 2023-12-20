@@ -14,6 +14,10 @@ const (
 	MemStoreKey = "mem_pax"
 )
 
+var (
+	ParamsKey = []byte("p_pax_params")
+)
+
 func KeyPrefix(p string) []byte {
 	return []byte(p)
 }
