@@ -4,9 +4,9 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	keepertest "pax/testutil/keeper"
-	"pax/testutil/nullify"
-	"github.com/unigrid-project/pax/x/pax/module"
+	keepertest "github.com/unigrid-project/pax/testutil/keeper"
+	"github.com/unigrid-project/pax/testutil/nullify"
+	pax "github.com/unigrid-project/pax/x/pax/module"
 	"github.com/unigrid-project/pax/x/pax/types"
 )
 

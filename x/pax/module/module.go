@@ -286,7 +286,7 @@ type ModuleOutputs struct {
 	depinject.Out
 
 	PaxKeeper keeper.Keeper
-	Module              appmodule.AppModule
+	Module    appmodule.AppModule
 }
 
 func ProvideModule(in ModuleInputs) ModuleOutputs {
