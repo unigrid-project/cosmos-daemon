@@ -1,10 +1,10 @@
 package cmd
 
 import (
-	"os"
-	"strings"
 	"fmt"
+	"os"
 	"path/filepath"
+	"strings"
 
 	"cosmossdk.io/client/v2/autocli"
 	clientv2keyring "cosmossdk.io/client/v2/autocli/keyring"
@@ -45,8 +45,28 @@ func NewRootCmd() *cobra.Command {
 		clientCtx          client.Context
 	)
 
-	if err := depinject.Inject(
-		depinject.Configs(app.AppConfig(),
+	// if err := depinject.Inject(
+	// 	depinject.Configs(
+	// 		app.AppConfig(),
+	// 		depinject.Supply(
+	// 			log.NewNopLogger(),
+	// 		),
+	// 		depinject.Provide(
+	// 			ProvideClientContext,
+	// 			ProvideKeyring,
+	// 		),
+	// 	),
+	// 	&txConfigOpts,
+	// 	&autoCliOpts,
+	// 	&moduleBasicManager,
+	// 	&clientCtx,
+	// ); err != nil {
+	// 	panic(err)
+	// }
+	if err := depinject.InjectDebug(
+		depinject.FileVisualizer("/home/evan/work/cosmos-daemon/output.dot"), // DebugOption
+		depinject.Configs(
+			app.AppConfig(),
 			depinject.Supply(
 				log.NewNopLogger(),
 			),
@@ -59,6 +79,7 @@ func NewRootCmd() *cobra.Command {
 		&autoCliOpts,
 		&moduleBasicManager,
 		&clientCtx,
+		// Other dependencies...
 	); err != nil {
 		panic(err)
 	}
@@ -217,4 +238,3 @@ func InitializeConfig(home string) {
 
 	fmt.Println("Hedgehog URL:", viper.GetString("hedgehog.hedgehog_url"))
 }
-

@@ -141,7 +141,6 @@ func newApp(
 	}
 	homePath := appOpts.Get(flags.FlagHome).(string)
 	InitializeConfig(homePath)
-	
 	return app
 }
 

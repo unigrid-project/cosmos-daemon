@@ -10,3 +10,6 @@ go.work.backup
 stress_test.log
 
 test.log
+debug_container.dot
+debug_container.log
+output.*
