@@ -14,7 +14,7 @@ import (
 	simcli "github.com/cosmos/cosmos-sdk/x/simulation/client/cli"
 	"github.com/stretchr/testify/require"
 
-	"pax/app"
+	"github.com/unigrid-project/pax/app"
 )
 
 // Profile with:
