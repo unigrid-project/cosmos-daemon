@@ -31,7 +31,7 @@ import (
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/require"
 
-	"pax/app"
+	"github.com/unigrid-project/pax/app"
 )
 
 const (
