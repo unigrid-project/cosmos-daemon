@@ -39,6 +39,7 @@ require (
 	github.com/spf13/viper v1.17.0
 	github.com/stretchr/testify v1.8.4
 	github.com/unigrid-project/cosmos-sdk-common v0.0.7
+	github.com/unigrid-project/cosmos-sdk-gridnode v0.0.6
 	github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting v0.0.0-00010101000000-000000000000
 	google.golang.org/genproto/googleapis/api v0.0.0-20231106174013-bbf56f31fb17
 	google.golang.org/grpc v1.59.0
@@ -111,7 +112,7 @@ require (
 	github.com/docker/go-connections v0.4.0 // indirect
 	github.com/docker/go-units v0.5.0 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
-	github.com/dvsekhvalnov/jose2go v1.5.1-0.20231206184617-48ba0b76bc88 // indirect
+	github.com/dvsekhvalnov/jose2go v1.6.0 // indirect
 	github.com/emicklei/dot v1.6.0 // indirect
 	github.com/fatih/color v1.15.0 // indirect
 	github.com/felixge/fgprof v0.9.3 // indirect
@@ -257,7 +258,7 @@ require (
 
 replace github.com/unigrid-project/cosmos-sdk-ugdmint => /home/evan/work/cosmos-sdk-ugdmint
 
-//replace github.com/unigrid-project/cosmos-sdk-gridnode => /home/evan/work/cosmos-sdk-gridnode
+replace github.com/unigrid-project/cosmos-sdk-gridnode => /home/evan/work/cosmos-sdk-gridnode
 
 replace github.com/unigrid-project/cosmos-sdk-common => /home/evan/work/cosmos-sdk-common
 
