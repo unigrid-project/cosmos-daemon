@@ -7,7 +7,7 @@ This document outlines the steps to compile the `paxd` daemon using Ignite. The 
 If there's a new module update available, pull the latest version using the following command:
 
 ```bash
-go get github.com/unigrid-project/cosmos-sdk-gridnode@latest
+go get github.com/unigrid-project/cosmos-gridnode@latest
 ```
 
 This command fetches the latest version of the specified module.
