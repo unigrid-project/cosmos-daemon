@@ -1,3 +1,4 @@
 version: v1
 directories:
 - proto
+- proto_vendor/github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting

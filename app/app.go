@@ -57,6 +57,7 @@ import (
 	paxmodulekeeper "github.com/unigrid-project/pax/x/pax/keeper"
 
 	//ugdmintmodulekeeper "github.com/unigrid-project/cosmos-sdk-ugdmint/x/ugdmint/keeper"
+	gridnodemodulekeeper "github.com/unigrid-project/cosmos-sdk-gridnode/x/gridnode/keeper"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	"github.com/unigrid-project/pax/docs"
@@ -122,6 +123,7 @@ type App struct {
 	PaxKeeper        paxmodulekeeper.Keeper
 	UgdvestingKeeper ugdvestingmodulekeeper.Keeper
 	//UgdmintKeeper ugdmintmodulekeeper.Keeper
+	GridnodeKeeper gridnodemodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -262,6 +264,7 @@ func New(
 		&app.PaxKeeper,
 		&app.UgdvestingKeeper,
 		//&app.UgdmintKeeper,
+		&app.GridnodeKeeper,
 		// this line is used by starport scaffolding # stargate/app/keeperDefinition
 	); err != nil {
 		panic(err)
