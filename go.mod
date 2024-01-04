@@ -40,6 +40,7 @@ require (
 	github.com/stretchr/testify v1.8.4
 	github.com/unigrid-project/cosmos-gridnode v0.0.7
 	github.com/unigrid-project/cosmos-sdk-common v0.0.7
+	github.com/unigrid-project/cosmos-ugdmint v0.0.0-00010101000000-000000000000
 	google.golang.org/genproto/googleapis/api v0.0.0-20231106174013-bbf56f31fb17
 	google.golang.org/grpc v1.59.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.3.0
@@ -254,8 +255,10 @@ require (
 	sigs.k8s.io/yaml v1.4.0 // indirect
 )
 
-replace github.com/unigrid-project/cosmos-sdk-ugdmint => /home/evan/work/cosmos-sdk-ugdmint
+replace github.com/unigrid-project/cosmos-ugdmint => /home/evan/work/cosmos-sdk-ugdmint
 
 replace github.com/unigrid-project/cosmos-sdk-common => /home/evan/work/cosmos-sdk-common
 
-replace github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting => /home/evan/work/cosmos-sdk-unigrid-hedgehog-vesting
+//replace github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting => /home/evan/work/cosmos-sdk-unigrid-hedgehog-vesting
+
+replace github.com/unigrid-project/cosmos-gridnode => /home/evan/work/cosmos-sdk-gridnode
