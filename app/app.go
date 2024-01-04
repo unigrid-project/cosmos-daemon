@@ -56,8 +56,9 @@ import (
 	//ugdvestingmodulekeeper "github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting/x/ugdvesting/keeper"
 	paxmodulekeeper "github.com/unigrid-project/pax/x/pax/keeper"
 
-	//ugdmintmodulekeeper "github.com/unigrid-project/cosmos-sdk-ugdmint/x/ugdmint/keeper"
 	gridnodemodulekeeper "github.com/unigrid-project/cosmos-gridnode/x/gridnode/keeper"
+	ugdmintmodulekeeper "github.com/unigrid-project/cosmos-ugdmint/x/ugdmint/keeper"
+
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	"github.com/unigrid-project/pax/docs"
@@ -122,7 +123,7 @@ type App struct {
 
 	PaxKeeper paxmodulekeeper.Keeper
 	//UgdvestingKeeper ugdvestingmodulekeeper.Keeper
-	//UgdmintKeeper ugdmintmodulekeeper.Keeper
+	UgdmintKeeper  ugdmintmodulekeeper.Keeper
 	GridnodeKeeper gridnodemodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
@@ -263,7 +264,7 @@ func New(
 		&app.CircuitBreakerKeeper,
 		&app.PaxKeeper,
 		//&app.UgdvestingKeeper,
-		//&app.UgdmintKeeper,
+		&app.UgdmintKeeper,
 		&app.GridnodeKeeper,
 		// this line is used by starport scaffolding # stargate/app/keeperDefinition
 	); err != nil {
