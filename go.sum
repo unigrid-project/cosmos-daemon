@@ -1095,6 +1095,12 @@ github.com/ugorji/go/codec v1.2.11/go.mod h1:UNopzCgEMSXjBc6AOMqYvWC1ktqTAfzJZUZ
 github.com/ulikunitz/xz v0.5.10/go.mod h1:nbz6k7qbPmH4IRqmfOplQw/tblSgqTqBwxkY0oWt/14=
 github.com/ulikunitz/xz v0.5.11 h1:kpFauv27b6ynzBNT/Xy+1k+fK4WswhN/6PN5WhFAGw8=
 github.com/ulikunitz/xz v0.5.11/go.mod h1:nbz6k7qbPmH4IRqmfOplQw/tblSgqTqBwxkY0oWt/14=
+github.com/unigrid-project/cosmos-common v0.0.8 h1:u7b7NfwKHXbvXj3QGEKaghHrB1TojpaQknA8zgPM0T8=
+github.com/unigrid-project/cosmos-common v0.0.8/go.mod h1:1yKYVwjFSztn3PpscSB02WKYUMkFiRpet2qlYB8OBio=
+github.com/unigrid-project/cosmos-sdk-common v0.0.6 h1:nvAShtDWIYd1wbtgRW2CknrgOG0OwO4mvgINwTPaBkg=
+github.com/unigrid-project/cosmos-sdk-common v0.0.6/go.mod h1:40cAkSp62OjHTtGMdUYQUMwzUEndl6va3uz9asDJl5Q=
+github.com/unigrid-project/cosmos-ugdmint v0.0.80 h1:wCTJjulkSEW9d2NTRbw2krkZs4/0f9awhudF+Gl7BCg=
+github.com/unigrid-project/cosmos-ugdmint v0.0.80/go.mod h1:Id/3FrQEOze5oGY4ipPee3Yd4u8ymGlceRIHa5BK4AI=
 github.com/urfave/cli v1.20.0/go.mod h1:70zkFmudgCuE/ngEzBv17Jvp/497gISqfk5gWijbERA=
 github.com/urfave/cli v1.22.1/go.mod h1:Gos4lmkARVdJ6EkW0WaNv/tZAAMe9V7XWyB60NtXRu0=
 github.com/vbatts/tar-split v0.11.5 h1:3bHCTIheBm1qFTcgh9oPu+nNBtX+XJIupG/vacinCts=
