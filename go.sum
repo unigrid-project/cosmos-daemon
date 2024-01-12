@@ -1099,8 +1099,8 @@ github.com/unigrid-project/cosmos-common v0.0.8 h1:u7b7NfwKHXbvXj3QGEKaghHrB1Toj
 github.com/unigrid-project/cosmos-common v0.0.8/go.mod h1:1yKYVwjFSztn3PpscSB02WKYUMkFiRpet2qlYB8OBio=
 github.com/unigrid-project/cosmos-gridnode v0.0.8 h1:NiQUKeM4ypxgouV0uFeXkyAg/YOQFhDdpB37Xib0rKA=
 github.com/unigrid-project/cosmos-gridnode v0.0.8/go.mod h1:zGWYZv8ecH0ascA3aj/l7O03MDv822bwYmB6jy9OiPw=
-github.com/unigrid-project/cosmos-ugdmint v0.0.81 h1:/kf66UrA4vTzJr2rZlHr3h4KooWJWjGqFyyeNOurWdE=
-github.com/unigrid-project/cosmos-ugdmint v0.0.81/go.mod h1:7lWvASI4+5PA4cMSRsF6B9K5ptT5fxkQKGT9jElgbe0=
+github.com/unigrid-project/cosmos-ugdmint v0.0.82 h1:fK0v6M/3dVayXloEblEQxLoWPz3GLXnc5SmJyKHCkAY=
+github.com/unigrid-project/cosmos-ugdmint v0.0.82/go.mod h1:7lWvASI4+5PA4cMSRsF6B9K5ptT5fxkQKGT9jElgbe0=
 github.com/urfave/cli v1.20.0/go.mod h1:70zkFmudgCuE/ngEzBv17Jvp/497gISqfk5gWijbERA=
 github.com/urfave/cli v1.22.1/go.mod h1:Gos4lmkARVdJ6EkW0WaNv/tZAAMe9V7XWyB60NtXRu0=
 github.com/vbatts/tar-split v0.11.5 h1:3bHCTIheBm1qFTcgh9oPu+nNBtX+XJIupG/vacinCts=
