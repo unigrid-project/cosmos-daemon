@@ -70,17 +70,19 @@ import (
 	ibctransfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 
-	ugdmintmodulev1 "github.com/unigrid-project/cosmos-ugdmint/api/cosmos/ugdmint/module/v1"
-	_ "github.com/unigrid-project/cosmos-ugdmint/x/ugdmint/module" // import for side-effects
-	ugdmintmoduletypes "github.com/unigrid-project/cosmos-ugdmint/x/ugdmint/types"
+	// ugdmintmodulev1 "github.com/unigrid-project/cosmos-ugdmint/api/cosmos/ugdmint/module/v1"
+	// _ "github.com/unigrid-project/cosmos-ugdmint/x/ugdmint/module" // import for side-effects
+	// ugdmintmoduletypes "github.com/unigrid-project/cosmos-ugdmint/x/ugdmint/types"
 
-	// _ "github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting/x/ugdvesting/module" // import for side-effects
-	// ugdvestingmoduletypes "github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting/x/ugdvesting/types"
+	// ugdvestingmodulev1 "github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting/api/ugdvesting/ugdvesting/module"
+	// _ "github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting/x/ugdvesting/module" // import for side-effects
+	// ugdvestingmoduletypes "github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting/x/ugdvesting/types"
 	paxmodulev1 "github.com/unigrid-project/pax/api/pax/pax/module"
 
 	gridnodemodulev1 "github.com/unigrid-project/cosmos-gridnode/api/gridnode/module"
 	_ "github.com/unigrid-project/cosmos-gridnode/x/gridnode/module" // import for side-effects
 	gridnodemoduletypes "github.com/unigrid-project/cosmos-gridnode/x/gridnode/types"
+
 	_ "github.com/unigrid-project/pax/x/pax/module" // import for side-effects
 	paxmoduletypes "github.com/unigrid-project/pax/x/pax/types"
 	"google.golang.org/protobuf/types/known/durationpb"
@@ -123,7 +125,7 @@ var (
 		// chain modules
 		paxmoduletypes.ModuleName,
 		//ugdvestingmoduletypes.ModuleName,
-		ugdmintmoduletypes.ModuleName,
+		//ugdmintmoduletypes.ModuleName,
 		gridnodemoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
@@ -151,7 +153,7 @@ var (
 		// chain modules
 		paxmoduletypes.ModuleName,
 		//ugdvestingmoduletypes.ModuleName,
-		ugdmintmoduletypes.ModuleName,
+		//ugdmintmoduletypes.ModuleName,
 		gridnodemoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
@@ -173,7 +175,7 @@ var (
 		// chain modules
 		paxmoduletypes.ModuleName,
 		//ugdvestingmoduletypes.ModuleName,
-		ugdmintmoduletypes.ModuleName,
+		//ugdmintmoduletypes.ModuleName,
 		gridnodemoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
@@ -332,10 +334,10 @@ var (
 			// 	Name:   ugdvestingmoduletypes.ModuleName,
 			// 	Config: appconfig.WrapAny(&ugdvestingmodulev1.Module{}),
 			// },
-			{
-				Name:   ugdmintmoduletypes.ModuleName,
-				Config: appconfig.WrapAny(&ugdmintmodulev1.Module{}),
-			},
+			// {
+			// 	Name:   ugdmintmoduletypes.ModuleName,
+			// 	Config: appconfig.WrapAny(&ugdmintmodulev1.Module{}),
+			// },
 			{
 				Name:   gridnodemoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&gridnodemodulev1.Module{}),

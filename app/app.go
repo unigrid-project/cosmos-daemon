@@ -53,12 +53,13 @@ import (
 	ibctransferkeeper "github.com/cosmos/ibc-go/v8/modules/apps/transfer/keeper"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 
-	//ugdvestingmodulekeeper "github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting/x/ugdvesting/keeper"
+	//wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
+	gridnodemodulekeeper "github.com/unigrid-project/cosmos-gridnode/x/gridnode/keeper"
+
+	//ugdvestingmodulekeeper "github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting/x/ugdvesting/keeper"
 	paxmodulekeeper "github.com/unigrid-project/pax/x/pax/keeper"
 
-	gridnodemodulekeeper "github.com/unigrid-project/cosmos-gridnode/x/gridnode/keeper"
-	ugdmintmodulekeeper "github.com/unigrid-project/cosmos-ugdmint/x/ugdmint/keeper"
-
+	//ugdmintmodulekeeper "github.com/unigrid-project/cosmos-ugdmint/x/ugdmint/keeper"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	"github.com/unigrid-project/pax/docs"
@@ -123,8 +124,9 @@ type App struct {
 
 	PaxKeeper paxmodulekeeper.Keeper
 	//UgdvestingKeeper ugdvestingmodulekeeper.Keeper
-	UgdmintKeeper  ugdmintmodulekeeper.Keeper
+	// UgdmintKeeper    ugdmintmodulekeeper.Keeper
 	GridnodeKeeper gridnodemodulekeeper.Keeper
+	//WasmKeeper     wasmkeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -264,8 +266,9 @@ func New(
 		&app.CircuitBreakerKeeper,
 		&app.PaxKeeper,
 		//&app.UgdvestingKeeper,
-		&app.UgdmintKeeper,
+		//&app.UgdmintKeeper,
 		&app.GridnodeKeeper,
+		//&app.WasmKeeper,
 		// this line is used by starport scaffolding # stargate/app/keeperDefinition
 	); err != nil {
 		panic(err)
