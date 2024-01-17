@@ -259,4 +259,4 @@ require (
 
 //replace github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting => /home/evan/work/cosmos-sdk-unigrid-hedgehog-vesting
 
-// replace github.com/unigrid-project/cosmos-gridnode => /home/evan/work/cosmos-sdk-gridnode
+//replace github.com/unigrid-project/cosmos-gridnode => /home/evan/work/cosmos-sdk-gridnode
