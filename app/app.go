@@ -54,10 +54,9 @@ import (
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 
 	//ugdvestingmodulekeeper "github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting/x/ugdvesting/keeper"
-	paxmodulekeeper "github.com/unigrid-project/pax/x/pax/keeper"
-
 	gridnodemodulekeeper "github.com/unigrid-project/cosmos-gridnode/x/gridnode/keeper"
 	ugdmintmodulekeeper "github.com/unigrid-project/cosmos-ugdmint/x/ugdmint/keeper"
+	paxmodulekeeper "github.com/unigrid-project/pax/x/pax/keeper"
 
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
