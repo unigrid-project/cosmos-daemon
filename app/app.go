@@ -121,7 +121,7 @@ type App struct {
 	ScopedICAHostKeeper       capabilitykeeper.ScopedKeeper
 
 	PaxKeeper paxmodulekeeper.Keeper
-	//UgdvestingKeeper ugdvestingmodulekeeper.Keeper
+	UgdvestingKeeper ugdvestingmodulekeeper.Keeper
 	UgdmintKeeper  ugdmintmodulekeeper.Keeper
 	GridnodeKeeper gridnodemodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
