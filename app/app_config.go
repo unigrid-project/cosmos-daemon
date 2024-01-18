@@ -73,11 +73,12 @@ import (
 	_ "github.com/unigrid-project/cosmos-ugdmint/x/ugdmint/module" // import for side-effects
 	ugdmintmoduletypes "github.com/unigrid-project/cosmos-ugdmint/x/ugdmint/types"
 
-	// _ "github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting/x/ugdvesting/module" // import for side-effects
-	// ugdvestingmoduletypes "github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting/x/ugdvesting/types"
+	// ugdvestingmodulev1 "github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting/api/ugdvesting/ugdvesting/module"
+	// _ "github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting/x/ugdvesting/module" // import for side-effects
+	// ugdvestingmoduletypes "github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting/x/ugdvesting/types"
 	paxmodulev1 "github.com/unigrid-project/pax/api/pax/pax/module"
 
-	gridnodemodulev1 "github.com/unigrid-project/cosmos-gridnode/api/gridnode/module"
+	gridnodemodulev1 "github.com/unigrid-project/cosmos-gridnode/api/pax/gridnode/module"
 	_ "github.com/unigrid-project/cosmos-gridnode/x/gridnode/module" // import for side-effects
 	gridnodemoduletypes "github.com/unigrid-project/cosmos-gridnode/x/gridnode/types"
 	_ "github.com/unigrid-project/pax/x/pax/module" // import for side-effects
@@ -195,6 +196,7 @@ var (
 		{Account: icatypes.ModuleName},
 		{Account: ugdmintmoduletypes.ModuleName, Permissions: []string{authtypes.Minter}},
 		{Account: gridnodemoduletypes.ModuleName},
+		//{Account: ugdvestingmoduletypes.ModuleName},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 

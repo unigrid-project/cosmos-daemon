@@ -39,8 +39,9 @@ require (
 	github.com/spf13/viper v1.17.0
 	github.com/stretchr/testify v1.8.4
 	github.com/unigrid-project/cosmos-common v0.0.8
-	github.com/unigrid-project/cosmos-gridnode v0.0.8
+	github.com/unigrid-project/cosmos-gridnode v0.0.11
 	github.com/unigrid-project/cosmos-ugdmint v0.0.82
+	github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting v0.0.55
 	google.golang.org/genproto/googleapis/api v0.0.0-20231106174013-bbf56f31fb17
 	google.golang.org/grpc v1.59.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.3.0
@@ -209,6 +210,7 @@ require (
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
 	github.com/sasha-s/go-deadlock v0.3.1 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
+	github.com/sosodev/duration v1.1.0 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.10.0 // indirect
 	github.com/spf13/cast v1.5.1 // indirect
