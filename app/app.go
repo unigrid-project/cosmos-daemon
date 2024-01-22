@@ -53,9 +53,9 @@ import (
 	ibctransferkeeper "github.com/cosmos/ibc-go/v8/modules/apps/transfer/keeper"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 
-	ugdvestingmodulekeeper "github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting/x/ugdvesting/keeper"
 	gridnodemodulekeeper "github.com/unigrid-project/cosmos-gridnode/x/gridnode/keeper"
 	ugdmintmodulekeeper "github.com/unigrid-project/cosmos-ugdmint/x/ugdmint/keeper"
+	ugdvestingmodulekeeper "github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting/x/ugdvesting/keeper"
 	paxmodulekeeper "github.com/unigrid-project/pax/x/pax/keeper"
 
 	// this line is used by starport scaffolding # stargate/app/moduleImport
@@ -120,10 +120,10 @@ type App struct {
 	ScopedICAControllerKeeper capabilitykeeper.ScopedKeeper
 	ScopedICAHostKeeper       capabilitykeeper.ScopedKeeper
 
-	PaxKeeper paxmodulekeeper.Keeper
+	PaxKeeper        paxmodulekeeper.Keeper
 	UgdvestingKeeper ugdvestingmodulekeeper.Keeper
-	UgdmintKeeper  ugdmintmodulekeeper.Keeper
-	GridnodeKeeper gridnodemodulekeeper.Keeper
+	UgdmintKeeper    ugdmintmodulekeeper.Keeper
+	GridnodeKeeper   gridnodemodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -262,7 +262,7 @@ func New(
 		&app.ConsensusParamsKeeper,
 		&app.CircuitBreakerKeeper,
 		&app.PaxKeeper,
-		//&app.UgdvestingKeeper,
+		&app.UgdvestingKeeper,
 		&app.UgdmintKeeper,
 		&app.GridnodeKeeper,
 		// this line is used by starport scaffolding # stargate/app/keeperDefinition
