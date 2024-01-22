@@ -73,9 +73,9 @@ import (
 	_ "github.com/unigrid-project/cosmos-ugdmint/x/ugdmint/module" // import for side-effects
 	ugdmintmoduletypes "github.com/unigrid-project/cosmos-ugdmint/x/ugdmint/types"
 
-	// ugdvestingmodulev1 "github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting/api/ugdvesting/ugdvesting/module"
-	// _ "github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting/x/ugdvesting/module" // import for side-effects
-	// ugdvestingmoduletypes "github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting/x/ugdvesting/types"
+	ugdvestingmodulev1 "github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting/api/ugdvesting/ugdvesting/module"
+	_ "github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting/x/ugdvesting/module" // import for side-effects
+	ugdvestingmoduletypes "github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting/x/ugdvesting/types"
 	paxmodulev1 "github.com/unigrid-project/pax/api/pax/pax/module"
 
 	gridnodemodulev1 "github.com/unigrid-project/cosmos-gridnode/api/pax/gridnode/module"
@@ -122,7 +122,7 @@ var (
 		circuittypes.ModuleName,
 		// chain modules
 		paxmoduletypes.ModuleName,
-		//ugdvestingmoduletypes.ModuleName,
+		ugdvestingmoduletypes.ModuleName,
 		ugdmintmoduletypes.ModuleName,
 		gridnodemoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
@@ -150,7 +150,7 @@ var (
 		ibcfeetypes.ModuleName,
 		// chain modules
 		paxmoduletypes.ModuleName,
-		//ugdvestingmoduletypes.ModuleName,
+		ugdvestingmoduletypes.ModuleName,
 		ugdmintmoduletypes.ModuleName,
 		gridnodemoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
@@ -172,7 +172,7 @@ var (
 		ibcfeetypes.ModuleName,
 		// chain modules
 		paxmoduletypes.ModuleName,
-		//ugdvestingmoduletypes.ModuleName,
+		ugdvestingmoduletypes.ModuleName,
 		ugdmintmoduletypes.ModuleName,
 		gridnodemoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
@@ -196,7 +196,7 @@ var (
 		{Account: icatypes.ModuleName},
 		{Account: ugdmintmoduletypes.ModuleName, Permissions: []string{authtypes.Minter}},
 		{Account: gridnodemoduletypes.ModuleName},
-		//{Account: ugdvestingmoduletypes.ModuleName},
+		{Account: ugdvestingmoduletypes.ModuleName},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 
@@ -331,10 +331,10 @@ var (
 				Name:   paxmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&paxmodulev1.Module{}),
 			},
-			// {
-			// 	Name:   ugdvestingmoduletypes.ModuleName,
-			// 	Config: appconfig.WrapAny(&ugdvestingmodulev1.Module{}),
-			// },
+			{
+				Name:   ugdvestingmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&ugdvestingmodulev1.Module{}),
+			},
 			{
 				Name:   ugdmintmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&ugdmintmodulev1.Module{}),
