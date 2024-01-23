@@ -41,7 +41,7 @@ require (
 	github.com/unigrid-project/cosmos-common v0.0.8
 	github.com/unigrid-project/cosmos-gridnode v0.0.11
 	github.com/unigrid-project/cosmos-ugdmint v0.0.82
-	github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting v0.0.56
+	github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting v0.0.57
 	google.golang.org/genproto/googleapis/api v0.0.0-20231120223509-83a465c0220f
 	google.golang.org/grpc v1.60.1
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.3.0
@@ -259,6 +259,6 @@ require (
 
 // replace github.com/unigrid-project/cosmos-ugdmint => /home/evan/work/cosmos-sdk-ugdmint
 
-//replace github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting => /home/evan/work/pax
+//replace github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting => /home/evan/work/cosmos-sdk-unigrid-hedgehog-vesting
 
-replace github.com/unigrid-project/cosmos-gridnode => /home/evan/work/cosmos-sdk-gridnode
+//replace github.com/unigrid-project/cosmos-gridnode => /home/evan/work/cosmos-sdk-gridnode
