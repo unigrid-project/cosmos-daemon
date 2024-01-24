@@ -257,7 +257,7 @@ require (
 	sigs.k8s.io/yaml v1.4.0 // indirect
 )
 
-// replace github.com/unigrid-project/cosmos-ugdmint => /home/evan/work/cosmos-sdk-ugdmint
+//replace github.com/unigrid-project/cosmos-ugdmint => /home/evan/work/cosmos-sdk-ugdmint
 
 //replace github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting => /home/evan/work/cosmos-sdk-unigrid-hedgehog-vesting
 

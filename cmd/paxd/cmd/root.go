@@ -45,6 +45,8 @@ func NewRootCmd() *cobra.Command {
 		clientCtx          client.Context
 	)
 
+	//if err := depinject.InjectDebug(
+	//depinject.FileVisualizer("/home/evan/work/cosmos-daemon/output.dot"),
 	if err := depinject.Inject(
 		depinject.Configs(
 			app.AppConfig(),
@@ -116,6 +118,12 @@ func NewRootCmd() *cobra.Command {
 			return server.InterceptConfigsPreRunHandler(cmd, customAppTemplate, customAppConfig, customCMTConfig)
 		},
 	}
+
+	// param for the hedgehog url to be passed at startup
+	rootCmd.PersistentFlags().StringVar(&HedgehogUrl, "hedgehog", "", "Pass the Hedgehog URL")
+	//fmt.Println("Value of --hedgehog flag:", HedgehogUrl)
+
+	viper.BindPFlag("hedgehog.hedgehog_url", rootCmd.PersistentFlags().Lookup("hedgehog"))
 
 	initRootCmd(rootCmd, clientCtx.TxConfig, clientCtx.InterfaceRegistry, clientCtx.Codec, moduleBasicManager)
 
