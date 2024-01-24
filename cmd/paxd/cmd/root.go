@@ -45,26 +45,7 @@ func NewRootCmd() *cobra.Command {
 		clientCtx          client.Context
 	)
 
-	// if err := depinject.Inject(
-	// 	depinject.Configs(
-	// 		app.AppConfig(),
-	// 		depinject.Supply(
-	// 			log.NewNopLogger(),
-	// 		),
-	// 		depinject.Provide(
-	// 			ProvideClientContext,
-	// 			ProvideKeyring,
-	// 		),
-	// 	),
-	// 	&txConfigOpts,
-	// 	&autoCliOpts,
-	// 	&moduleBasicManager,
-	// 	&clientCtx,
-	// ); err != nil {
-	// 	panic(err)
-	// }
-	if err := depinject.InjectDebug(
-		depinject.FileVisualizer("/home/evan/work/cosmos-daemon/output.dot"), // DebugOption
+	if err := depinject.Inject(
 		depinject.Configs(
 			app.AppConfig(),
 			depinject.Supply(
@@ -79,10 +60,10 @@ func NewRootCmd() *cobra.Command {
 		&autoCliOpts,
 		&moduleBasicManager,
 		&clientCtx,
-		// Other dependencies...
 	); err != nil {
 		panic(err)
 	}
+
 	// Since the IBC modules don't support dependency injection, we need to
 	// manually add the modules to the basic manager on the client side.
 	// This needs to be removed after IBC supports App Wiring.
