@@ -39,9 +39,9 @@ require (
 	github.com/spf13/viper v1.17.0
 	github.com/stretchr/testify v1.8.4
 	github.com/unigrid-project/cosmos-common v0.0.8
-	github.com/unigrid-project/cosmos-gridnode v0.0.11
-	github.com/unigrid-project/cosmos-ugdmint v0.0.82
-	github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting v0.0.57
+	github.com/unigrid-project/cosmos-gridnode v0.0.13
+	github.com/unigrid-project/cosmos-ugdmint v0.0.83
+	github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting v0.0.59
 	google.golang.org/genproto/googleapis/api v0.0.0-20231120223509-83a465c0220f
 	google.golang.org/grpc v1.60.1
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.3.0
