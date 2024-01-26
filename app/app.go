@@ -40,7 +40,6 @@ import (
 	govkeeper "github.com/cosmos/cosmos-sdk/x/gov/keeper"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	groupkeeper "github.com/cosmos/cosmos-sdk/x/group/keeper"
-	mintkeeper "github.com/cosmos/cosmos-sdk/x/mint/keeper"
 	paramsclient "github.com/cosmos/cosmos-sdk/x/params/client"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
@@ -89,11 +88,11 @@ type App struct {
 	interfaceRegistry codectypes.InterfaceRegistry
 
 	// keepers
-	AccountKeeper         authkeeper.AccountKeeper
-	BankKeeper            bankkeeper.Keeper
-	StakingKeeper         *stakingkeeper.Keeper
-	SlashingKeeper        slashingkeeper.Keeper
-	MintKeeper            mintkeeper.Keeper
+	AccountKeeper  authkeeper.AccountKeeper
+	BankKeeper     bankkeeper.Keeper
+	StakingKeeper  *stakingkeeper.Keeper
+	SlashingKeeper slashingkeeper.Keeper
+	//MintKeeper            mintkeeper.Keeper
 	DistrKeeper           distrkeeper.Keeper
 	GovKeeper             *govkeeper.Keeper
 	CrisisKeeper          *crisiskeeper.Keeper
@@ -249,7 +248,6 @@ func New(
 		&app.BankKeeper,
 		&app.StakingKeeper,
 		&app.SlashingKeeper,
-		&app.MintKeeper,
 		&app.DistrKeeper,
 		&app.GovKeeper,
 		&app.CrisisKeeper,

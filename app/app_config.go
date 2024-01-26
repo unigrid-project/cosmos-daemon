@@ -17,7 +17,6 @@ import (
 	genutilmodulev1 "cosmossdk.io/api/cosmos/genutil/module/v1"
 	govmodulev1 "cosmossdk.io/api/cosmos/gov/module/v1"
 	groupmodulev1 "cosmossdk.io/api/cosmos/group/module/v1"
-	mintmodulev1 "cosmossdk.io/api/cosmos/mint/module/v1"
 	paramsmodulev1 "cosmossdk.io/api/cosmos/params/module/v1"
 	slashingmodulev1 "cosmossdk.io/api/cosmos/slashing/module/v1"
 	stakingmodulev1 "cosmossdk.io/api/cosmos/staking/module/v1"
@@ -52,8 +51,9 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/cosmos/cosmos-sdk/x/group"
 	_ "github.com/cosmos/cosmos-sdk/x/group/module" // import for side-effects
-	_ "github.com/cosmos/cosmos-sdk/x/mint"         // import for side-effects
-	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
+
+	//_ "github.com/cosmos/cosmos-sdk/x/mint"         // import for side-effects
+	//minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	_ "github.com/cosmos/cosmos-sdk/x/params" // import for side-effects
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	_ "github.com/cosmos/cosmos-sdk/x/slashing" // import for side-effects
@@ -68,6 +68,8 @@ import (
 	ibcfeetypes "github.com/cosmos/ibc-go/v8/modules/apps/29-fee/types"
 	ibctransfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
+
+	//mintmodulev1 "github.com/unigrid-project/cosmos-ugdmint/api/cosmos/ugdmint/module/v1"
 
 	ugdmintmodulev1 "github.com/unigrid-project/cosmos-ugdmint/api/cosmos/ugdmint/module/v1"
 	_ "github.com/unigrid-project/cosmos-ugdmint/x/ugdmint/module" // import for side-effects
@@ -103,7 +105,7 @@ var (
 		stakingtypes.ModuleName,
 		slashingtypes.ModuleName,
 		govtypes.ModuleName,
-		minttypes.ModuleName,
+		//minttypes.ModuleName,
 		crisistypes.ModuleName,
 		ibcexported.ModuleName,
 		genutiltypes.ModuleName,
@@ -135,7 +137,7 @@ var (
 	// NOTE: capability module's beginblocker must come before any modules using capabilities (e.g. IBC)
 	beginBlockers = []string{
 		// cosmos sdk modules
-		minttypes.ModuleName,
+		//minttypes.ModuleName,
 		distrtypes.ModuleName,
 		slashingtypes.ModuleName,
 		evidencetypes.ModuleName,
@@ -187,7 +189,7 @@ var (
 	moduleAccPerms = []*authmodulev1.ModuleAccountPermission{
 		{Account: authtypes.FeeCollectorName},
 		{Account: distrtypes.ModuleName},
-		{Account: minttypes.ModuleName, Permissions: []string{authtypes.Minter}},
+		//{Account: minttypes.ModuleName, Permissions: []string{authtypes.Minter}},
 		{Account: stakingtypes.BondedPoolName, Permissions: []string{authtypes.Burner, stakingtypes.ModuleName}},
 		{Account: stakingtypes.NotBondedPoolName, Permissions: []string{authtypes.Burner, stakingtypes.ModuleName}},
 		{Account: govtypes.ModuleName, Permissions: []string{authtypes.Burner}},
@@ -204,7 +206,8 @@ var (
 	blockAccAddrs = []string{
 		authtypes.FeeCollectorName,
 		distrtypes.ModuleName,
-		minttypes.ModuleName,
+		//minttypes.ModuleName,
+		ugdmintmoduletypes.ModuleName,
 		stakingtypes.BondedPoolName,
 		stakingtypes.NotBondedPoolName,
 		// We allow the following module accounts to receive funds:
@@ -296,10 +299,10 @@ var (
 				Name:   evidencetypes.ModuleName,
 				Config: appconfig.WrapAny(&evidencemodulev1.Module{}),
 			},
-			{
-				Name:   minttypes.ModuleName,
-				Config: appconfig.WrapAny(&mintmodulev1.Module{}),
-			},
+			// {
+			// 	Name:   minttypes.ModuleName,
+			// 	Config: appconfig.WrapAny(&mintmodulev1.Module{}),
+			// },
 			{
 				Name: group.ModuleName,
 				Config: appconfig.WrapAny(&groupmodulev1.Module{

@@ -63,6 +63,7 @@ func NewRootCmd() *cobra.Command {
 		&moduleBasicManager,
 		&clientCtx,
 	); err != nil {
+		fmt.Printf("Error during dependency injection: %+v\n", err)
 		panic(err)
 	}
 
