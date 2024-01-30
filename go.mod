@@ -7,6 +7,10 @@ replace (
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.7.0
 	// replace broken goleveldb
 	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
+
+	//used for local testing. change to where the project is located
+	//github.com/unigrid-project/cosmos-daemon => /home/marcus/Documents/unigrid/ugdcosmos/ugdcosmos/cosmos-daemon
+	//github.com/CosmWasm/wasmd => github.com/CosmWasm/wasmd v0.50.0
 )
 
 require (

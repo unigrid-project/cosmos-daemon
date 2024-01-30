@@ -56,10 +56,10 @@ import (
 	//ugdvestingmodulekeeper "github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting/x/ugdvesting/keeper"
 	paxmodulekeeper "github.com/unigrid-project/pax/x/pax/keeper"
 
-	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	gridnodemodulekeeper "github.com/unigrid-project/cosmos-gridnode/x/gridnode/keeper"
 	ugdmintmodulekeeper "github.com/unigrid-project/cosmos-ugdmint/x/ugdmint/keeper"
 
+	cosmwasmmodulekeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	"github.com/unigrid-project/pax/docs"
@@ -107,7 +107,6 @@ type App struct {
 	GroupKeeper           groupkeeper.Keeper
 	ConsensusParamsKeeper consensuskeeper.Keeper
 	CircuitBreakerKeeper  circuitkeeper.Keeper
-	WasmKeeper            wasmkeeper.Keeper
 
 	// IBC
 	IBCKeeper           *ibckeeper.Keeper // IBC Keeper must be a pointer in the app, so we can SetRouter on it correctly
@@ -127,6 +126,7 @@ type App struct {
 	//UgdvestingKeeper ugdvestingmodulekeeper.Keeper
 	UgdmintKeeper  ugdmintmodulekeeper.Keeper
 	GridnodeKeeper gridnodemodulekeeper.Keeper
+	CosmwasmKeeper cosmwasmmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -265,10 +265,10 @@ func New(
 		&app.ConsensusParamsKeeper,
 		&app.CircuitBreakerKeeper,
 		&app.PaxKeeper,
-		&app.WasmKeeper,
 		//&app.UgdvestingKeeper,
 		&app.UgdmintKeeper,
 		&app.GridnodeKeeper,
+		&app.CosmwasmKeeper,
 		// this line is used by starport scaffolding # stargate/app/keeperDefinition
 	); err != nil {
 		panic(err)
@@ -310,6 +310,7 @@ func New(
 
 	// Register legacy modules
 	app.registerIBCModules()
+	app.registerWasmModules()
 
 	// register streaming services
 	if err := app.RegisterStreamingServices(appOpts, app.kvStoreKeys()); err != nil {

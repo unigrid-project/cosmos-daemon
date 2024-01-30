@@ -84,6 +84,8 @@ import (
 	_ "github.com/unigrid-project/pax/x/pax/module" // import for side-effects
 	paxmoduletypes "github.com/unigrid-project/pax/x/pax/types"
 	"google.golang.org/protobuf/types/known/durationpb"
+	//cosmwasmmodulev1 "github.com/unigrid-project/pax/api/pax/cosmwasm/module"
+	cosmwasmmoduletypes "github.com/CosmWasm/wasmd/x/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 
@@ -125,7 +127,8 @@ var (
 		//ugdvestingmoduletypes.ModuleName,
 		ugdmintmoduletypes.ModuleName,
 		gridnodemoduletypes.ModuleName,
-		// this line is used by starport scaffolding # stargate/app/initGenesis
+		cosmwasmmoduletypes.ModuleName,
+// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -153,7 +156,8 @@ var (
 		//ugdvestingmoduletypes.ModuleName,
 		ugdmintmoduletypes.ModuleName,
 		gridnodemoduletypes.ModuleName,
-		// this line is used by starport scaffolding # stargate/app/beginBlockers
+		cosmwasmmoduletypes.ModuleName,
+// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
 	endBlockers = []string{
@@ -175,7 +179,8 @@ var (
 		//ugdvestingmoduletypes.ModuleName,
 		ugdmintmoduletypes.ModuleName,
 		gridnodemoduletypes.ModuleName,
-		// this line is used by starport scaffolding # stargate/app/endBlockers
+		cosmwasmmoduletypes.ModuleName,
+// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
 	preBlockers = []string{
@@ -341,7 +346,11 @@ var (
 				Name:   gridnodemoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&gridnodemodulev1.Module{}),
 			},
-			// this line is used by starport scaffolding # stargate/app/moduleConfig
+			{
+				Name:   cosmwasmmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&cosmwasmmodulev1.Module{}),
+			},
+// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},
 	})
 )
