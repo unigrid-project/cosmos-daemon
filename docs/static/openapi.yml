@@ -1689,9 +1689,11 @@ paths:
                 type: string
               pruning_keep_recent:
                 type: string
-                title: pruning settings
               pruning_interval:
                 type: string
+              halt_height:
+                type: string
+                format: uint64
             description: >-
               ConfigResponse defines the response structure for the Config gRPC
               query.
@@ -9002,473 +9004,6 @@ paths:
               MsgUpdateParams is the Msg/UpdateParams request type.
 
               Since: cosmos-sdk 0.47
-      tags:
-        - Msg
-  /gridnode/all-delegations:
-    get:
-      operationId: CosmossdkgridnodeGridnodeQuery_AllDelegations
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              delegations:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    account:
-                      type: string
-                    delegated_amount:
-                      type: string
-                      format: int64
-                    unbonding_entries:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          amount:
-                            type: string
-                            format: int64
-                          completion_time:
-                            type: string
-                            format: int64
-                      title: New field for unbonding entries
-              pagination:
-                type: object
-                properties:
-                  next_key:
-                    type: string
-                    format: byte
-                    description: |-
-                      next_key is the key to be passed to PageRequest.key to
-                      query the next page most efficiently. It will be empty if
-                      there are no more results.
-                  total:
-                    type: string
-                    format: uint64
-                    title: >-
-                      total is total number of results available if
-                      PageRequest.count_total
-
-                      was set, its value is undefined otherwise
-                description: >-
-                  PageResponse is to be embedded in gRPC response messages where
-                  the
-
-                  corresponding request message has used PageRequest.
-
-                   message SomeResponse {
-                           repeated Bar results = 1;
-                           PageResponse page = 2;
-                   }
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: pagination.key
-          description: |-
-            key is a value returned in PageResponse.next_key to begin
-            querying the next page most efficiently. Only one of offset or key
-            should be set.
-          in: query
-          required: false
-          type: string
-          format: byte
-        - name: pagination.offset
-          description: >-
-            offset is a numeric offset that can be used when key is unavailable.
-
-            It is less efficient than using key. Only one of offset or key
-            should
-
-            be set.
-          in: query
-          required: false
-          type: string
-          format: uint64
-        - name: pagination.limit
-          description: >-
-            limit is the total number of results to be returned in the result
-            page.
-
-            If left empty it will default to a value to be set by each app.
-          in: query
-          required: false
-          type: string
-          format: uint64
-        - name: pagination.count_total
-          description: >-
-            count_total is set to true  to indicate that the result set should
-            include
-
-            a count of the total number of items available for pagination in
-            UIs.
-
-            count_total is only respected when offset is used. It is ignored
-            when key
-
-            is set.
-          in: query
-          required: false
-          type: boolean
-        - name: pagination.reverse
-          description: >-
-            reverse is set to true if results are to be returned in the
-            descending order.
-
-
-            Since: cosmos-sdk 0.43
-          in: query
-          required: false
-          type: boolean
-      tags:
-        - Query
-  /gridnode/delegated-amount/{delegator_address}:
-    get:
-      summary: DelegatedAmount queries the amount delegated by a specific account.
-      operationId: CosmossdkgridnodeGridnodeQuery_DelegatedAmount
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              amount:
-                type: string
-                format: int64
-            description: >-
-              QueryDelegatedAmountResponse is the response type for the
-              Query/DelegatedAmount RPC method.
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: delegator_address
-          in: path
-          required: true
-          type: string
-      tags:
-        - Query
-  /gridnode/params:
-    get:
-      summary: Parameters queries the parameters of the module.
-      operationId: CosmossdkgridnodeGridnodeQuery_Params
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              params:
-                description: params holds all the parameters of this module.
-                type: object
-            description: >-
-              QueryParamsResponse is response type for the Query/Params RPC
-              method.
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      tags:
-        - Query
-  /gridnode/query-unbonding/{bonding_account_address}:
-    get:
-      operationId: CosmossdkgridnodeGridnodeQuery_UnbondingEntries
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              unbonding_entries:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    account:
-                      type: string
-                      title: This remains a string as it represents an address
-                    amount:
-                      type: string
-                      format: int64
-                      title: Use the Coin type from Cosmos SDK
-                    completion_time:
-                      type: string
-                      format: int64
-                      title: Use the Timestamp type for time values
-              pagination:
-                type: object
-                properties:
-                  next_key:
-                    type: string
-                    format: byte
-                    description: |-
-                      next_key is the key to be passed to PageRequest.key to
-                      query the next page most efficiently. It will be empty if
-                      there are no more results.
-                  total:
-                    type: string
-                    format: uint64
-                    title: >-
-                      total is total number of results available if
-                      PageRequest.count_total
-
-                      was set, its value is undefined otherwise
-                description: >-
-                  PageResponse is to be embedded in gRPC response messages where
-                  the
-
-                  corresponding request message has used PageRequest.
-
-                   message SomeResponse {
-                           repeated Bar results = 1;
-                           PageResponse page = 2;
-                   }
-            description: >-
-              QueryUnbondingEntriesResponse is the response type for the
-              Query/UnbondingEntries RPC method.
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: bonding_account_address
-          in: path
-          required: true
-          type: string
-        - name: pagination.key
-          description: |-
-            key is a value returned in PageResponse.next_key to begin
-            querying the next page most efficiently. Only one of offset or key
-            should be set.
-          in: query
-          required: false
-          type: string
-          format: byte
-        - name: pagination.offset
-          description: >-
-            offset is a numeric offset that can be used when key is unavailable.
-
-            It is less efficient than using key. Only one of offset or key
-            should
-
-            be set.
-          in: query
-          required: false
-          type: string
-          format: uint64
-        - name: pagination.limit
-          description: >-
-            limit is the total number of results to be returned in the result
-            page.
-
-            If left empty it will default to a value to be set by each app.
-          in: query
-          required: false
-          type: string
-          format: uint64
-        - name: pagination.count_total
-          description: >-
-            count_total is set to true  to indicate that the result set should
-            include
-
-            a count of the total number of items available for pagination in
-            UIs.
-
-            count_total is only respected when offset is used. It is ignored
-            when key
-
-            is set.
-          in: query
-          required: false
-          type: boolean
-        - name: pagination.reverse
-          description: >-
-            reverse is set to true if results are to be returned in the
-            descending order.
-
-
-            Since: cosmos-sdk 0.43
-          in: query
-          required: false
-          type: boolean
-      tags:
-        - Query
-  /gridnode/delegate-tokens:
-    post:
-      operationId: CosmossdkgridnodeGridnodeMsg_DelegateTokens
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              tx_hash:
-                type: string
-                title: Transaction hash of the delegated tokens operation
-              status:
-                type: string
-                title: Status of the operation, e.g., "success" or "failure"
-            description: >-
-              MsgGridnodeDelegateResponse is the response type for the
-              Msg/DelegateTokens RPC method.
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: body
-          description: >-
-            MsgGridnodeDelegate is the request type for the Msg/DelegateTokens
-            RPC method.
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              delegator_address:
-                type: string
-              amount:
-                type: string
-                format: int64
-              timestamp:
-                type: string
-                format: int64
-                title: Timestamp in Unix format or
-              unique_id:
-                type: string
-                title: unique identifier UUID
-            description: >-
-              MsgGridnodeDelegate is the request type for the Msg/DelegateTokens
-              RPC method.
-      tags:
-        - Msg
-  /gridnode/undelegate-tokens:
-    post:
-      operationId: CosmossdkgridnodeGridnodeMsg_UndelegateTokens
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              tx_hash:
-                type: string
-                title: Transaction hash of the delegated tokens operation
-              status:
-                type: string
-                title: Status of the operation, e.g., "success" or "failure"
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: body
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              delegator_address:
-                type: string
-              amount:
-                type: string
-                format: int64
-              timestamp:
-                type: string
-                format: int64
-                title: Timestamp in Unix format or
-              unique_id:
-                type: string
-                title: unique identifier UUID
       tags:
         - Msg
   /ibc.applications.fee.v1.Msg/PayPacketFee:
@@ -19377,6 +18912,176 @@ paths:
               parameters.
       tags:
         - Msg
+  /gridnode/delegate-tokens:
+    post:
+      operationId: PaxGridnodeMsg_DelegateTokens
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              tx_hash:
+                type: string
+                title: Transaction hash of the delegated tokens operation
+              status:
+                type: string
+                title: Status of the operation, e.g., "success" or "failure"
+            description: >-
+              MsgGridnodeDelegateResponse is the response type for the
+              Msg/DelegateTokens RPC method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          description: >-
+            MsgGridnodeDelegate is the request type for the Msg/DelegateTokens
+            RPC method.
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              delegator_address:
+                type: string
+              amount:
+                type: string
+                format: int64
+              timestamp:
+                type: string
+                format: int64
+                title: Timestamp in Unix format or
+              unique_id:
+                type: string
+                title: unique identifier UUID
+            description: >-
+              MsgGridnodeDelegate is the request type for the Msg/DelegateTokens
+              RPC method.
+      tags:
+        - Msg
+  /gridnode/undelegate-tokens:
+    post:
+      operationId: PaxGridnodeMsg_UndelegateTokens
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              tx_hash:
+                type: string
+                title: Transaction hash of the delegated tokens operation
+              status:
+                type: string
+                title: Status of the operation, e.g., "success" or "failure"
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              delegator_address:
+                type: string
+              amount:
+                type: string
+                format: int64
+              timestamp:
+                type: string
+                format: int64
+                title: Timestamp in Unix format or
+              unique_id:
+                type: string
+                title: unique identifier UUID
+      tags:
+        - Msg
+  /pax.gridnode.Msg/UpdateParams:
+    post:
+      operationId: PaxGridnodeMsg_UpdateParams
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            description: >-
+              MsgUpdateParamsResponse defines the response structure for
+              executing a
+
+              MsgUpdateParams message.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          description: MsgUpdateParams is the Msg/UpdateParams request type.
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              authority:
+                type: string
+                description: >-
+                  authority is the address that controls the module (defaults to
+                  x/gov unless overwritten).
+              params:
+                description: |-
+                  params defines the module parameters to update.
+
+                  NOTE: All parameters must be supplied.
+                type: object
+            description: MsgUpdateParams is the Msg/UpdateParams request type.
+      tags:
+        - Msg
   /pax.pax.Msg/UpdateParams:
     post:
       summary: |-
@@ -20687,9 +20392,11 @@ definitions:
         type: string
       pruning_keep_recent:
         type: string
-        title: pruning settings
       pruning_interval:
         type: string
+      halt_height:
+        type: string
+        format: uint64
     description: ConfigResponse defines the response structure for the Config gRPC query.
   cosmos.base.node.v1beta1.StatusResponse:
     type: object
@@ -23099,298 +22806,6 @@ definitions:
           min_commission_rate is the chain-wide minimum commission rate that a
           validator can charge their delegators
     description: Params defines the parameters for the x/staking module.
-  cosmos.base.query.v1beta1.PageRequest:
-    type: object
-    properties:
-      key:
-        type: string
-        format: byte
-        description: |-
-          key is a value returned in PageResponse.next_key to begin
-          querying the next page most efficiently. Only one of offset or key
-          should be set.
-      offset:
-        type: string
-        format: uint64
-        description: |-
-          offset is a numeric offset that can be used when key is unavailable.
-          It is less efficient than using key. Only one of offset or key should
-          be set.
-      limit:
-        type: string
-        format: uint64
-        description: >-
-          limit is the total number of results to be returned in the result
-          page.
-
-          If left empty it will default to a value to be set by each app.
-      count_total:
-        type: boolean
-        description: >-
-          count_total is set to true  to indicate that the result set should
-          include
-
-          a count of the total number of items available for pagination in UIs.
-
-          count_total is only respected when offset is used. It is ignored when
-          key
-
-          is set.
-      reverse:
-        type: boolean
-        description: >-
-          reverse is set to true if results are to be returned in the descending
-          order.
-
-
-          Since: cosmos-sdk 0.43
-    description: |-
-      message SomeRequest {
-               Foo some_parameter = 1;
-               PageRequest pagination = 2;
-       }
-    title: |-
-      PageRequest is to be embedded in gRPC request messages for efficient
-      pagination. Ex:
-  cosmos.base.query.v1beta1.PageResponse:
-    type: object
-    properties:
-      next_key:
-        type: string
-        format: byte
-        description: |-
-          next_key is the key to be passed to PageRequest.key to
-          query the next page most efficiently. It will be empty if
-          there are no more results.
-      total:
-        type: string
-        format: uint64
-        title: |-
-          total is total number of results available if PageRequest.count_total
-          was set, its value is undefined otherwise
-    description: |-
-      PageResponse is to be embedded in gRPC response messages where the
-      corresponding request message has used PageRequest.
-
-       message SomeResponse {
-               repeated Bar results = 1;
-               PageResponse page = 2;
-       }
-  cosmossdkgridnode.gridnode.DelegationInfo:
-    type: object
-    properties:
-      account:
-        type: string
-      delegated_amount:
-        type: string
-        format: int64
-      unbonding_entries:
-        type: array
-        items:
-          type: object
-          properties:
-            amount:
-              type: string
-              format: int64
-            completion_time:
-              type: string
-              format: int64
-        title: New field for unbonding entries
-  cosmossdkgridnode.gridnode.Params:
-    type: object
-    description: Params defines the parameters for the module.
-  cosmossdkgridnode.gridnode.QueryAllDelegationsResponse:
-    type: object
-    properties:
-      delegations:
-        type: array
-        items:
-          type: object
-          properties:
-            account:
-              type: string
-            delegated_amount:
-              type: string
-              format: int64
-            unbonding_entries:
-              type: array
-              items:
-                type: object
-                properties:
-                  amount:
-                    type: string
-                    format: int64
-                  completion_time:
-                    type: string
-                    format: int64
-              title: New field for unbonding entries
-      pagination:
-        type: object
-        properties:
-          next_key:
-            type: string
-            format: byte
-            description: |-
-              next_key is the key to be passed to PageRequest.key to
-              query the next page most efficiently. It will be empty if
-              there are no more results.
-          total:
-            type: string
-            format: uint64
-            title: >-
-              total is total number of results available if
-              PageRequest.count_total
-
-              was set, its value is undefined otherwise
-        description: |-
-          PageResponse is to be embedded in gRPC response messages where the
-          corresponding request message has used PageRequest.
-
-           message SomeResponse {
-                   repeated Bar results = 1;
-                   PageResponse page = 2;
-           }
-  cosmossdkgridnode.gridnode.QueryDelegatedAmountResponse:
-    type: object
-    properties:
-      amount:
-        type: string
-        format: int64
-    description: >-
-      QueryDelegatedAmountResponse is the response type for the
-      Query/DelegatedAmount RPC method.
-  cosmossdkgridnode.gridnode.QueryParamsResponse:
-    type: object
-    properties:
-      params:
-        description: params holds all the parameters of this module.
-        type: object
-    description: QueryParamsResponse is response type for the Query/Params RPC method.
-  cosmossdkgridnode.gridnode.QueryUnbondingEntriesResponse:
-    type: object
-    properties:
-      unbonding_entries:
-        type: array
-        items:
-          type: object
-          properties:
-            account:
-              type: string
-              title: This remains a string as it represents an address
-            amount:
-              type: string
-              format: int64
-              title: Use the Coin type from Cosmos SDK
-            completion_time:
-              type: string
-              format: int64
-              title: Use the Timestamp type for time values
-      pagination:
-        type: object
-        properties:
-          next_key:
-            type: string
-            format: byte
-            description: |-
-              next_key is the key to be passed to PageRequest.key to
-              query the next page most efficiently. It will be empty if
-              there are no more results.
-          total:
-            type: string
-            format: uint64
-            title: >-
-              total is total number of results available if
-              PageRequest.count_total
-
-              was set, its value is undefined otherwise
-        description: |-
-          PageResponse is to be embedded in gRPC response messages where the
-          corresponding request message has used PageRequest.
-
-           message SomeResponse {
-                   repeated Bar results = 1;
-                   PageResponse page = 2;
-           }
-    description: >-
-      QueryUnbondingEntriesResponse is the response type for the
-      Query/UnbondingEntries RPC method.
-  cosmossdkgridnode.gridnode.SimpleUnbondingEntry:
-    type: object
-    properties:
-      amount:
-        type: string
-        format: int64
-      completion_time:
-        type: string
-        format: int64
-  cosmossdkgridnode.gridnode.UnbondingEntry:
-    type: object
-    properties:
-      account:
-        type: string
-        title: This remains a string as it represents an address
-      amount:
-        type: string
-        format: int64
-        title: Use the Coin type from Cosmos SDK
-      completion_time:
-        type: string
-        format: int64
-        title: Use the Timestamp type for time values
-  cosmossdkgridnode.gridnode.MsgGridnodeDelegate:
-    type: object
-    properties:
-      delegator_address:
-        type: string
-      amount:
-        type: string
-        format: int64
-      timestamp:
-        type: string
-        format: int64
-        title: Timestamp in Unix format or
-      unique_id:
-        type: string
-        title: unique identifier UUID
-    description: >-
-      MsgGridnodeDelegate is the request type for the Msg/DelegateTokens RPC
-      method.
-  cosmossdkgridnode.gridnode.MsgGridnodeDelegateResponse:
-    type: object
-    properties:
-      tx_hash:
-        type: string
-        title: Transaction hash of the delegated tokens operation
-      status:
-        type: string
-        title: Status of the operation, e.g., "success" or "failure"
-    description: >-
-      MsgGridnodeDelegateResponse is the response type for the
-      Msg/DelegateTokens RPC method.
-  cosmossdkgridnode.gridnode.MsgGridnodeUndelegate:
-    type: object
-    properties:
-      delegator_address:
-        type: string
-      amount:
-        type: string
-        format: int64
-      timestamp:
-        type: string
-        format: int64
-        title: Timestamp in Unix format or
-      unique_id:
-        type: string
-        title: unique identifier UUID
-  cosmossdkgridnode.gridnode.MsgGridnodeUndelegateResponse:
-    type: object
-    properties:
-      tx_hash:
-        type: string
-        title: Transaction hash of the delegated tokens operation
-      status:
-        type: string
-        title: Status of the operation, e.g., "success" or "failure"
   ibc.applications.fee.v1.Fee:
     type: object
     properties:
@@ -27360,6 +26775,83 @@ definitions:
     description: |-
       Version defines the versioning scheme used to negotiate the IBC verison in
       the connection handshake.
+  pax.gridnode.MsgGridnodeDelegate:
+    type: object
+    properties:
+      delegator_address:
+        type: string
+      amount:
+        type: string
+        format: int64
+      timestamp:
+        type: string
+        format: int64
+        title: Timestamp in Unix format or
+      unique_id:
+        type: string
+        title: unique identifier UUID
+    description: >-
+      MsgGridnodeDelegate is the request type for the Msg/DelegateTokens RPC
+      method.
+  pax.gridnode.MsgGridnodeDelegateResponse:
+    type: object
+    properties:
+      tx_hash:
+        type: string
+        title: Transaction hash of the delegated tokens operation
+      status:
+        type: string
+        title: Status of the operation, e.g., "success" or "failure"
+    description: >-
+      MsgGridnodeDelegateResponse is the response type for the
+      Msg/DelegateTokens RPC method.
+  pax.gridnode.MsgGridnodeUndelegate:
+    type: object
+    properties:
+      delegator_address:
+        type: string
+      amount:
+        type: string
+        format: int64
+      timestamp:
+        type: string
+        format: int64
+        title: Timestamp in Unix format or
+      unique_id:
+        type: string
+        title: unique identifier UUID
+  pax.gridnode.MsgGridnodeUndelegateResponse:
+    type: object
+    properties:
+      tx_hash:
+        type: string
+        title: Transaction hash of the delegated tokens operation
+      status:
+        type: string
+        title: Status of the operation, e.g., "success" or "failure"
+  pax.gridnode.MsgUpdateParams:
+    type: object
+    properties:
+      authority:
+        type: string
+        description: >-
+          authority is the address that controls the module (defaults to x/gov
+          unless overwritten).
+      params:
+        description: |-
+          params defines the module parameters to update.
+
+          NOTE: All parameters must be supplied.
+        type: object
+    description: MsgUpdateParams is the Msg/UpdateParams request type.
+  pax.gridnode.MsgUpdateParamsResponse:
+    type: object
+    description: |-
+      MsgUpdateParamsResponse defines the response structure for executing a
+      MsgUpdateParams message.
+  pax.gridnode.Params:
+    type: object
+    description: Params defines the parameters for the module.
   pax.pax.MsgUpdateParams:
     type: object
     properties:
