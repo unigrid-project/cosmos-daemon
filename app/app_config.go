@@ -17,7 +17,6 @@ import (
 	genutilmodulev1 "cosmossdk.io/api/cosmos/genutil/module/v1"
 	govmodulev1 "cosmossdk.io/api/cosmos/gov/module/v1"
 	groupmodulev1 "cosmossdk.io/api/cosmos/group/module/v1"
-	mintmodulev1 "cosmossdk.io/api/cosmos/mint/module/v1"
 	paramsmodulev1 "cosmossdk.io/api/cosmos/params/module/v1"
 	slashingmodulev1 "cosmossdk.io/api/cosmos/slashing/module/v1"
 	stakingmodulev1 "cosmossdk.io/api/cosmos/staking/module/v1"
@@ -43,7 +42,6 @@ import (
 	_ "github.com/cosmos/cosmos-sdk/x/bank"         // import for side-effects
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	_ "github.com/cosmos/cosmos-sdk/x/consensus" // import for side-effects
-	consensusparamtypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
 	consensustypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
 	_ "github.com/cosmos/cosmos-sdk/x/crisis" // import for side-effects
 	crisistypes "github.com/cosmos/cosmos-sdk/x/crisis/types"
@@ -53,8 +51,9 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/cosmos/cosmos-sdk/x/group"
 	_ "github.com/cosmos/cosmos-sdk/x/group/module" // import for side-effects
-	_ "github.com/cosmos/cosmos-sdk/x/mint"         // import for side-effects
-	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
+
+	//_ "github.com/cosmos/cosmos-sdk/x/mint"         // import for side-effects
+	//minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	_ "github.com/cosmos/cosmos-sdk/x/params" // import for side-effects
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	_ "github.com/cosmos/cosmos-sdk/x/slashing" // import for side-effects
@@ -70,15 +69,18 @@ import (
 	ibctransfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 
+	//mintmodulev1 "github.com/unigrid-project/cosmos-ugdmint/api/cosmos/ugdmint/module/v1"
+
 	ugdmintmodulev1 "github.com/unigrid-project/cosmos-ugdmint/api/cosmos/ugdmint/module/v1"
 	_ "github.com/unigrid-project/cosmos-ugdmint/x/ugdmint/module" // import for side-effects
 	ugdmintmoduletypes "github.com/unigrid-project/cosmos-ugdmint/x/ugdmint/types"
 
-	// _ "github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting/x/ugdvesting/module" // import for side-effects
-	// ugdvestingmoduletypes "github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting/x/ugdvesting/types"
+	ugdvestingmodulev1 "github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting/api/ugdvesting/ugdvesting/module"
+	_ "github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting/x/ugdvesting/module" // import for side-effects
+	ugdvestingmoduletypes "github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting/x/ugdvesting/types"
 	paxmodulev1 "github.com/unigrid-project/pax/api/pax/pax/module"
 
-	gridnodemodulev1 "github.com/unigrid-project/cosmos-gridnode/api/gridnode/module"
+	gridnodemodulev1 "github.com/unigrid-project/cosmos-gridnode/api/pax/gridnode/module"
 	_ "github.com/unigrid-project/cosmos-gridnode/x/gridnode/module" // import for side-effects
 	gridnodemoduletypes "github.com/unigrid-project/cosmos-gridnode/x/gridnode/types"
 	_ "github.com/unigrid-project/pax/x/pax/module" // import for side-effects
@@ -105,7 +107,7 @@ var (
 		stakingtypes.ModuleName,
 		slashingtypes.ModuleName,
 		govtypes.ModuleName,
-		minttypes.ModuleName,
+		//minttypes.ModuleName,
 		crisistypes.ModuleName,
 		ibcexported.ModuleName,
 		genutiltypes.ModuleName,
@@ -120,15 +122,15 @@ var (
 		vestingtypes.ModuleName,
 		circuittypes.ModuleName,
 		group.ModuleName,
-		consensusparamtypes.ModuleName,
+		consensustypes.ModuleName,
 		circuittypes.ModuleName,
 		// chain modules
 		paxmoduletypes.ModuleName,
-		//ugdvestingmoduletypes.ModuleName,
+		ugdvestingmoduletypes.ModuleName,
 		ugdmintmoduletypes.ModuleName,
 		gridnodemoduletypes.ModuleName,
 		cosmwasmmoduletypes.ModuleName,
-// this line is used by starport scaffolding # stargate/app/initGenesis
+		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -138,7 +140,7 @@ var (
 	// NOTE: capability module's beginblocker must come before any modules using capabilities (e.g. IBC)
 	beginBlockers = []string{
 		// cosmos sdk modules
-		minttypes.ModuleName,
+		//minttypes.ModuleName,
 		distrtypes.ModuleName,
 		slashingtypes.ModuleName,
 		evidencetypes.ModuleName,
@@ -153,11 +155,11 @@ var (
 		ibcfeetypes.ModuleName,
 		// chain modules
 		paxmoduletypes.ModuleName,
-		//ugdvestingmoduletypes.ModuleName,
+		ugdvestingmoduletypes.ModuleName,
 		ugdmintmoduletypes.ModuleName,
 		gridnodemoduletypes.ModuleName,
 		cosmwasmmoduletypes.ModuleName,
-// this line is used by starport scaffolding # stargate/app/beginBlockers
+		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
 	endBlockers = []string{
@@ -176,11 +178,11 @@ var (
 		ibcfeetypes.ModuleName,
 		// chain modules
 		paxmoduletypes.ModuleName,
-		//ugdvestingmoduletypes.ModuleName,
+		ugdvestingmoduletypes.ModuleName,
 		ugdmintmoduletypes.ModuleName,
 		gridnodemoduletypes.ModuleName,
 		cosmwasmmoduletypes.ModuleName,
-// this line is used by starport scaffolding # stargate/app/endBlockers
+		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
 	preBlockers = []string{
@@ -192,7 +194,7 @@ var (
 	moduleAccPerms = []*authmodulev1.ModuleAccountPermission{
 		{Account: authtypes.FeeCollectorName},
 		{Account: distrtypes.ModuleName},
-		{Account: minttypes.ModuleName, Permissions: []string{authtypes.Minter}},
+		//{Account: minttypes.ModuleName, Permissions: []string{authtypes.Minter}},
 		{Account: stakingtypes.BondedPoolName, Permissions: []string{authtypes.Burner, stakingtypes.ModuleName}},
 		{Account: stakingtypes.NotBondedPoolName, Permissions: []string{authtypes.Burner, stakingtypes.ModuleName}},
 		{Account: govtypes.ModuleName, Permissions: []string{authtypes.Burner}},
@@ -200,6 +202,8 @@ var (
 		{Account: ibcfeetypes.ModuleName},
 		{Account: icatypes.ModuleName},
 		{Account: ugdmintmoduletypes.ModuleName, Permissions: []string{authtypes.Minter}},
+		{Account: gridnodemoduletypes.ModuleName},
+		{Account: ugdvestingmoduletypes.ModuleName},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 
@@ -207,7 +211,8 @@ var (
 	blockAccAddrs = []string{
 		authtypes.FeeCollectorName,
 		distrtypes.ModuleName,
-		minttypes.ModuleName,
+		//minttypes.ModuleName,
+		ugdmintmoduletypes.ModuleName,
 		stakingtypes.BondedPoolName,
 		stakingtypes.NotBondedPoolName,
 		// We allow the following module accounts to receive funds:
@@ -299,10 +304,10 @@ var (
 				Name:   evidencetypes.ModuleName,
 				Config: appconfig.WrapAny(&evidencemodulev1.Module{}),
 			},
-			{
-				Name:   minttypes.ModuleName,
-				Config: appconfig.WrapAny(&mintmodulev1.Module{}),
-			},
+			// {
+			// 	Name:   minttypes.ModuleName,
+			// 	Config: appconfig.WrapAny(&mintmodulev1.Module{}),
+			// },
 			{
 				Name: group.ModuleName,
 				Config: appconfig.WrapAny(&groupmodulev1.Module{
@@ -334,10 +339,10 @@ var (
 				Name:   paxmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&paxmodulev1.Module{}),
 			},
-			// {
-			// 	Name:   ugdvestingmoduletypes.ModuleName,
-			// 	Config: appconfig.WrapAny(&ugdvestingmodulev1.Module{}),
-			// },
+			{
+				Name:   ugdvestingmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&ugdvestingmodulev1.Module{}),
+			},
 			{
 				Name:   ugdmintmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&ugdmintmodulev1.Module{}),
@@ -350,7 +355,7 @@ var (
 				Name:   cosmwasmmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&cosmwasmmodulev1.Module{}),
 			},
-// this line is used by starport scaffolding # stargate/app/moduleConfig
+			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},
 	})
 )

@@ -45,26 +45,9 @@ func NewRootCmd() *cobra.Command {
 		clientCtx          client.Context
 	)
 
-	// if err := depinject.Inject(
-	// 	depinject.Configs(
-	// 		app.AppConfig(),
-	// 		depinject.Supply(
-	// 			log.NewNopLogger(),
-	// 		),
-	// 		depinject.Provide(
-	// 			ProvideClientContext,
-	// 			ProvideKeyring,
-	// 		),
-	// 	),
-	// 	&txConfigOpts,
-	// 	&autoCliOpts,
-	// 	&moduleBasicManager,
-	// 	&clientCtx,
-	// ); err != nil {
-	// 	panic(err)
-	// }
-	if err := depinject.InjectDebug(
-		depinject.FileVisualizer("/home/evan/work/cosmos-daemon/output.dot"), // DebugOption
+	//if err := depinject.InjectDebug(
+	//depinject.FileVisualizer("/home/evan/work/cosmos-daemon/output.dot"),
+	if err := depinject.Inject(
 		depinject.Configs(
 			app.AppConfig(),
 			depinject.Supply(
@@ -79,15 +62,15 @@ func NewRootCmd() *cobra.Command {
 		&autoCliOpts,
 		&moduleBasicManager,
 		&clientCtx,
-		// Other dependencies...
 	); err != nil {
+		fmt.Printf("Error during dependency injection: %+v\n", err)
 		panic(err)
 	}
+
 	// Since the IBC modules don't support dependency injection, we need to
 	// manually add the modules to the basic manager on the client side.
 	// This needs to be removed after IBC supports App Wiring.
 	app.AddIBCModuleManager(moduleBasicManager)
-	//app.AddWASMModuleManager(moduleBasicManager)
 
 	rootCmd := &cobra.Command{
 		Use:           app.Name + "d",
@@ -136,6 +119,12 @@ func NewRootCmd() *cobra.Command {
 			return server.InterceptConfigsPreRunHandler(cmd, customAppTemplate, customAppConfig, customCMTConfig)
 		},
 	}
+
+	// param for the hedgehog url to be passed at startup
+	rootCmd.PersistentFlags().StringVar(&HedgehogUrl, "hedgehog", "", "Pass the Hedgehog URL")
+	//fmt.Println("Value of --hedgehog flag:", HedgehogUrl)
+
+	viper.BindPFlag("hedgehog.hedgehog_url", rootCmd.PersistentFlags().Lookup("hedgehog"))
 
 	initRootCmd(rootCmd, clientCtx.TxConfig, clientCtx.InterfaceRegistry, clientCtx.Codec, moduleBasicManager)
 

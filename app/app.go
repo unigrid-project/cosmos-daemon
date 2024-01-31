@@ -40,7 +40,6 @@ import (
 	govkeeper "github.com/cosmos/cosmos-sdk/x/gov/keeper"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	groupkeeper "github.com/cosmos/cosmos-sdk/x/group/keeper"
-	mintkeeper "github.com/cosmos/cosmos-sdk/x/mint/keeper"
 	paramsclient "github.com/cosmos/cosmos-sdk/x/params/client"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
@@ -53,13 +52,13 @@ import (
 	ibctransferkeeper "github.com/cosmos/ibc-go/v8/modules/apps/transfer/keeper"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 
-	//ugdvestingmodulekeeper "github.com/unigrid-project/cosmos-sdk-unigrid-hedgehog-vesting/x/ugdvesting/keeper"
-	paxmodulekeeper "github.com/unigrid-project/pax/x/pax/keeper"
-
 	gridnodemodulekeeper "github.com/unigrid-project/cosmos-gridnode/x/gridnode/keeper"
 	ugdmintmodulekeeper "github.com/unigrid-project/cosmos-ugdmint/x/ugdmint/keeper"
+	paxmodulekeeper "github.com/unigrid-project/pax/x/pax/keeper"
 
 	cosmwasmmodulekeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
+	ugdvestingmodulekeeper "github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting/x/ugdvesting/keeper"
+
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	"github.com/unigrid-project/pax/docs"
@@ -91,11 +90,11 @@ type App struct {
 	interfaceRegistry codectypes.InterfaceRegistry
 
 	// keepers
-	AccountKeeper         authkeeper.AccountKeeper
-	BankKeeper            bankkeeper.Keeper
-	StakingKeeper         *stakingkeeper.Keeper
-	SlashingKeeper        slashingkeeper.Keeper
-	MintKeeper            mintkeeper.Keeper
+	AccountKeeper  authkeeper.AccountKeeper
+	BankKeeper     bankkeeper.Keeper
+	StakingKeeper  *stakingkeeper.Keeper
+	SlashingKeeper slashingkeeper.Keeper
+	//MintKeeper            mintkeeper.Keeper
 	DistrKeeper           distrkeeper.Keeper
 	GovKeeper             *govkeeper.Keeper
 	CrisisKeeper          *crisiskeeper.Keeper
@@ -122,11 +121,11 @@ type App struct {
 	ScopedICAControllerKeeper capabilitykeeper.ScopedKeeper
 	ScopedICAHostKeeper       capabilitykeeper.ScopedKeeper
 
-	PaxKeeper paxmodulekeeper.Keeper
-	//UgdvestingKeeper ugdvestingmodulekeeper.Keeper
-	UgdmintKeeper  ugdmintmodulekeeper.Keeper
-	GridnodeKeeper gridnodemodulekeeper.Keeper
-	CosmwasmKeeper cosmwasmmodulekeeper.Keeper
+	PaxKeeper        paxmodulekeeper.Keeper
+	UgdvestingKeeper ugdvestingmodulekeeper.Keeper
+	UgdmintKeeper    ugdmintmodulekeeper.Keeper
+	GridnodeKeeper   gridnodemodulekeeper.Keeper
+	CosmwasmKeeper   cosmwasmmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -252,7 +251,6 @@ func New(
 		&app.BankKeeper,
 		&app.StakingKeeper,
 		&app.SlashingKeeper,
-		&app.MintKeeper,
 		&app.DistrKeeper,
 		&app.GovKeeper,
 		&app.CrisisKeeper,
@@ -265,7 +263,7 @@ func New(
 		&app.ConsensusParamsKeeper,
 		&app.CircuitBreakerKeeper,
 		&app.PaxKeeper,
-		//&app.UgdvestingKeeper,
+		&app.UgdvestingKeeper,
 		&app.UgdmintKeeper,
 		&app.GridnodeKeeper,
 		&app.CosmwasmKeeper,
@@ -310,7 +308,6 @@ func New(
 
 	// Register legacy modules
 	app.registerIBCModules()
-	app.registerWasmModules()
 
 	// register streaming services
 	if err := app.RegisterStreamingServices(appOpts, app.kvStoreKeys()); err != nil {

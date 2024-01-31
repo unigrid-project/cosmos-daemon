@@ -14,3 +14,4 @@ debug_container.dot
 debug_container.log
 output.*
 output_graph.txt
+pax.log
