@@ -3,14 +3,12 @@ module github.com/unigrid-project/pax
 go 1.21
 
 replace (
+	//github.com/CosmWasm/wasmd => github.com/CosmWasm/wasmd v0.50.0
 	// fix upstream GHSA-h395-qcrw-5vmq vulnerability.
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.7.0
-	// replace broken goleveldb
-	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
 
 	//used for local testing. change to where the project is located
 	//github.com/unigrid-project/cosmos-daemon => /home/marcus/Documents/unigrid/ugdcosmos/ugdcosmos/cosmos-daemon
-	//github.com/CosmWasm/wasmd => github.com/CosmWasm/wasmd v0.50.0
 )
 
 require (
@@ -149,8 +147,8 @@ require (
 	github.com/google/orderedcode v0.0.1 // indirect
 	github.com/google/pprof v0.0.0-20231101202521-4ca4178f5c7a // indirect
 	github.com/google/s2a-go v0.1.7 // indirect
-	github.com/google/uuid v1.3.1 // indirect
-	github.com/googleapis/enterprise-certificate-proxy v0.3.1 // indirect
+	github.com/google/uuid v1.4.0 // indirect
+	github.com/googleapis/enterprise-certificate-proxy v0.3.2 // indirect
 	github.com/googleapis/gax-go/v2 v2.12.0 // indirect
 	github.com/gorilla/handlers v1.5.2 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
