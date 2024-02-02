@@ -3,12 +3,12 @@ module github.com/unigrid-project/pax
 go 1.21
 
 replace (
-	//github.com/CosmWasm/wasmd => github.com/CosmWasm/wasmd v0.50.0
+	//github.com/CosmWasm/wasmd => /home/marcus/go/pkg/mod/github.com/!cosm!wasm/wasmd@v0.50.0
 	// fix upstream GHSA-h395-qcrw-5vmq vulnerability.
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.7.0
 
 	//used for local testing. change to where the project is located
-	//github.com/unigrid-project/cosmos-daemon => /home/marcus/Documents/unigrid/ugdcosmos/ugdcosmos/cosmos-daemon
+	github.com/unigrid-project/cosmos-daemon => /home/marcus/Documents/unigrid/ugdcosmos/ugdcosmos/cosmos-daemon
 )
 
 require (
@@ -42,6 +42,7 @@ require (
 	github.com/spf13/viper v1.17.0
 	github.com/stretchr/testify v1.8.4
 	github.com/unigrid-project/cosmos-common v0.0.8
+	github.com/unigrid-project/cosmos-daemon v0.0.0-00010101000000-000000000000
 	github.com/unigrid-project/cosmos-gridnode v0.0.13
 	github.com/unigrid-project/cosmos-ugdmint v0.0.85
 	github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting v0.0.59

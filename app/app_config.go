@@ -86,8 +86,9 @@ import (
 	_ "github.com/unigrid-project/pax/x/pax/module" // import for side-effects
 	paxmoduletypes "github.com/unigrid-project/pax/x/pax/types"
 	"google.golang.org/protobuf/types/known/durationpb"
+
 	//cosmwasmmodulev1 "github.com/unigrid-project/pax/api/pax/cosmwasm/module"
-	cosmwasmmoduletypes "github.com/CosmWasm/wasmd/x/types"
+	cosmwasmmoduletypes "github.com/CosmWasm/wasmd/x/wasm/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 
