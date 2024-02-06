@@ -80,6 +80,7 @@ import (
 	ugdvestingmoduletypes "github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting/x/ugdvesting/types"
 	paxmodulev1 "github.com/unigrid-project/pax/api/pax/pax/module"
 
+	cosmwasmmoduletypes "github.com/CosmWasm/wasmd/x/wasm/types"
 	gridnodemodulev1 "github.com/unigrid-project/cosmos-gridnode/api/pax/gridnode/module"
 	_ "github.com/unigrid-project/cosmos-gridnode/x/gridnode/module" // import for side-effects
 	gridnodemoduletypes "github.com/unigrid-project/cosmos-gridnode/x/gridnode/types"
@@ -127,6 +128,7 @@ var (
 		ugdvestingmoduletypes.ModuleName,
 		ugdmintmoduletypes.ModuleName,
 		gridnodemoduletypes.ModuleName,
+		cosmwasmmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
@@ -155,6 +157,7 @@ var (
 		ugdvestingmoduletypes.ModuleName,
 		ugdmintmoduletypes.ModuleName,
 		gridnodemoduletypes.ModuleName,
+		cosmwasmmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
@@ -177,6 +180,7 @@ var (
 		ugdvestingmoduletypes.ModuleName,
 		ugdmintmoduletypes.ModuleName,
 		gridnodemoduletypes.ModuleName,
+		cosmwasmmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
@@ -199,6 +203,7 @@ var (
 		{Account: ugdmintmoduletypes.ModuleName, Permissions: []string{authtypes.Minter}},
 		{Account: gridnodemoduletypes.ModuleName},
 		{Account: ugdvestingmoduletypes.ModuleName},
+		{Account: cosmwasmmoduletypes.ModuleName},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 
