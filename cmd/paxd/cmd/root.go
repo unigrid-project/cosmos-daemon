@@ -71,6 +71,7 @@ func NewRootCmd() *cobra.Command {
 	// manually add the modules to the basic manager on the client side.
 	// This needs to be removed after IBC supports App Wiring.
 	app.AddIBCModuleManager(moduleBasicManager)
+	app.AddWASMModuleManager(moduleBasicManager)
 
 	rootCmd := &cobra.Command{
 		Use:           app.Name + "d",
