@@ -22,7 +22,7 @@ import (
 	ibcporttypes "github.com/cosmos/ibc-go/v8/modules/core/05-port/types"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/spf13/cast"
-	paxwasm "github.com/unigrid-project/cosmos-daemon/app/wasm"
+	paxwasm "github.com/unigrid-project/pax/app/wasm"
 )
 
 func (app *App) registerWasmModules(appOpts servertypes.AppOptions) {

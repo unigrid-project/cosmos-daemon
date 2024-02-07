@@ -10,6 +10,7 @@ import (
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/cosmos/cosmos-sdk/runtime"
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -45,8 +46,7 @@ import (
 	ibctm "github.com/cosmos/ibc-go/v8/modules/light-clients/07-tendermint"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/spf13/cast"
-	"github.com/cosmos/cosmos-sdk/runtime"
-	paxwasm "github.com/unigrid-project/cosmos-daemon/app/wasm"
+	paxwasm "github.com/unigrid-project/pax/app/wasm"
 	// this line is used by starport scaffolding # ibc/app/import
 )
 

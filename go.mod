@@ -7,9 +7,6 @@ replace (
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.7.0
 	// replace broken goleveldb
 	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
-
-	//used for local testing. change to where the project is located
-	github.com/unigrid-project/cosmos-daemon => /home/marcus/Documents/unigrid/ugdcosmos/ugdcosmos/cosmos-daemon
 )
 
 require (
@@ -45,10 +42,10 @@ require (
 	github.com/spf13/viper v1.17.0
 	github.com/stretchr/testify v1.8.4
 	github.com/unigrid-project/cosmos-common v0.0.8
-	github.com/unigrid-project/cosmos-daemon v0.0.0-00010101000000-000000000000
 	github.com/unigrid-project/cosmos-gridnode v0.0.13
 	github.com/unigrid-project/cosmos-ugdmint v0.0.85
 	github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting v0.0.59
+	golang.org/x/tools v0.15.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20231120223509-83a465c0220f
 	google.golang.org/grpc v1.60.1
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.3.0
@@ -249,7 +246,6 @@ require (
 	golang.org/x/sys v0.15.0 // indirect
 	golang.org/x/term v0.15.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
-	golang.org/x/tools v0.15.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 	google.golang.org/api v0.149.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
