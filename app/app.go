@@ -308,8 +308,7 @@ func New(
 	app.App = appBuilder.Build(db, traceStore, baseAppOptions...)
 
 	// Register legacy modules
-	app.registerIBCModules()
-	app.registerWasmModules(appOpts)
+	app.registerLegecyModules(appOpts)
 
 	// register streaming services
 	if err := app.RegisterStreamingServices(appOpts, app.kvStoreKeys()); err != nil {

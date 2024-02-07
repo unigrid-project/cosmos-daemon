@@ -1,9 +1,19 @@
 package app
 
 import (
+	"fmt"
+	"path/filepath"
+	"strings"
+
 	storetypes "cosmossdk.io/store/types"
+	"github.com/CosmWasm/wasmd/x/wasm"
+	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
+	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
+	"github.com/cosmos/cosmos-sdk/client/flags"
+	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	govv1beta1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
@@ -27,16 +37,21 @@ import (
 	ibc "github.com/cosmos/ibc-go/v8/modules/core"
 	ibcclienttypes "github.com/cosmos/ibc-go/v8/modules/core/02-client/types"
 	ibcconnectiontypes "github.com/cosmos/ibc-go/v8/modules/core/03-connection/types"
+	ibcporttypes "github.com/cosmos/ibc-go/v8/modules/core/05-port/types"
 	porttypes "github.com/cosmos/ibc-go/v8/modules/core/05-port/types"
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 	solomachine "github.com/cosmos/ibc-go/v8/modules/light-clients/06-solomachine"
 	ibctm "github.com/cosmos/ibc-go/v8/modules/light-clients/07-tendermint"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/spf13/cast"
+	"github.com/cosmos/cosmos-sdk/runtime"
+	paxwasm "github.com/unigrid-project/cosmos-daemon/app/wasm"
 	// this line is used by starport scaffolding # ibc/app/import
 )
 
 // registerIBCModules register IBC keepers and non dependency inject modules.
-func (app *App) registerIBCModules() {
+func (app *App) registerLegecyModules(appOpts servertypes.AppOptions) {
 	// set up non depinject support modules store keys
 	if err := app.RegisterStores(
 		storetypes.NewKVStoreKey(capabilitytypes.StoreKey),
@@ -47,6 +62,7 @@ func (app *App) registerIBCModules() {
 		storetypes.NewKVStoreKey(icacontrollertypes.StoreKey),
 		storetypes.NewMemoryStoreKey(capabilitytypes.MemStoreKey),
 		storetypes.NewTransientStoreKey(paramstypes.TStoreKey),
+		storetypes.NewKVStoreKey(wasmtypes.StoreKey),
 	); err != nil {
 		panic(err)
 	}
@@ -71,6 +87,7 @@ func (app *App) registerIBCModules() {
 	scopedIBCTransferKeeper := app.CapabilityKeeper.ScopeToModule(ibctransfertypes.ModuleName)
 	scopedICAControllerKeeper := app.CapabilityKeeper.ScopeToModule(icacontrollertypes.SubModuleName)
 	scopedICAHostKeeper := app.CapabilityKeeper.ScopeToModule(icahosttypes.SubModuleName)
+	scopedWasmKeeper := app.CapabilityKeeper.ScopeToModule(wasmtypes.ModuleName)
 
 	// Create IBC keeper
 	app.IBCKeeper = ibckeeper.NewKeeper(
@@ -157,6 +174,46 @@ func (app *App) registerIBCModules() {
 
 	// this line is used by starport scaffolding # ibc/app/module
 
+	homePath := cast.ToString(appOpts.Get(flags.FlagHome))
+	wasmDir := filepath.Join(homePath, "wasm")
+	wasmConfig, err := wasm.ReadWasmConfig(appOpts)
+	if err != nil {
+		panic(fmt.Sprintf("error while reading wasm config: %s", err))
+	}
+
+	var wasmOpts []wasmkeeper.Option
+	if cast.ToBool(appOpts.Get("telemetry.enabled")) {
+		wasmOpts = append(wasmOpts, wasmkeeper.WithVMCacheMetrics(prometheus.DefaultRegisterer))
+	}
+	//add if we use custom commands in wasm
+	//wasmOpts = append(wasmOpts, wasmkeeper.WithQueryPlugins(okp4wasm.CustomQueryPlugins(&app.LogicKeeper)))
+
+	availableCapabilities := strings.Join(paxwasm.AllCapabilities(), ",")
+	app.WasmKeeper = wasmkeeper.NewKeeper(
+		app.AppCodec(),
+		runtime.NewKVStoreService(app.GetKey(wasmtypes.StoreKey)),
+		app.AccountKeeper,
+		app.BankKeeper,
+		app.StakingKeeper,
+		distrkeeper.NewQuerier(app.DistrKeeper),
+		app.IBCFeeKeeper, // ISC4 Wrapper: fee IBC middleware
+		app.IBCKeeper.ChannelKeeper,
+		app.IBCKeeper.PortKeeper,
+		scopedWasmKeeper,
+		app.TransferKeeper,
+		app.MsgServiceRouter(),
+		app.GRPCQueryRouter(),
+		wasmDir,
+		wasmConfig,
+		availableCapabilities,
+		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		wasmOpts...,
+	)
+
+	var wasmStack ibcporttypes.IBCModule
+	wasmStack = wasm.NewIBCHandler(app.WasmKeeper, app.IBCKeeper.ChannelKeeper, app.IBCFeeKeeper)
+	wasmStack = ibcfee.NewIBCMiddleware(wasmStack, app.IBCFeeKeeper)
+
 	app.IBCKeeper.SetRouter(ibcRouter)
 
 	app.ScopedIBCKeeper = scopedIBCKeeper
@@ -179,10 +236,11 @@ func (app *App) registerIBCModules() {
 }
 
 // AddIBCModuleManager adds the missing IBC modules into the module manager.
-func AddIBCModuleManager(moduleManager module.BasicManager) {
+func AddLegecyModuleManager(moduleManager module.BasicManager) {
 	moduleManager[ibcexported.ModuleName] = ibc.AppModule{}
 	moduleManager[ibctransfertypes.ModuleName] = ibctransfer.AppModule{}
 	moduleManager[ibcfeetypes.ModuleName] = ibcfee.AppModule{}
 	moduleManager[icatypes.ModuleName] = icamodule.AppModule{}
 	moduleManager[capabilitytypes.ModuleName] = capability.AppModule{}
+	moduleManager[wasmtypes.ModuleName] = wasm.AppModule{}
 }
