@@ -6,6 +6,7 @@ import (
 
 	"cosmossdk.io/log"
 	confixcmd "cosmossdk.io/tools/confix/cmd"
+	wasmcli "github.com/CosmWasm/wasmd/x/wasm/client/cli"
 	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/debug"
@@ -25,7 +26,6 @@ import (
 	ibccmd "github.com/cosmos/ibc-go/v8/modules/core/client/cli"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-
 	"github.com/unigrid-project/pax/app"
 )
 
@@ -89,6 +89,7 @@ func queryCommand() *cobra.Command {
 		authcmd.QueryTxCmd(),
 		server.QueryBlockResultsCmd(),
 		ibccmd.GetQueryCmd(),
+		wasmcli.GetQueryCmd(),
 	)
 	cmd.PersistentFlags().String(flags.FlagChainID, "", "The network chain ID")
 
@@ -116,6 +117,7 @@ func txCommand() *cobra.Command {
 		authcmd.GetDecodeCommand(),
 		authcmd.GetSimulateCmd(),
 		ibccmd.GetTxCmd(),
+		wasmcli.GetTxCmd(),
 	)
 	cmd.PersistentFlags().String(flags.FlagChainID, "", "The network chain ID")
 
