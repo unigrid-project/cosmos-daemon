@@ -53,6 +53,8 @@ import (
 	ibctransferkeeper "github.com/cosmos/ibc-go/v8/modules/apps/transfer/keeper"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 
+	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
+
 	gridnodemodulekeeper "github.com/unigrid-project/cosmos-gridnode/x/gridnode/keeper"
 	ugdmintmodulekeeper "github.com/unigrid-project/cosmos-ugdmint/x/ugdmint/keeper"
 	ugdvestingmodulekeeper "github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting/x/ugdvesting/keeper"
@@ -180,6 +182,7 @@ func New(
 	traceStore io.Writer,
 	loadLatest bool,
 	appOpts servertypes.AppOptions,
+	wasmOpts []wasmkeeper.Option,
 	baseAppOptions ...func(*baseapp.BaseApp),
 ) (*App, error) {
 	var (
