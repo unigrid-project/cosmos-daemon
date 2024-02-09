@@ -5,6 +5,7 @@ import (
 	"os"
 	"testing"
 
+	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/server"
@@ -42,8 +43,8 @@ func BenchmarkFullAppSimulation(b *testing.B) {
 	appOptions := make(simtestutil.AppOptionsMap, 0)
 	appOptions[flags.FlagHome] = app.DefaultNodeHome
 	appOptions[server.FlagInvCheckPeriod] = simcli.FlagPeriodValue
-
-	bApp, err := app.New(logger, db, nil, true, appOptions, interBlockCacheOpt())
+	var emptyWasmOpts []wasmkeeper.Option
+	bApp, err := app.New(logger, db, nil, true, appOptions, emptyWasmOpts, interBlockCacheOpt())
 	require.NoError(b, err)
 	require.Equal(b, app.Name, bApp.Name())
 
@@ -99,8 +100,8 @@ func BenchmarkInvariants(b *testing.B) {
 	appOptions := make(simtestutil.AppOptionsMap, 0)
 	appOptions[flags.FlagHome] = app.DefaultNodeHome
 	appOptions[server.FlagInvCheckPeriod] = simcli.FlagPeriodValue
-
-	bApp, err := app.New(logger, db, nil, true, appOptions, interBlockCacheOpt())
+	var emptyWasmOpts []wasmkeeper.Option
+	bApp, err := app.New(logger, db, nil, true, appOptions, emptyWasmOpts, interBlockCacheOpt())
 	require.NoError(b, err)
 	require.Equal(b, app.Name, bApp.Name())
 
