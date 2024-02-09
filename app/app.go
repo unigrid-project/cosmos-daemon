@@ -113,6 +113,7 @@ type App struct {
 	FeeGrantKeeper        feegrantkeeper.Keeper
 	GroupKeeper           groupkeeper.Keeper
 	ConsensusParamsKeeper consensuskeeper.Keeper
+	WasmKeeper            wasmkeeper.Keeper
 	CircuitBreakerKeeper  circuitkeeper.Keeper
 
 	// IBC
@@ -131,7 +132,6 @@ type App struct {
 
 	// Scoped Wasm
 	ScopedWasmKeeper capabilitykeeper.ScopedKeeper
-	WasmKeeper       wasmkeeper.Keeper
 	PaxKeeper        paxmodulekeeper.Keeper
 	UgdvestingKeeper ugdvestingmodulekeeper.Keeper
 	UgdmintKeeper    ugdmintmodulekeeper.Keeper
@@ -207,7 +207,7 @@ func New(
 				// This needs to be removed after IBC supports App Wiring.
 				app.GetIBCKeeper,
 				app.GetCapabilityScopedKeeper,
-				app.WasmKeeper,
+				app.GetWasmKeeper,
 				// Supply the logger
 				logger,
 
@@ -257,7 +257,7 @@ func New(
 		&appBuilder,
 		&app.appCodec,
 		&app.legacyAmino,
-		// &app.WasmKeeper,
+		//&app.WasmKeeper,
 		&app.txConfig,
 		&app.interfaceRegistry,
 		&app.AccountKeeper,
