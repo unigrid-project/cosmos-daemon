@@ -229,6 +229,8 @@ func (app *App) registerLegecyModules(appOpts servertypes.AppOptions) {
 		capability.NewAppModule(app.appCodec, *app.CapabilityKeeper, false),
 		ibctm.AppModule{},
 		solomachine.AppModule{},
+		wasm.NewAppModule(app.appCodec, &app.WasmKeeper, app.StakingKeeper, app.AccountKeeper, app.BankKeeper,
+			app.MsgServiceRouter(), app.GetSubspace(wasmtypes.ModuleName)),
 	); err != nil {
 		panic(err)
 	}
