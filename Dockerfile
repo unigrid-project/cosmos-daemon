@@ -1,5 +1,6 @@
 # docker build . -t unigrid/paxd:latest
-# docker run --rm -it unigrid/paxd:latest /bin/sh
+# docker run --name paxd --rm -it unigrid/paxd:latest /bin/sh
+# docker cp pax:/usr/bin/paxd /path/to/local/directory
 
 # Use the Go alpine image as the base for the builder stage
 FROM golang:1.21-alpine AS go-builder
