@@ -176,7 +176,6 @@ func (app *App) registerLegecyModules(appOpts servertypes.AppOptions) {
 		AddRoute(icacontrollertypes.SubModuleName, icaControllerIBCModule).
 		AddRoute(icahosttypes.SubModuleName, icaHostIBCModule)
 
-	app.IBCKeeper.SetRouter(ibcRouter)
 	// this line is used by starport scaffolding # ibc/app/module
 
 	homePath := cast.ToString(appOpts.Get(flags.FlagHome))
