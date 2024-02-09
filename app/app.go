@@ -355,14 +355,11 @@ func New(
 	// 	app.UpgradeKeeper.SetModuleVersionMap(ctx, app.ModuleManager.GetVersionMap())
 	// 	return app.App.InitChainer(ctx, req)
 	// })
+
 	// wasm
 	txConfig := authtx.NewTxConfig(app.appCodec, authtx.DefaultSignModes)
 	wasmConfig := wasmtypes.DefaultWasmConfig()
-	keys := storetypes.NewKVStoreKeys(
-		wasmtypes.StoreKey,
-	)
-
-	app.setAnteHandler(txConfig, wasmConfig, keys[wasmtypes.StoreKey])
+	app.setAnteHandler(txConfig, wasmConfig, app.GetKey(wasmtypes.StoreKey))
 
 	if err := app.Load(loadLatest); err != nil {
 		return nil, err
