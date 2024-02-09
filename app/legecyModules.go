@@ -214,7 +214,7 @@ func (app *App) registerLegecyModules(appOpts servertypes.AppOptions) {
 		wasmOpts...,
 	)
 
-	app.IBCKeeper.SetRouter(ibcRouter)
+	//app.IBCKeeper.SetRouter(ibcRouter)
 
 	app.ScopedIBCKeeper = scopedIBCKeeper
 	app.ScopedIBCTransferKeeper = scopedIBCTransferKeeper

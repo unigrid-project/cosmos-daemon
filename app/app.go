@@ -14,7 +14,6 @@ import (
 	evidencekeeper "cosmossdk.io/x/evidence/keeper"
 	feegrantkeeper "cosmossdk.io/x/feegrant/keeper"
 	upgradekeeper "cosmossdk.io/x/upgrade/keeper"
-	cosmwasmmodulekeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	abci "github.com/cometbft/cometbft/abci/types"
 	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/baseapp"
@@ -132,7 +131,7 @@ type App struct {
 
 	// Scoped Wasm
 	ScopedWasmKeeper capabilitykeeper.ScopedKeeper
-	WasmKeeper       cosmwasmmodulekeeper.Keeper
+	WasmKeeper       wasmkeeper.Keeper
 	PaxKeeper        paxmodulekeeper.Keeper
 	UgdvestingKeeper ugdvestingmodulekeeper.Keeper
 	UgdmintKeeper    ugdmintmodulekeeper.Keeper
@@ -208,6 +207,7 @@ func New(
 				// This needs to be removed after IBC supports App Wiring.
 				app.GetIBCKeeper,
 				app.GetCapabilityScopedKeeper,
+				app.WasmKeeper,
 				// Supply the logger
 				logger,
 
@@ -442,6 +442,11 @@ func (app *App) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig
 // GetIBCKeeper returns the IBC keeper.
 func (app *App) GetIBCKeeper() *ibckeeper.Keeper {
 	return app.IBCKeeper
+}
+
+// GetWasmKeeper reurns the wasm keeper
+func (app *App) GetWasmKeeper() wasmkeeper.Keeper {
+	return app.WasmKeeper
 }
 
 // GetCapabilityScopedKeeper returns the capability scoped keeper.

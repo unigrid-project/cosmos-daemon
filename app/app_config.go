@@ -203,7 +203,7 @@ var (
 		{Account: ugdmintmoduletypes.ModuleName, Permissions: []string{authtypes.Minter}},
 		{Account: gridnodemoduletypes.ModuleName},
 		{Account: ugdvestingmoduletypes.ModuleName},
-		{Account: cosmwasmmoduletypes.ModuleName},
+		{Account: cosmwasmmoduletypes.ModuleName, Permissions: []string{authtypes.Burner}},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 
