@@ -40,14 +40,14 @@ FROM alpine:3.16
 # Copy the built binary from the builder stage
 COPY --from=go-builder /code/bin/paxd /usr/bin/paxd
 
-# Optionally copy any additional files or scripts required by your application
-# COPY docker/* /opt/
-# RUN chmod +x /opt/*.sh
+# Copy the necessary scripts and configuration files
+COPY docker/* /opt/
+RUN chmod +x /opt/*.sh
 
 WORKDIR /opt
 
 # Expose necessary ports (adjust these according to your application's needs)
-EXPOSE 1317 26656 26657
+EXPOSE 1317 26656 26657 9090
 
 # Define the default command
 CMD ["/usr/bin/paxd", "version"]

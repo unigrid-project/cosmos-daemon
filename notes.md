@@ -38,4 +38,36 @@ After compiling you can check the version was correctly added.
 paxd version
 ```
 
+### Dev server
 
+Bring up a local node with a test account containing tokens
+
+This is just designed for local testing/CI - do not use these scripts in production.
+Very likely you will assign tokens to accounts whose mnemonics are public on github.
+
+### Build the container with latest code
+```sh
+docker build --no-cache . -t unigrid/paxd:latest
+```
+Remove the volume to reset data.
+```sh
+docker volume rm -f paxd_data
+
+# pass password (one time) as env variable for setup, so we don't need to keep typing it
+# add some addresses that you have private keys for (locally) to give them genesis funds
+docker run --rm -it \
+    -e PASSWORD=xxxxxxxx \
+    --mount type=volume,source=paxd_data,target=/root \
+    unigrid/paxd:latest /opt/setup_and_run.sh unigrid1pkptre7fdkl6gfrzlesjjvhxhlc3r4gmmk8rs6
+
+# only perform setup
+docker run --rm -it \
+    -e PASSWORD=xxxxxxxx \
+    --mount type=volume,source=paxd_data,target=/root \
+    unigrid/paxd:latest /opt/setup_paxd.sh unigrid1pkptre7fdkl6gfrzlesjjvhxhlc3r4gmmk8rs6
+
+# This will start both paxd and rest-server, both are logged
+docker run --rm -it -p 26657:26657 -p 26656:26656 -p 1317:1317 \
+    --mount type=volume,source=paxd_data,target=/root \
+    unigrid/paxd:latest /opt/run_paxd.sh
+```
