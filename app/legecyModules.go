@@ -71,9 +71,9 @@ func (app *App) registerLegecyModules(appOpts servertypes.AppOptions) {
 	keyTable.RegisterParamSet(&ibcconnectiontypes.Params{})
 	app.ParamsKeeper.Subspace(ibcexported.ModuleName).WithKeyTable(keyTable)
 	app.ParamsKeeper.Subspace(ibctransfertypes.ModuleName).WithKeyTable(ibctransfertypes.ParamKeyTable())
+	app.ParamsKeeper.Subspace(wasmtypes.ModuleName)
 	app.ParamsKeeper.Subspace(icacontrollertypes.SubModuleName).WithKeyTable(icacontrollertypes.ParamKeyTable())
 	app.ParamsKeeper.Subspace(icahosttypes.SubModuleName).WithKeyTable(icahosttypes.ParamKeyTable())
-	app.ParamsKeeper.Subspace(wasmtypes.ModuleName)
 	// add capability keeper and ScopeToModule for ibc module
 	app.CapabilityKeeper = capabilitykeeper.NewKeeper(
 		app.AppCodec(),
@@ -225,6 +225,7 @@ func (app *App) registerLegecyModules(appOpts servertypes.AppOptions) {
 
 	fmt.Println("In RegisterModules")
 	if err := app.RegisterModules(
+		wasm.NewAppModule(app.appCodec, &app.WasmKeeper, app.StakingKeeper, app.AccountKeeper, app.BankKeeper, app.MsgServiceRouter(), app.GetSubspace(wasmtypes.ModuleName)),
 		ibc.NewAppModule(app.IBCKeeper),
 		ibctransfer.NewAppModule(app.TransferKeeper),
 		ibcfee.NewAppModule(app.IBCFeeKeeper),
@@ -232,8 +233,6 @@ func (app *App) registerLegecyModules(appOpts servertypes.AppOptions) {
 		capability.NewAppModule(app.appCodec, *app.CapabilityKeeper, false),
 		ibctm.AppModule{},
 		solomachine.AppModule{},
-		wasm.NewAppModule(app.appCodec, &app.WasmKeeper, app.StakingKeeper, app.AccountKeeper, app.BankKeeper,
-			app.MsgServiceRouter(), app.GetSubspace(wasmtypes.ModuleName)),
 	); err != nil {
 		panic(err)
 	}
@@ -241,10 +240,10 @@ func (app *App) registerLegecyModules(appOpts servertypes.AppOptions) {
 
 // AddIBCModuleManager adds the missing IBC modules into the module manager.
 func AddLegecyModuleManager(moduleManager module.BasicManager) {
+	//moduleManager[wasmtypes.ModuleName] = wasm.AppModule{}
 	moduleManager[ibcexported.ModuleName] = ibc.AppModule{}
 	moduleManager[ibctransfertypes.ModuleName] = ibctransfer.AppModule{}
 	moduleManager[ibcfeetypes.ModuleName] = ibcfee.AppModule{}
 	moduleManager[icatypes.ModuleName] = icamodule.AppModule{}
 	moduleManager[capabilitytypes.ModuleName] = capability.AppModule{}
-	moduleManager[wasmtypes.ModuleName] = wasm.AppModule{}
 }

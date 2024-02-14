@@ -56,6 +56,8 @@ docker volume rm -f paxd_data
 # pass password (one time) as env variable for setup, so we don't need to keep typing it
 # add some addresses that you have private keys for (locally) to give them genesis funds
 docker run --rm -it \
+    --name paxd \
+    -p 1317:1317 \
     -e PASSWORD=xxxxxxxx \
     --mount type=volume,source=paxd_data,target=/root \
     unigrid/paxd:latest /opt/setup_and_run.sh unigrid1pkptre7fdkl6gfrzlesjjvhxhlc3r4gmmk8rs6

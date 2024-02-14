@@ -6,4 +6,4 @@ if test -n "$1"; then
 fi
 
 mkdir -p /root/log
-paxd start --rpc.laddr tcp://0.0.0.0:26657 --trace
+paxd start --rpc.laddr tcp://0.0.0.0:26657 --api.enable=true --api.swagger=true --api.address tcp://0.0.0.0:1317 --trace
