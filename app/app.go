@@ -2,10 +2,11 @@ package app
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"os"
 	"path/filepath"
+
+	//tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 
 	"cosmossdk.io/depinject"
 	"cosmossdk.io/log"
@@ -31,7 +32,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
 
-	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	authsims "github.com/cosmos/cosmos-sdk/x/auth/simulation"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -290,11 +290,6 @@ func New(
 		panic(err)
 	}
 
-	// register interfaces for wasm
-	//RegisterInterfaces(app.interfaceRegistry)
-	//wasmtypes.RegisterLegacyAminoCodec(app.legacyAmino)
-	wasmtypes.RegisterInterfaces(app.interfaceRegistry)
-
 	// Below we could construct and set an application specific mempool and
 	// ABCI 1.0 PrepareProposal and ProcessProposal handlers. These defaults are
 	// already set in the SDK's BaseApp, this shows an example of how to override
@@ -331,6 +326,21 @@ func New(
 
 	app.registerLegecyModules(appOpts)
 
+	// In v0.46, the SDK introduces _postHandlers_. PostHandlers are like
+	// antehandlers, but are run _after_ the `runMsgs` execution. They are also
+	// defined as a chain, and have the same signature as antehandlers.
+	//
+	// In baseapp, postHandlers are run in the same store branch as `runMsgs`,
+	// meaning that both `runMsgs` and `postHandler` state will be committed if
+	// both are successful, and both will be reverted if any of the two fails.
+	//
+	// The SDK exposes a default postHandlers chain
+	//
+	// Please note that changing any of the anteHandler or postHandler chain is
+	// likely to be a state-machine breaking change, which needs a coordinated
+	// upgrade.
+	app.setPostHandler()
+
 	// register streaming services
 	if err := app.RegisterStreamingServices(appOpts, app.kvStoreKeys()); err != nil {
 		return nil, err
@@ -354,6 +364,9 @@ func New(
 
 	app.sm.RegisterStoreDecoders()
 	app.SetInitChainer(app.InitChainer)
+	// app.SetPreBlocker(app.PreBlocker)
+	// app.SetBeginBlocker(app.BeginBlocker)
+	// app.SetEndBlocker(app.EndBlocker)
 	// A custom InitChainer can be set if extra pre-init-genesis logic is required.
 	// By default, when using app wiring enabled module, this is not required.
 	// For instance, the upgrade module will set automatically the module version map in its init genesis thanks to app wiring.
@@ -365,13 +378,25 @@ func New(
 	// })
 
 	// wasm
-	txConfig := authtx.NewTxConfig(app.appCodec, authtx.DefaultSignModes)
-	wasmConfig := wasmtypes.DefaultWasmConfig()
-	app.setAnteHandler(txConfig, wasmConfig, app.GetKey(wasmtypes.StoreKey))
+	// txConfig := authtx.NewTxConfig(app.appCodec, authtx.DefaultSignModes)
+	// wasmConfig := wasmtypes.DefaultWasmConfig()
+	// app.setAnteHandler(txConfig, wasmConfig, app.GetKey(wasmtypes.StoreKey))
 
 	if err := app.Load(loadLatest); err != nil {
 		return nil, err
 	}
+
+	// if loadLatest {
+	// 	if err := app.LoadLatestVersion(); err != nil {
+	// 		panic(fmt.Errorf("error loading last version: %w", err))
+	// 	}
+	// 	ctx := app.BaseApp.NewUncachedContext(true, tmproto.Header{})
+
+	// 	// Initialize pinned codes in wasmvm as they are not persisted there
+	// 	if err := app.WasmKeeper.InitializePinnedCodes(ctx); err != nil {
+	// 		panic(fmt.Sprintf("failed initialize pinned codes %s", err))
+	// 	}
+	// }
 
 	return app, nil
 }
@@ -506,30 +531,41 @@ func RegisterInterfaces(registry codectypes.InterfaceRegistry) {
 	wasmtypes.RegisterInterfaces(registry)
 }
 
-func (app *App) setAnteHandler(txConfig client.TxConfig, wasmConfig wasmtypes.WasmConfig, txCounterStoreKey *storetypes.KVStoreKey) {
-	anteHandler, err := NewAnteHandler(
-		HandlerOptions{
-			HandlerOptions: ante.HandlerOptions{
-				AccountKeeper:   app.AccountKeeper,
-				BankKeeper:      app.BankKeeper,
-				SignModeHandler: txConfig.SignModeHandler(),
-				FeegrantKeeper:  app.FeeGrantKeeper,
-				SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
-			},
-			IBCKeeper:             app.IBCKeeper,
-			WasmConfig:            &wasmConfig,
-			WasmKeeper:            &app.WasmKeeper,
-			TXCounterStoreService: runtime.NewKVStoreService(txCounterStoreKey),
-			CircuitKeeper:         &app.CircuitBreakerKeeper,
-		},
-	)
-	if err != nil {
-		panic(fmt.Errorf("failed to create AnteHandler: %s", err))
-	}
+// func (app *App) setAnteHandler(txConfig client.TxConfig, wasmConfig wasmtypes.WasmConfig, txCounterStoreKey *storetypes.KVStoreKey) {
+// 	anteHandler, err := NewAnteHandler(
+// 		HandlerOptions{
+// 			HandlerOptions: ante.HandlerOptions{
+// 				AccountKeeper:   app.AccountKeeper,
+// 				BankKeeper:      app.BankKeeper,
+// 				SignModeHandler: txConfig.SignModeHandler(),
+// 				FeegrantKeeper:  app.FeeGrantKeeper,
+// 				SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
+// 			},
+// 			IBCKeeper:             app.IBCKeeper,
+// 			WasmConfig:            &wasmConfig,
+// 			WasmKeeper:            &app.WasmKeeper,
+// 			TXCounterStoreService: runtime.NewKVStoreService(txCounterStoreKey),
+// 			CircuitKeeper:         &app.CircuitBreakerKeeper,
+// 		},
+// 	)
+// 	if err != nil {
+// 		panic(fmt.Errorf("failed to create AnteHandler: %s", err))
+// 	}
+// 	fmt.Println("AnteHandler created")
+// 	// Set the AnteHandler for the app
+// 	app.SetAnteHandler(anteHandler)
+// }
 
-	// Set the AnteHandler for the app
-	app.SetAnteHandler(anteHandler)
-}
+// func (app *App) setPostHandler() {
+// 	postHandler, err := posthandler.NewPostHandler(
+// 		posthandler.HandlerOptions{},
+// 	)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+
+// 	app.SetPostHandler(postHandler)
+// }
 
 // TxConfig returns WasmApp's TxConfig
 func (app *App) TxConfig() client.TxConfig {

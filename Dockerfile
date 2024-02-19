@@ -44,6 +44,8 @@ COPY --from=go-builder /code/bin/paxd /usr/bin/paxd
 COPY docker/* /opt/
 RUN chmod +x /opt/*.sh
 
+COPY contracts/artifacts /opt/artifacts/
+
 WORKDIR /opt
 
 # Expose necessary ports (adjust these according to your application's needs)

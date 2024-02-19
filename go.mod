@@ -7,6 +7,10 @@ replace (
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.7.0
 	// replace broken goleveldb
 	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
+// github.com/unigrid-project/cosmos-gridnode => /opt/cosmos-sdk-gridnode
+// github.com/unigrid-project/cosmos-ugdmint => /opt/cosmos-sdk-ugdmint
+// github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting => /opt/cosmos-sdk-unigrid-hedgehog-vesting
+
 )
 
 require (
@@ -259,9 +263,3 @@ require (
 	pgregory.net/rapid v1.1.0 // indirect
 	sigs.k8s.io/yaml v1.4.0 // indirect
 )
-
-//replace github.com/unigrid-project/cosmos-ugdmint => /home/evan/work/cosmos-sdk-ugdmint
-
-//replace github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting => /home/evan/work/cosmos-sdk-unigrid-hedgehog-vesting
-
-//replace github.com/unigrid-project/cosmos-gridnode => /home/evan/work/cosmos-sdk-gridnode
