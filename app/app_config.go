@@ -53,10 +53,15 @@ import (
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 	"google.golang.org/protobuf/types/known/durationpb"
 
-	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 	paxmodulev1 "pax/api/pax/pax/module"
 	_ "pax/x/pax/module" // import for side-effects
 	paxmoduletypes "pax/x/pax/types"
+
+	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
+
+	gridnodemodulev1 "github.com/unigrid-project/cosmos-gridnode/api/pax/gridnode/module"
+	_ "github.com/unigrid-project/cosmos-gridnode/x/gridnode/module" // import for side-effects
+	gridnodemoduletypes "github.com/unigrid-project/cosmos-gridnode/x/gridnode/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 
@@ -97,6 +102,7 @@ var (
 		// chain modules
 		paxmoduletypes.ModuleName,
 		wasmtypes.ModuleName,
+		gridnodemoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
@@ -123,6 +129,7 @@ var (
 		// chain modules
 		paxmoduletypes.ModuleName,
 		wasmtypes.ModuleName,
+		gridnodemoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
@@ -143,6 +150,7 @@ var (
 		// chain modules
 		paxmoduletypes.ModuleName,
 		wasmtypes.ModuleName,
+		gridnodemoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
@@ -164,6 +172,7 @@ var (
 		{Account: ibcfeetypes.ModuleName},
 		{Account: icatypes.ModuleName},
 		{Account: wasmtypes.ModuleName, Permissions: []string{authtypes.Burner}},
+		{Account: gridnodemoduletypes.ModuleName},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 
@@ -302,6 +311,10 @@ var (
 			{
 				Name:   paxmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&paxmodulev1.Module{}),
+			},
+			{
+				Name:   gridnodemoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&gridnodemodulev1.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},
