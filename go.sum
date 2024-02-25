@@ -1026,6 +1026,8 @@ github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d/go.mod h1
 github.com/smartystreets/goconvey v1.6.4/go.mod h1:syvi0/a8iFYH4r/RixwvyeAJjdLS9QV7WQ/tjFTllLA=
 github.com/soheilhy/cmux v0.1.4/go.mod h1:IM3LyeVVIOuxMH7sFAkER9+bJ4dT7Ms6E4xg4kGIyLM=
 github.com/sony/gobreaker v0.4.1/go.mod h1:ZKptC7FHNvhBz7dN2LGjPVBz2sZJmc0/PkyDJOjmxWY=
+github.com/sosodev/duration v1.1.0 h1:kQcaiGbJaIsRqgQy7VGlZrVw1giWO+lDoX3MCPnpVO4=
+github.com/sosodev/duration v1.1.0/go.mod h1:RQIBBX0+fMLc/D9+Jb/fwvVmo0eZvDDEERAikUR6SDg=
 github.com/sourcegraph/conc v0.3.0 h1:OQTbbt6P72L20UqAkXXuLOj79LfEanQ+YQFNpLA9ySo=
 github.com/sourcegraph/conc v0.3.0/go.mod h1:Sdozi7LEKbFPqYX2/J+iBAM6HpqSLTASQIKqDmF7Mt0=
 github.com/spaolacci/murmur3 v0.0.0-20180118202830-f09979ecbc72/go.mod h1:JwIasOWyU6f++ZhiEuf87xNszmSA2myDM2Kzu9HwQUA=
@@ -1096,6 +1098,8 @@ github.com/unigrid-project/cosmos-common v0.0.8 h1:u7b7NfwKHXbvXj3QGEKaghHrB1Toj
 github.com/unigrid-project/cosmos-common v0.0.8/go.mod h1:1yKYVwjFSztn3PpscSB02WKYUMkFiRpet2qlYB8OBio=
 github.com/unigrid-project/cosmos-gridnode v0.0.13 h1:Bsg87RlmSZHm0fW49h3U3G2NnBFnLAm57AEkXCIwWkM=
 github.com/unigrid-project/cosmos-gridnode v0.0.13/go.mod h1:L86CoWpX/Xznxwb+JVoDIvYm6wH73HzRT8Jd+mi5IoQ=
+github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting v0.0.59 h1:kbOvgzMofs3j0DhVKyWEnvPIWdDwyJkqLMPNExZi3mk=
+github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting v0.0.59/go.mod h1:p5/Va4MgvuIyrkOio+zYppNFNZk2I9evS9DnGNdMHcs=
 github.com/urfave/cli v1.20.0/go.mod h1:70zkFmudgCuE/ngEzBv17Jvp/497gISqfk5gWijbERA=
 github.com/urfave/cli v1.22.1/go.mod h1:Gos4lmkARVdJ6EkW0WaNv/tZAAMe9V7XWyB60NtXRu0=
 github.com/vbatts/tar-split v0.11.5 h1:3bHCTIheBm1qFTcgh9oPu+nNBtX+XJIupG/vacinCts=

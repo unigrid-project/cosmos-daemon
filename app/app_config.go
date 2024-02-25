@@ -62,6 +62,10 @@ import (
 	gridnodemodulev1 "github.com/unigrid-project/cosmos-gridnode/api/pax/gridnode/module"
 	_ "github.com/unigrid-project/cosmos-gridnode/x/gridnode/module" // import for side-effects
 	gridnodemoduletypes "github.com/unigrid-project/cosmos-gridnode/x/gridnode/types"
+
+	ugdvestingmodulev1 "github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting/api/ugdvesting/ugdvesting/module"
+	_ "github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting/x/ugdvesting/module" // import for side-effects
+	ugdvestingmoduletypes "github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting/x/ugdvesting/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 
@@ -103,6 +107,7 @@ var (
 		paxmoduletypes.ModuleName,
 		wasmtypes.ModuleName,
 		gridnodemoduletypes.ModuleName,
+		ugdvestingmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
@@ -130,6 +135,7 @@ var (
 		paxmoduletypes.ModuleName,
 		wasmtypes.ModuleName,
 		gridnodemoduletypes.ModuleName,
+		ugdvestingmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
@@ -151,6 +157,7 @@ var (
 		paxmoduletypes.ModuleName,
 		wasmtypes.ModuleName,
 		gridnodemoduletypes.ModuleName,
+		ugdvestingmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
@@ -173,6 +180,7 @@ var (
 		{Account: icatypes.ModuleName},
 		{Account: wasmtypes.ModuleName, Permissions: []string{authtypes.Burner}},
 		{Account: gridnodemoduletypes.ModuleName},
+		{Account: ugdvestingmoduletypes.ModuleName},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 
@@ -315,6 +323,10 @@ var (
 			{
 				Name:   gridnodemoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&gridnodemodulev1.Module{}),
+			},
+			{
+				Name:   ugdvestingmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&ugdvestingmodulev1.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},
