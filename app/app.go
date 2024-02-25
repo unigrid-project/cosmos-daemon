@@ -82,7 +82,7 @@ import (
 )
 
 const (
-	AccountAddressPrefix = "ugd"
+	AccountAddressPrefix = "unigrid"
 	Name                 = "pax"
 )
 
