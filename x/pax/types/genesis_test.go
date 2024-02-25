@@ -3,8 +3,9 @@ package types_test
 import (
 	"testing"
 
+	"pax/x/pax/types"
+
 	"github.com/stretchr/testify/require"
-	"github.com/unigrid-project/pax/x/pax/types"
 )
 
 func TestGenesisState_Validate(t *testing.T) {

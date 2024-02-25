@@ -3,7 +3,7 @@ package pax
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 
-	modulev1 "github.com/unigrid-project/pax/api/pax/pax"
+	modulev1 "pax/api/pax/pax"
 )
 
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.

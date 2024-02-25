@@ -5,16 +5,18 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	keepertest "github.com/unigrid-project/pax/testutil/keeper"
-	"github.com/unigrid-project/pax/x/pax/types"
+	keepertest "pax/testutil/keeper"
+	"pax/x/pax/keeper"
+	"pax/x/pax/types"
 )
 
 func TestParamsQuery(t *testing.T) {
-	keeper, ctx := keepertest.PaxKeeper(t)
+	k, ctx := keepertest.PaxKeeper(t)
+	qs := keeper.NewQueryServerImpl(k)
 	params := types.DefaultParams()
-	require.NoError(t, keeper.SetParams(ctx, params))
+	require.NoError(t, k.SetParams(ctx, params))
 
-	response, err := keeper.Params(ctx, &types.QueryParamsRequest{})
+	response, err := qs.Params(ctx, &types.QueryParamsRequest{})
 	require.NoError(t, err)
 	require.Equal(t, &types.QueryParamsResponse{Params: params}, response)
 }

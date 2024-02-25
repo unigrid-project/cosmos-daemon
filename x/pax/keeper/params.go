@@ -5,7 +5,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/runtime"
 
-	"github.com/unigrid-project/pax/x/pax/types"
+	"pax/x/pax/types"
 )
 
 // GetParams get all parameters as types.Params

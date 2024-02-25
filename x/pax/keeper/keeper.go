@@ -8,7 +8,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/unigrid-project/pax/x/pax/types"
+	"pax/x/pax/types"
 )
 
 type (

@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/unigrid-project/pax/x/pax/types"
+	"pax/x/pax/types"
 )
 
 func TestMsgUpdateParams(t *testing.T) {

@@ -1,9 +1,7 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"cosmossdk.io/client/v2/autocli"
@@ -25,14 +23,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
-	"github.com/spf13/viper"
-	"github.com/unigrid-project/pax/app"
+
+	"pax/app"
 )
-
-const DefaultHedgehogUrl = "https://149.102.147.45:39886"
-
-// testing localhost hedgehog
-//const DefaultHedgehogUrl = "https://127.0.0.1:39886"
 
 // NewRootCmd creates a new root command for paxd. It is called once in the main function.
 func NewRootCmd() *cobra.Command {
@@ -45,11 +38,8 @@ func NewRootCmd() *cobra.Command {
 		clientCtx          client.Context
 	)
 
-	//if err := depinject.InjectDebug(
-	//depinject.FileVisualizer("/home/evan/work/cosmos-daemon/output.dot"),
 	if err := depinject.Inject(
-		depinject.Configs(
-			app.AppConfig(),
+		depinject.Configs(app.AppConfig(),
 			depinject.Supply(
 				log.NewNopLogger(),
 			),
@@ -63,14 +53,8 @@ func NewRootCmd() *cobra.Command {
 		&moduleBasicManager,
 		&clientCtx,
 	); err != nil {
-		fmt.Printf("Error during dependency injection: %+v\n", err)
 		panic(err)
 	}
-
-	// Since the IBC modules don't support dependency injection, we need to
-	// manually add the modules to the basic manager on the client side.
-	// This needs to be removed after IBC supports App Wiring.
-	app.AddIBCModuleManager(moduleBasicManager)
 
 	rootCmd := &cobra.Command{
 		Use:           app.Name + "d",
@@ -94,7 +78,7 @@ func NewRootCmd() *cobra.Command {
 
 			// This needs to go after ReadFromClientConfig, as that function
 			// sets the RPC client needed for SIGN_MODE_TEXTUAL.
-			txConfigOpts.EnabledSignModes = append(tx.DefaultSignModes, signing.SignMode_SIGN_MODE_TEXTUAL)
+			txConfigOpts.EnabledSignModes = append(txConfigOpts.EnabledSignModes, signing.SignMode_SIGN_MODE_TEXTUAL)
 			txConfigOpts.TextualCoinMetadataQueryFn = txmodule.NewGRPCCoinMetadataQueryFn(clientCtx)
 			txConfigWithTextual, err := tx.NewTxConfigWithOptions(
 				codec.NewProtoCodec(clientCtx.InterfaceRegistry),
@@ -120,11 +104,14 @@ func NewRootCmd() *cobra.Command {
 		},
 	}
 
-	// param for the hedgehog url to be passed at startup
-	rootCmd.PersistentFlags().StringVar(&HedgehogUrl, "hedgehog", "", "Pass the Hedgehog URL")
-	//fmt.Println("Value of --hedgehog flag:", HedgehogUrl)
-
-	viper.BindPFlag("hedgehog.hedgehog_url", rootCmd.PersistentFlags().Lookup("hedgehog"))
+	// Since the IBC modules don't support dependency injection, we need to
+	// manually register the modules on the client side.
+	// This needs to be removed after IBC supports App Wiring.
+	ibcModules := app.RegisterIBC(clientCtx.InterfaceRegistry)
+	for name, mod := range ibcModules {
+		moduleBasicManager[name] = module.CoreAppModuleBasicAdaptor(name, mod)
+		autoCliOpts.Modules[name] = mod
+	}
 
 	initRootCmd(rootCmd, clientCtx.TxConfig, clientCtx.InterfaceRegistry, clientCtx.Codec, moduleBasicManager)
 
@@ -144,7 +131,7 @@ func overwriteFlagDefaults(c *cobra.Command, defaults map[string]string) {
 	set := func(s *pflag.FlagSet, key, val string) {
 		if f := s.Lookup(key); f != nil {
 			f.DefValue = val
-			f.Value.Set(val)
+			_ = f.Value.Set(val)
 		}
 	}
 	for key, val := range defaults {
@@ -185,46 +172,4 @@ func ProvideKeyring(clientCtx client.Context, addressCodec address.Codec) (clien
 	}
 
 	return keyring.NewAutoCLIKeyring(kb)
-}
-
-// InitializeConfig reads the hedgehog configuration file and ENV variables if set.
-// if there is no flag or config we use DefaultHedgehogUrl
-func InitializeConfig(home string) {
-	viper.SetConfigName("hedgehog")
-	viper.SetConfigType("toml")
-	configPath := filepath.Join(home, "config")
-	viper.AddConfigPath(configPath)
-
-	// Print the full path of the file it's looking for
-	fullPath := filepath.Join(configPath, "hedgehog.toml")
-	fmt.Println("Searching for config file at:", fullPath)
-
-	err := viper.ReadInConfig()
-	if err != nil {
-		// Check if the error is due to the file not being found
-		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			// Config file not found; ignore or handle as desired
-			fmt.Println("Warning: Hedgehog Config file not found. Using default settings.")
-		} else {
-			// Some other error occurred; handle or print it
-			fmt.Printf("Error reading config file: %s", err)
-			return
-		}
-	}
-
-	// If HedgehogUrl flag value is set, prioritize it over the configuration file value
-	if HedgehogUrl != "" {
-		viper.Set("hedgehog.hedgehog_url", HedgehogUrl)
-	}
-
-	// Get the value of hedgehog_url
-	hedgehogURL := viper.GetString("hedgehog.hedgehog_url")
-
-	// If hedgehogURL is empty, set it to the default value
-	if hedgehogURL == "" {
-		hedgehogURL = DefaultHedgehogUrl
-		viper.Set("hedgehog.hedgehog_url", DefaultHedgehogUrl) // Set the default value in viper
-	}
-
-	fmt.Println("Hedgehog URL:", viper.GetString("hedgehog.hedgehog_url"))
 }

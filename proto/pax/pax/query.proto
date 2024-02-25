@@ -7,7 +7,7 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "pax/pax/params.proto";
 
-option go_package = "github.com/unigrid-project/pax/x/pax/types";
+option go_package = "pax/x/pax/types";
 
 // Query defines the gRPC querier service.
 service Query {
