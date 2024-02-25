@@ -6,8 +6,8 @@ import (
 
 	svrcmd "github.com/cosmos/cosmos-sdk/server/cmd"
 
-	"github.com/unigrid-project/pax/app"
-	"github.com/unigrid-project/pax/cmd/paxd/cmd"
+	"pax/app"
+	"pax/cmd/paxd/cmd"
 )
 
 func main() {

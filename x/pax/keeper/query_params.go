@@ -7,14 +7,14 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/unigrid-project/pax/x/pax/types"
+	"pax/x/pax/types"
 )
 
-func (k Keeper) Params(goCtx context.Context, req *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
+func (s queryServer) Params(goCtx context.Context, req *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	return &types.QueryParamsResponse{Params: k.GetParams(ctx)}, nil
+	return &types.QueryParamsResponse{Params: s.k.GetParams(ctx)}, nil
 }

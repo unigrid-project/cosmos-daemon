@@ -4,10 +4,12 @@ package pax.pax;
 import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/unigrid-project/pax/x/pax/types";
+option go_package = "pax/x/pax/types";
 
 // Params defines the parameters for the module.
 message Params {
   option (amino.name) = "pax/x/pax/Params";
   option (gogoproto.equal) = true;
+
+  
 }

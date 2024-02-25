@@ -17,8 +17,8 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/unigrid-project/pax/x/pax/keeper"
-	"github.com/unigrid-project/pax/x/pax/types"
+	"pax/x/pax/keeper"
+	"pax/x/pax/types"
 )
 
 func PaxKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
@@ -43,7 +43,9 @@ func PaxKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 	ctx := sdk.NewContext(stateStore, cmtproto.Header{}, false, log.NewNopLogger())
 
 	// Initialize params
-	k.SetParams(ctx, types.DefaultParams())
+	if err := k.SetParams(ctx, types.DefaultParams()); err != nil {
+		panic(err)
+	}
 
 	return k, ctx
 }

@@ -3,11 +3,12 @@ package pax_test
 import (
 	"testing"
 
+	keepertest "pax/testutil/keeper"
+	"pax/testutil/nullify"
+	pax "pax/x/pax/module"
+	"pax/x/pax/types"
+
 	"github.com/stretchr/testify/require"
-	keepertest "github.com/unigrid-project/pax/testutil/keeper"
-	"github.com/unigrid-project/pax/testutil/nullify"
-	pax "github.com/unigrid-project/pax/x/pax/module"
-	"github.com/unigrid-project/pax/x/pax/types"
 )
 
 func TestGenesis(t *testing.T) {

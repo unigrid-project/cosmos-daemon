@@ -22,11 +22,10 @@ import (
 	authcmd "github.com/cosmos/cosmos-sdk/x/auth/client/cli"
 	"github.com/cosmos/cosmos-sdk/x/crisis"
 	genutilcli "github.com/cosmos/cosmos-sdk/x/genutil/client/cli"
-	ibccmd "github.com/cosmos/ibc-go/v8/modules/core/client/cli"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/unigrid-project/pax/app"
+	"pax/app"
 )
 
 func initRootCmd(
@@ -88,7 +87,6 @@ func queryCommand() *cobra.Command {
 		server.QueryBlocksCmd(),
 		authcmd.QueryTxCmd(),
 		server.QueryBlockResultsCmd(),
-		ibccmd.GetQueryCmd(),
 	)
 	cmd.PersistentFlags().String(flags.FlagChainID, "", "The network chain ID")
 
@@ -115,7 +113,6 @@ func txCommand() *cobra.Command {
 		authcmd.GetEncodeCommand(),
 		authcmd.GetDecodeCommand(),
 		authcmd.GetSimulateCmd(),
-		ibccmd.GetTxCmd(),
 	)
 	cmd.PersistentFlags().String(flags.FlagChainID, "", "The network chain ID")
 
@@ -139,8 +136,6 @@ func newApp(
 	if err != nil {
 		panic(err)
 	}
-	homePath := appOpts.Get(flags.FlagHome).(string)
-	InitializeConfig(homePath)
 	return app
 }
 
