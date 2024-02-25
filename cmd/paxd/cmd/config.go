@@ -62,6 +62,7 @@ func initAppConfig() (string, interface{}) {
 	//
 	// In tests, we set the min gas prices to 0.
 	// srvCfg.MinGasPrices = "0stake"
+	srvCfg.MinGasPrices = "0ugd"
 	// srvCfg.BaseConfig.IAVLDisableFastNode = true // disable fastnode by default
 
 	customAppConfig := CustomAppConfig{
