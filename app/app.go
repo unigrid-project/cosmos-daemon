@@ -81,6 +81,8 @@ import (
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	gridnodemodulekeeper "github.com/unigrid-project/cosmos-gridnode/x/gridnode/keeper"
 
+	ugdvestingmodulekeeper "github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting/x/ugdvesting/keeper"
+
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	"pax/docs"
@@ -152,7 +154,9 @@ type App struct {
 	ScopedWasmKeeper capabilitykeeper.ScopedKeeper
 
 	// Unigrid
-	GridnodeKeeper gridnodemodulekeeper.Keeper
+	GridnodeKeeper   gridnodemodulekeeper.Keeper
+	UgdvestingKeeper ugdvestingmodulekeeper.Keeper
+
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -293,6 +297,7 @@ func New(
 		&app.CircuitBreakerKeeper,
 		&app.PaxKeeper,
 		&app.GridnodeKeeper,
+		&app.UgdvestingKeeper,
 		// this line is used by starport scaffolding # stargate/app/keeperDefinition
 	); err != nil {
 		panic(err)
