@@ -56,8 +56,7 @@ import (
 	groupkeeper "github.com/cosmos/cosmos-sdk/x/group/keeper"
 	_ "github.com/cosmos/cosmos-sdk/x/group/module" // import for side-effects
 	_ "github.com/cosmos/cosmos-sdk/x/mint"         // import for side-effects
-	mintkeeper "github.com/cosmos/cosmos-sdk/x/mint/keeper"
-	_ "github.com/cosmos/cosmos-sdk/x/params" // import for side-effects
+	_ "github.com/cosmos/cosmos-sdk/x/params"       // import for side-effects
 	paramsclient "github.com/cosmos/cosmos-sdk/x/params/client"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
@@ -81,6 +80,7 @@ import (
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	gridnodemodulekeeper "github.com/unigrid-project/cosmos-gridnode/x/gridnode/keeper"
 
+	ugdmintmodulekeeper "github.com/unigrid-project/cosmos-ugdmint/x/ugdmint/keeper"
 	ugdvestingmodulekeeper "github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting/x/ugdvesting/keeper"
 
 	// this line is used by starport scaffolding # stargate/app/moduleImport
@@ -120,8 +120,9 @@ type App struct {
 	DistrKeeper           distrkeeper.Keeper
 	ConsensusParamsKeeper consensuskeeper.Keeper
 
-	SlashingKeeper       slashingkeeper.Keeper
-	MintKeeper           mintkeeper.Keeper
+	SlashingKeeper slashingkeeper.Keeper
+	// Unigrid
+	UgdmintKeeper        ugdmintmodulekeeper.Keeper
 	GovKeeper            *govkeeper.Keeper
 	CrisisKeeper         *crisiskeeper.Keeper
 	UpgradeKeeper        *upgradekeeper.Keeper
@@ -284,7 +285,7 @@ func New(
 		&app.DistrKeeper,
 		&app.ConsensusParamsKeeper,
 		&app.SlashingKeeper,
-		&app.MintKeeper,
+		&app.UgdmintKeeper,
 		&app.GovKeeper,
 		&app.CrisisKeeper,
 		&app.UpgradeKeeper,
