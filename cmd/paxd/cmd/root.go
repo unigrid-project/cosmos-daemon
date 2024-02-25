@@ -1,7 +1,9 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"cosmossdk.io/client/v2/autocli"
@@ -23,9 +25,15 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
+	"github.com/spf13/viper"
 
 	"pax/app"
 )
+
+const DefaultHedgehogUrl = "https://149.102.147.45:39886"
+
+// testing localhost hedgehog
+//const DefaultHedgehogUrl = "https://127.0.0.1:39886"
 
 // NewRootCmd creates a new root command for paxd. It is called once in the main function.
 func NewRootCmd() *cobra.Command {
@@ -113,6 +121,12 @@ func NewRootCmd() *cobra.Command {
 		autoCliOpts.Modules[name] = mod
 	}
 
+	// param for the hedgehog url to be passed at startup
+	rootCmd.PersistentFlags().StringVar(&HedgehogUrl, "hedgehog", "", "Pass the Hedgehog URL")
+	//fmt.Println("Value of --hedgehog flag:", HedgehogUrl)
+
+	viper.BindPFlag("hedgehog.hedgehog_url", rootCmd.PersistentFlags().Lookup("hedgehog"))
+
 	initRootCmd(rootCmd, clientCtx.TxConfig, clientCtx.InterfaceRegistry, clientCtx.Codec, moduleBasicManager)
 
 	overwriteFlagDefaults(rootCmd, map[string]string{
@@ -172,4 +186,46 @@ func ProvideKeyring(clientCtx client.Context, addressCodec address.Codec) (clien
 	}
 
 	return keyring.NewAutoCLIKeyring(kb)
+}
+
+// InitializeConfig reads the hedgehog configuration file and ENV variables if set.
+// if there is no flag or config we use DefaultHedgehogUrl
+func InitializeConfig(home string) {
+	viper.SetConfigName("hedgehog")
+	viper.SetConfigType("toml")
+	configPath := filepath.Join(home, "config")
+	viper.AddConfigPath(configPath)
+
+	// Print the full path of the file it's looking for
+	fullPath := filepath.Join(configPath, "hedgehog.toml")
+	fmt.Println("Searching for config file at:", fullPath)
+
+	err := viper.ReadInConfig()
+	if err != nil {
+		// Check if the error is due to the file not being found
+		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+			// Config file not found; ignore or handle as desired
+			fmt.Println("Warning: Hedgehog Config file not found. Using default settings.")
+		} else {
+			// Some other error occurred; handle or print it
+			fmt.Printf("Error reading config file: %s", err)
+			return
+		}
+	}
+
+	// If HedgehogUrl flag value is set, prioritize it over the configuration file value
+	if HedgehogUrl != "" {
+		viper.Set("hedgehog.hedgehog_url", HedgehogUrl)
+	}
+
+	// Get the value of hedgehog_url
+	hedgehogURL := viper.GetString("hedgehog.hedgehog_url")
+
+	// If hedgehogURL is empty, set it to the default value
+	if hedgehogURL == "" {
+		hedgehogURL = DefaultHedgehogUrl
+		viper.Set("hedgehog.hedgehog_url", DefaultHedgehogUrl) // Set the default value in viper
+	}
+
+	fmt.Println("Hedgehog URL:", viper.GetString("hedgehog.hedgehog_url"))
 }

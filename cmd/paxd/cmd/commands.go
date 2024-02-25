@@ -25,9 +25,10 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
+	"pax/app"
+
 	"github.com/CosmWasm/wasmd/x/wasm"
 	wasmcli "github.com/CosmWasm/wasmd/x/wasm/client/cli"
-	"pax/app"
 )
 
 func initRootCmd(
@@ -144,6 +145,8 @@ func newApp(
 	if err != nil {
 		panic(err)
 	}
+	homePath := appOpts.Get(flags.FlagHome).(string)
+	InitializeConfig(homePath)
 	return app
 }
 
