@@ -41,8 +41,8 @@ require (
 	github.com/spf13/viper v1.18.2
 	github.com/stretchr/testify v1.8.4
 	github.com/unigrid-project/cosmos-common v0.0.8
-	github.com/unigrid-project/cosmos-gridnode v0.0.13
-	github.com/unigrid-project/cosmos-ugdmint v0.0.85
+	github.com/unigrid-project/cosmos-gridnode v0.0.14
+	github.com/unigrid-project/cosmos-ugdmint v0.0.89
 	github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting v0.0.59
 	golang.org/x/tools v0.18.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20231120223509-83a465c0220f
