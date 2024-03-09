@@ -9063,6 +9063,409 @@ paths:
               Since: cosmos-sdk 0.47
       tags:
         - Msg
+  /cosmos.ugdmint.v1beta1.Msg/UpdateParams:
+    post:
+      summary: >-
+        UpdateParams defines a governance operation for updating the x/ugdmint
+        module
+
+        parameters. The authority is defaults to the x/gov module account.
+      description: 'Since: cosmos-sdk 0.47'
+      operationId: CosmosUgdmintV1Beta1Msg_UpdateParams
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            description: >-
+              MsgUpdateParamsResponse defines the response structure for
+              executing a
+
+              MsgUpdateParams message.
+
+
+              Since: cosmos-sdk 0.47
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          description: |-
+            MsgUpdateParams is the Msg/UpdateParams request type.
+
+            Since: cosmos-sdk 0.47
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              authority:
+                type: string
+                description: >-
+                  authority is the address that controls the module (defaults to
+                  x/gov unless overwritten).
+              params:
+                description: |-
+                  params defines the x/ugdmint parameters to update.
+
+                  NOTE: All parameters must be supplied.
+                type: object
+                properties:
+                  mint_denom:
+                    type: string
+                    title: type of coin to mint
+                  subsidy_halving_interval:
+                    type: string
+                    title: subsidy halving interval
+                  goal_bonded:
+                    type: string
+                    title: goal of percent bonded atoms
+                  blocks_per_year:
+                    type: string
+                    format: uint64
+                    title: expected blocks per year
+            description: |-
+              MsgUpdateParams is the Msg/UpdateParams request type.
+
+              Since: cosmos-sdk 0.47
+      tags:
+        - Msg
+  /cosmos/ugdmint/v1beta1/mint_records:
+    get:
+      summary: AllMintRecords queries all mint records stored by the module.
+      operationId: CosmosUgdmintV1Beta1Query_AllMintRecords
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              mint_records:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    block_height:
+                      type: string
+                      format: int64
+                      title: Block height at which minting occurred
+                    account:
+                      type: string
+                      title: Account to which coins were minted
+                    amount:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          denom:
+                            type: string
+                          amount:
+                            type: string
+                        description: >-
+                          Coin defines a token with a denomination and an
+                          amount.
+
+
+                          NOTE: The amount field is an Int which implements the
+                          custom method
+
+                          signatures required by gogoproto.
+                  title: MintRecord represents a record of minting activity
+            description: >-
+              QueryAllMintRecordsResponse is response type for the
+              Query/AllMintRecords RPC method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
+  /cosmos/ugdmint/v1beta1/params:
+    get:
+      summary: Parameters queries the parameters of the module.
+      operationId: CosmosUgdmintV1Beta1Query_Params
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              params:
+                description: params holds all the parameters of this module.
+                type: object
+                properties:
+                  mint_denom:
+                    type: string
+                    title: type of coin to mint
+                  subsidy_halving_interval:
+                    type: string
+                    title: subsidy halving interval
+                  goal_bonded:
+                    type: string
+                    title: goal of percent bonded atoms
+                  blocks_per_year:
+                    type: string
+                    format: uint64
+                    title: expected blocks per year
+            description: >-
+              QueryParamsResponse is response type for the Query/Params RPC
+              method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
+  /cosmos/ugdmint/v1beta1/subsidy_halving_interval:
+    get:
+      summary: Subsidy halving interval
+      operationId: CosmosUgdmintV1Beta1Query_SubsidyHalvingInterval
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              subsidy_halving_interval:
+                type: string
+                format: byte
+                description: subsidy halving interval value.
+            description: >-
+              QuerySubsidyHalvingIntervalResponse is the response type for the
+              Query/SubsidyHalvingInterval RPC method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
+  /gridnode.gridnode.v1.Msg/UpdateParams:
+    post:
+      operationId: GridnodeGridnodeV1Msg_UpdateParams
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            description: >-
+              MsgUpdateParamsResponse defines the response structure for
+              executing a
+
+              MsgUpdateParams message.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          description: MsgUpdateParams is the Msg/UpdateParams request type.
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              authority:
+                type: string
+                description: >-
+                  authority is the address that controls the module (defaults to
+                  x/gov unless overwritten).
+              params:
+                description: |-
+                  params defines the module parameters to update.
+
+                  NOTE: All parameters must be supplied.
+                type: object
+            description: MsgUpdateParams is the Msg/UpdateParams request type.
+      tags:
+        - Msg
+  /gridnode/delegate-tokens:
+    post:
+      operationId: GridnodeGridnodeV1Msg_DelegateTokens
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              tx_hash:
+                type: string
+                title: Transaction hash of the delegated tokens operation
+              status:
+                type: string
+                title: Status of the operation, e.g., "success" or "failure"
+            description: >-
+              MsgGridnodeDelegateResponse is the response type for the
+              Msg/DelegateTokens RPC method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          description: >-
+            MsgGridnodeDelegate is the request type for the Msg/DelegateTokens
+            RPC method.
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              delegator_address:
+                type: string
+              amount:
+                type: string
+                format: int64
+              timestamp:
+                type: string
+                format: int64
+                title: Timestamp in Unix format or
+              unique_id:
+                type: string
+                title: unique identifier UUID
+            description: >-
+              MsgGridnodeDelegate is the request type for the Msg/DelegateTokens
+              RPC method.
+      tags:
+        - Msg
+  /gridnode/undelegate-tokens:
+    post:
+      operationId: GridnodeGridnodeV1Msg_UndelegateTokens
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              tx_hash:
+                type: string
+                title: Transaction hash of the delegated tokens operation
+              status:
+                type: string
+                title: Status of the operation, e.g., "success" or "failure"
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              delegator_address:
+                type: string
+              amount:
+                type: string
+                format: int64
+              timestamp:
+                type: string
+                format: int64
+                title: Timestamp in Unix format or
+              unique_id:
+                type: string
+                title: unique identifier UUID
+      tags:
+        - Msg
   /ibc.applications.fee.v1.Msg/PayPacketFee:
     post:
       summary: >-
@@ -19713,6 +20116,231 @@ definitions:
           min_commission_rate is the chain-wide minimum commission rate that a
           validator can charge their delegators
     description: Params defines the parameters for the x/staking module.
+  cosmos.ugdmint.v1beta1.MsgUpdateParams:
+    type: object
+    properties:
+      authority:
+        type: string
+        description: >-
+          authority is the address that controls the module (defaults to x/gov
+          unless overwritten).
+      params:
+        description: |-
+          params defines the x/ugdmint parameters to update.
+
+          NOTE: All parameters must be supplied.
+        type: object
+        properties:
+          mint_denom:
+            type: string
+            title: type of coin to mint
+          subsidy_halving_interval:
+            type: string
+            title: subsidy halving interval
+          goal_bonded:
+            type: string
+            title: goal of percent bonded atoms
+          blocks_per_year:
+            type: string
+            format: uint64
+            title: expected blocks per year
+    description: |-
+      MsgUpdateParams is the Msg/UpdateParams request type.
+
+      Since: cosmos-sdk 0.47
+  cosmos.ugdmint.v1beta1.MsgUpdateParamsResponse:
+    type: object
+    description: |-
+      MsgUpdateParamsResponse defines the response structure for executing a
+      MsgUpdateParams message.
+
+      Since: cosmos-sdk 0.47
+  cosmos.ugdmint.v1beta1.Params:
+    type: object
+    properties:
+      mint_denom:
+        type: string
+        title: type of coin to mint
+      subsidy_halving_interval:
+        type: string
+        title: subsidy halving interval
+      goal_bonded:
+        type: string
+        title: goal of percent bonded atoms
+      blocks_per_year:
+        type: string
+        format: uint64
+        title: expected blocks per year
+    description: Params defines the parameters for the module.
+  cosmos.ugdmint.v1beta1.MintRecord:
+    type: object
+    properties:
+      block_height:
+        type: string
+        format: int64
+        title: Block height at which minting occurred
+      account:
+        type: string
+        title: Account to which coins were minted
+      amount:
+        type: array
+        items:
+          type: object
+          properties:
+            denom:
+              type: string
+            amount:
+              type: string
+          description: |-
+            Coin defines a token with a denomination and an amount.
+
+            NOTE: The amount field is an Int which implements the custom method
+            signatures required by gogoproto.
+    title: MintRecord represents a record of minting activity
+  cosmos.ugdmint.v1beta1.QueryAllMintRecordsResponse:
+    type: object
+    properties:
+      mint_records:
+        type: array
+        items:
+          type: object
+          properties:
+            block_height:
+              type: string
+              format: int64
+              title: Block height at which minting occurred
+            account:
+              type: string
+              title: Account to which coins were minted
+            amount:
+              type: array
+              items:
+                type: object
+                properties:
+                  denom:
+                    type: string
+                  amount:
+                    type: string
+                description: >-
+                  Coin defines a token with a denomination and an amount.
+
+
+                  NOTE: The amount field is an Int which implements the custom
+                  method
+
+                  signatures required by gogoproto.
+          title: MintRecord represents a record of minting activity
+    description: >-
+      QueryAllMintRecordsResponse is response type for the Query/AllMintRecords
+      RPC method.
+  cosmos.ugdmint.v1beta1.QueryParamsResponse:
+    type: object
+    properties:
+      params:
+        description: params holds all the parameters of this module.
+        type: object
+        properties:
+          mint_denom:
+            type: string
+            title: type of coin to mint
+          subsidy_halving_interval:
+            type: string
+            title: subsidy halving interval
+          goal_bonded:
+            type: string
+            title: goal of percent bonded atoms
+          blocks_per_year:
+            type: string
+            format: uint64
+            title: expected blocks per year
+    description: QueryParamsResponse is response type for the Query/Params RPC method.
+  cosmos.ugdmint.v1beta1.QuerySubsidyHalvingIntervalResponse:
+    type: object
+    properties:
+      subsidy_halving_interval:
+        type: string
+        format: byte
+        description: subsidy halving interval value.
+    description: >-
+      QuerySubsidyHalvingIntervalResponse is the response type for the
+      Query/SubsidyHalvingInterval RPC method.
+  gridnode.gridnode.v1.MsgGridnodeDelegate:
+    type: object
+    properties:
+      delegator_address:
+        type: string
+      amount:
+        type: string
+        format: int64
+      timestamp:
+        type: string
+        format: int64
+        title: Timestamp in Unix format or
+      unique_id:
+        type: string
+        title: unique identifier UUID
+    description: >-
+      MsgGridnodeDelegate is the request type for the Msg/DelegateTokens RPC
+      method.
+  gridnode.gridnode.v1.MsgGridnodeDelegateResponse:
+    type: object
+    properties:
+      tx_hash:
+        type: string
+        title: Transaction hash of the delegated tokens operation
+      status:
+        type: string
+        title: Status of the operation, e.g., "success" or "failure"
+    description: >-
+      MsgGridnodeDelegateResponse is the response type for the
+      Msg/DelegateTokens RPC method.
+  gridnode.gridnode.v1.MsgGridnodeUndelegate:
+    type: object
+    properties:
+      delegator_address:
+        type: string
+      amount:
+        type: string
+        format: int64
+      timestamp:
+        type: string
+        format: int64
+        title: Timestamp in Unix format or
+      unique_id:
+        type: string
+        title: unique identifier UUID
+  gridnode.gridnode.v1.MsgGridnodeUndelegateResponse:
+    type: object
+    properties:
+      tx_hash:
+        type: string
+        title: Transaction hash of the delegated tokens operation
+      status:
+        type: string
+        title: Status of the operation, e.g., "success" or "failure"
+  gridnode.gridnode.v1.MsgUpdateParams:
+    type: object
+    properties:
+      authority:
+        type: string
+        description: >-
+          authority is the address that controls the module (defaults to x/gov
+          unless overwritten).
+      params:
+        description: |-
+          params defines the module parameters to update.
+
+          NOTE: All parameters must be supplied.
+        type: object
+    description: MsgUpdateParams is the Msg/UpdateParams request type.
+  gridnode.gridnode.v1.MsgUpdateParamsResponse:
+    type: object
+    description: |-
+      MsgUpdateParamsResponse defines the response structure for executing a
+      MsgUpdateParams message.
+  gridnode.gridnode.v1.Params:
+    type: object
+    description: Params defines the parameters for the module.
   ibc.applications.fee.v1.Fee:
     type: object
     properties:
