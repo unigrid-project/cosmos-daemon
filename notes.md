@@ -57,7 +57,7 @@ docker volume rm -f paxd_data
 # add some addresses that you have private keys for (locally) to give them genesis funds
 docker run --rm -it \
     --name paxd \
-    -p 1317:1317 \
+    -p 26657:26657 -p 26656:26656 -p 1317:1317 \
     -e PASSWORD=xxxxxxxx \
     --mount type=volume,source=paxd_data,target=/root \
     unigrid/paxd:latest /opt/setup_and_run.sh unigrid1pkptre7fdkl6gfrzlesjjvhxhlc3r4gmmk8rs6
@@ -70,6 +70,7 @@ docker run --rm -it \
 
 # This will start both paxd and rest-server, both are logged
 docker run --rm -it -p 26657:26657 -p 26656:26656 -p 1317:1317 \
+    --name paxd \
     --mount type=volume,source=paxd_data,target=/root \
     unigrid/paxd:latest /opt/run_paxd.sh
 ```
