@@ -9145,50 +9145,69 @@ paths:
               Since: cosmos-sdk 0.47
       tags:
         - Msg
-  /cosmos/ugdmint/v1beta1/mint_records:
+  /gridnode/all-delegations:
     get:
-      summary: AllMintRecords queries all mint records stored by the module.
-      operationId: CosmosUgdmintV1Beta1Query_AllMintRecords
+      operationId: GridnodeGridnodeV1Query_AllDelegations
       responses:
         '200':
           description: A successful response.
           schema:
             type: object
             properties:
-              mint_records:
+              delegations:
                 type: array
                 items:
                   type: object
                   properties:
-                    block_height:
-                      type: string
-                      format: int64
-                      title: Block height at which minting occurred
                     account:
                       type: string
-                      title: Account to which coins were minted
-                    amount:
+                    delegated_amount:
+                      type: string
+                      format: int64
+                    unbonding_entries:
                       type: array
                       items:
                         type: object
                         properties:
-                          denom:
-                            type: string
                           amount:
                             type: string
-                        description: >-
-                          Coin defines a token with a denomination and an
-                          amount.
+                            format: int64
+                          completion_time:
+                            type: string
+                            format: int64
+                      title: New field for unbonding entries
+                    public_key:
+                      type: string
+              pagination:
+                type: object
+                properties:
+                  next_key:
+                    type: string
+                    format: byte
+                    description: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently. It will be empty if
+                      there are no more results.
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
 
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
 
-                          NOTE: The amount field is an Int which implements the
-                          custom method
+                  corresponding request message has used PageRequest.
 
-                          signatures required by gogoproto.
-                  title: MintRecord represents a record of minting activity
-            description: >-
-              QueryAllMintRecordsResponse is response type for the
-              Query/AllMintRecords RPC method.
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
+              chain_id:
+                type: string
         default:
           description: An unexpected error response.
           schema:
@@ -9207,12 +9226,110 @@ paths:
                     '@type':
                       type: string
                   additionalProperties: {}
+      parameters:
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.count_total
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
       tags:
         - Query
-  /cosmos/ugdmint/v1beta1/params:
+  /gridnode/delegated-amount/{delegator_address}:
+    get:
+      summary: DelegatedAmount queries the amount delegated by a specific account.
+      operationId: GridnodeGridnodeV1Query_DelegatedAmount
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              amount:
+                type: string
+                format: int64
+            description: >-
+              QueryDelegatedAmountResponse is the response type for the
+              Query/DelegatedAmount RPC method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: delegator_address
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
+  /gridnode/params:
     get:
       summary: Parameters queries the parameters of the module.
-      operationId: CosmosUgdmintV1Beta1Query_Params
+      operationId: GridnodeGridnodeV1Query_Params
       responses:
         '200':
           description: A successful response.
@@ -9222,20 +9339,6 @@ paths:
               params:
                 description: params holds all the parameters of this module.
                 type: object
-                properties:
-                  mint_denom:
-                    type: string
-                    title: type of coin to mint
-                  subsidy_halving_interval:
-                    type: string
-                    title: subsidy halving interval
-                  goal_bonded:
-                    type: string
-                    title: goal of percent bonded atoms
-                  blocks_per_year:
-                    type: string
-                    format: uint64
-                    title: expected blocks per year
             description: >-
               QueryParamsResponse is response type for the Query/Params RPC
               method.
@@ -9259,23 +9362,62 @@ paths:
                   additionalProperties: {}
       tags:
         - Query
-  /cosmos/ugdmint/v1beta1/subsidy_halving_interval:
+  /gridnode/query-unbonding/{bonding_account_address}:
     get:
-      summary: Subsidy halving interval
-      operationId: CosmosUgdmintV1Beta1Query_SubsidyHalvingInterval
+      operationId: GridnodeGridnodeV1Query_UnbondingEntries
       responses:
         '200':
           description: A successful response.
           schema:
             type: object
             properties:
-              subsidy_halving_interval:
-                type: string
-                format: byte
-                description: subsidy halving interval value.
+              unbonding_entries:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    account:
+                      type: string
+                      title: This remains a string as it represents an address
+                    amount:
+                      type: string
+                      format: int64
+                      title: Use the Coin type from Cosmos SDK
+                    completion_time:
+                      type: string
+                      format: int64
+                      title: Use the Timestamp type for time values
+              pagination:
+                type: object
+                properties:
+                  next_key:
+                    type: string
+                    format: byte
+                    description: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently. It will be empty if
+                      there are no more results.
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
             description: >-
-              QuerySubsidyHalvingIntervalResponse is the response type for the
-              Query/SubsidyHalvingInterval RPC method.
+              QueryUnbondingEntriesResponse is the response type for the
+              Query/UnbondingEntries RPC method.
         default:
           description: An unexpected error response.
           schema:
@@ -9294,6 +9436,67 @@ paths:
                     '@type':
                       type: string
                   additionalProperties: {}
+      parameters:
+        - name: bonding_account_address
+          in: path
+          required: true
+          type: string
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.count_total
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
       tags:
         - Query
   /gridnode.gridnode.v1.Msg/UpdateParams:
@@ -20172,98 +20375,250 @@ definitions:
         format: uint64
         title: expected blocks per year
     description: Params defines the parameters for the module.
-  cosmos.ugdmint.v1beta1.MintRecord:
+  cosmos.base.query.v1beta1.PageRequest:
     type: object
     properties:
-      block_height:
+      key:
         type: string
-        format: int64
-        title: Block height at which minting occurred
+        format: byte
+        description: |-
+          key is a value returned in PageResponse.next_key to begin
+          querying the next page most efficiently. Only one of offset or key
+          should be set.
+      offset:
+        type: string
+        format: uint64
+        description: |-
+          offset is a numeric offset that can be used when key is unavailable.
+          It is less efficient than using key. Only one of offset or key should
+          be set.
+      limit:
+        type: string
+        format: uint64
+        description: >-
+          limit is the total number of results to be returned in the result
+          page.
+
+          If left empty it will default to a value to be set by each app.
+      count_total:
+        type: boolean
+        description: >-
+          count_total is set to true  to indicate that the result set should
+          include
+
+          a count of the total number of items available for pagination in UIs.
+
+          count_total is only respected when offset is used. It is ignored when
+          key
+
+          is set.
+      reverse:
+        type: boolean
+        description: >-
+          reverse is set to true if results are to be returned in the descending
+          order.
+
+
+          Since: cosmos-sdk 0.43
+    description: |-
+      message SomeRequest {
+               Foo some_parameter = 1;
+               PageRequest pagination = 2;
+       }
+    title: |-
+      PageRequest is to be embedded in gRPC request messages for efficient
+      pagination. Ex:
+  cosmos.base.query.v1beta1.PageResponse:
+    type: object
+    properties:
+      next_key:
+        type: string
+        format: byte
+        description: |-
+          next_key is the key to be passed to PageRequest.key to
+          query the next page most efficiently. It will be empty if
+          there are no more results.
+      total:
+        type: string
+        format: uint64
+        title: |-
+          total is total number of results available if PageRequest.count_total
+          was set, its value is undefined otherwise
+    description: |-
+      PageResponse is to be embedded in gRPC response messages where the
+      corresponding request message has used PageRequest.
+
+       message SomeResponse {
+               repeated Bar results = 1;
+               PageResponse page = 2;
+       }
+  gridnode.gridnode.v1.DelegationInfo:
+    type: object
+    properties:
       account:
         type: string
-        title: Account to which coins were minted
-      amount:
+      delegated_amount:
+        type: string
+        format: int64
+      unbonding_entries:
         type: array
         items:
           type: object
           properties:
-            denom:
-              type: string
             amount:
-              type: string
-          description: |-
-            Coin defines a token with a denomination and an amount.
-
-            NOTE: The amount field is an Int which implements the custom method
-            signatures required by gogoproto.
-    title: MintRecord represents a record of minting activity
-  cosmos.ugdmint.v1beta1.QueryAllMintRecordsResponse:
-    type: object
-    properties:
-      mint_records:
-        type: array
-        items:
-          type: object
-          properties:
-            block_height:
               type: string
               format: int64
-              title: Block height at which minting occurred
+            completion_time:
+              type: string
+              format: int64
+        title: New field for unbonding entries
+      public_key:
+        type: string
+  gridnode.gridnode.v1.Params:
+    type: object
+    description: Params defines the parameters for the module.
+  gridnode.gridnode.v1.QueryAllDelegationsResponse:
+    type: object
+    properties:
+      delegations:
+        type: array
+        items:
+          type: object
+          properties:
             account:
               type: string
-              title: Account to which coins were minted
-            amount:
+            delegated_amount:
+              type: string
+              format: int64
+            unbonding_entries:
               type: array
               items:
                 type: object
                 properties:
-                  denom:
-                    type: string
                   amount:
                     type: string
-                description: >-
-                  Coin defines a token with a denomination and an amount.
+                    format: int64
+                  completion_time:
+                    type: string
+                    format: int64
+              title: New field for unbonding entries
+            public_key:
+              type: string
+      pagination:
+        type: object
+        properties:
+          next_key:
+            type: string
+            format: byte
+            description: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently. It will be empty if
+              there are no more results.
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
 
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
 
-                  NOTE: The amount field is an Int which implements the custom
-                  method
-
-                  signatures required by gogoproto.
-          title: MintRecord represents a record of minting activity
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
+      chain_id:
+        type: string
+  gridnode.gridnode.v1.QueryDelegatedAmountResponse:
+    type: object
+    properties:
+      amount:
+        type: string
+        format: int64
     description: >-
-      QueryAllMintRecordsResponse is response type for the Query/AllMintRecords
-      RPC method.
-  cosmos.ugdmint.v1beta1.QueryParamsResponse:
+      QueryDelegatedAmountResponse is the response type for the
+      Query/DelegatedAmount RPC method.
+  gridnode.gridnode.v1.QueryParamsResponse:
     type: object
     properties:
       params:
         description: params holds all the parameters of this module.
         type: object
-        properties:
-          mint_denom:
-            type: string
-            title: type of coin to mint
-          subsidy_halving_interval:
-            type: string
-            title: subsidy halving interval
-          goal_bonded:
-            type: string
-            title: goal of percent bonded atoms
-          blocks_per_year:
-            type: string
-            format: uint64
-            title: expected blocks per year
     description: QueryParamsResponse is response type for the Query/Params RPC method.
-  cosmos.ugdmint.v1beta1.QuerySubsidyHalvingIntervalResponse:
+  gridnode.gridnode.v1.QueryUnbondingEntriesResponse:
     type: object
     properties:
-      subsidy_halving_interval:
-        type: string
-        format: byte
-        description: subsidy halving interval value.
+      unbonding_entries:
+        type: array
+        items:
+          type: object
+          properties:
+            account:
+              type: string
+              title: This remains a string as it represents an address
+            amount:
+              type: string
+              format: int64
+              title: Use the Coin type from Cosmos SDK
+            completion_time:
+              type: string
+              format: int64
+              title: Use the Timestamp type for time values
+      pagination:
+        type: object
+        properties:
+          next_key:
+            type: string
+            format: byte
+            description: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently. It will be empty if
+              there are no more results.
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
     description: >-
-      QuerySubsidyHalvingIntervalResponse is the response type for the
-      Query/SubsidyHalvingInterval RPC method.
+      QueryUnbondingEntriesResponse is the response type for the
+      Query/UnbondingEntries RPC method.
+  gridnode.gridnode.v1.SimpleUnbondingEntry:
+    type: object
+    properties:
+      amount:
+        type: string
+        format: int64
+      completion_time:
+        type: string
+        format: int64
+  gridnode.gridnode.v1.UnbondingEntry:
+    type: object
+    properties:
+      account:
+        type: string
+        title: This remains a string as it represents an address
+      amount:
+        type: string
+        format: int64
+        title: Use the Coin type from Cosmos SDK
+      completion_time:
+        type: string
+        format: int64
+        title: Use the Timestamp type for time values
   gridnode.gridnode.v1.MsgGridnodeDelegate:
     type: object
     properties:
@@ -20338,9 +20693,6 @@ definitions:
     description: |-
       MsgUpdateParamsResponse defines the response structure for executing a
       MsgUpdateParams message.
-  gridnode.gridnode.v1.Params:
-    type: object
-    description: Params defines the parameters for the module.
   ibc.applications.fee.v1.Fee:
     type: object
     properties:

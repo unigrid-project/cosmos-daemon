@@ -20,7 +20,10 @@ RUN set -eux; \
     ARCH=$(uname -m); \
     WASM_VERSION=$(go list -m all | grep github.com/CosmWasm/wasmvm | awk '{print $2}'); \
     if [ ! -z "${WASM_VERSION}" ]; then \
-      wget -O /lib/libwasmvm_muslc.a https://github.com/CosmWasm/wasmvm/releases/download/${WASM_VERSION}/libwasmvm_muslc.${ARCH}.a; \
+      echo "Downloading libwasmvm_muslc for ARCH=${ARCH} and WASM_VERSION=${WASM_VERSION}"; \
+      DOWNLOAD_URL="https://github.com/CosmWasm/wasmvm/releases/download/${WASM_VERSION}/libwasmvm_muslc.${ARCH}.a"; \
+      echo "Download URL: ${DOWNLOAD_URL}"; \
+      wget -O /lib/libwasmvm_muslc.a ${DOWNLOAD_URL}; \
     fi; \
     go mod download
 

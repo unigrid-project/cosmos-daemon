@@ -6,11 +6,11 @@ accounts:
   cointype: 88888888
 - name: bob
   coins:
-  - 200000000000000ugd
+  - 200000000000000uugd
   cointype: 88888888
 - name: janus
   coins:
-  - 200000000000000ugd
+  - 200000000000000uugd
   mnemonic: vacuum toss steel skull skirt hip acoustic desert photo hotel boss leg fire shaft novel panther shield track hub cover bleak admit merry skate
 client:
   openapi:
