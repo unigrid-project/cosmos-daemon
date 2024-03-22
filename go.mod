@@ -7,6 +7,7 @@ replace (
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.7.0
 	// replace broken goleveldb
 	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
+//github.com/unigrid-project/cosmos-gridnode => /home/evan/work/cosmos-sdk-gridnode
 )
 
 require (
@@ -41,7 +42,7 @@ require (
 	github.com/spf13/viper v1.18.2
 	github.com/stretchr/testify v1.9.0
 	github.com/unigrid-project/cosmos-common v0.0.8
-	github.com/unigrid-project/cosmos-gridnode v0.0.21
+	github.com/unigrid-project/cosmos-gridnode v0.0.25
 	github.com/unigrid-project/cosmos-ugdmint v0.0.90
 	github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting v0.0.61
 	golang.org/x/tools v0.19.0
