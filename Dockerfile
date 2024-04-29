@@ -9,8 +9,21 @@ SHELL ["/bin/sh", "-ecuxo", "pipefail"]
 
 # Install necessary build dependencies
 RUN apk add --no-cache ca-certificates build-base git
-
 WORKDIR /code
+
+# Copy the entire current directory to /code
+COPY . /code/
+
+# Display detailed list of all files and directories copied
+RUN ls -la /code
+
+# Specifically check for the .git directory
+RUN if [ -d "/code/.git" ]; then \
+        echo ".git directory exists"; \
+        ls -la /code/.git; \
+    else \
+        echo ".git directory does NOT exist"; \
+    fi
 
 # Add go.mod and go.sum to download and cache dependencies
 ADD go.mod go.sum ./
@@ -26,9 +39,6 @@ RUN set -eux; \
       wget -O /lib/libwasmvm_muslc.a ${DOWNLOAD_URL}; \
     fi; \
     go mod download
-
-# Copy over the source code
-COPY . /code/
 
 # Build the project with static linking using the Makefile
 # Ensure that the binary is statically linked

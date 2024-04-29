@@ -5,6 +5,11 @@ COMMIT := $(shell git log -1 --format='%H')
 BINDIR ?= $(GOPATH)/bin
 APP = ./app
 
+# export VERSION := $(shell echo $(shell git describe --tags --always --match "v*") | sed 's/^v//')
+export VERSION := v0.0.16
+
+export COMMIT := $(shell git log -1 --format='%H')
+
 # don't override user values
 ifeq (,$(VERSION))
   VERSION := $(shell git describe --tags)
@@ -45,14 +50,14 @@ ldflags = -X github.com/unigrid-project/pax/cmd/paxd/version.Name=pax \
 ifeq ($(LINK_STATICALLY),true)
   ldflags += -linkmode=external -extldflags "-Wl,-z,muldefs -static"
 endif
-ifeq (,$(findstring nostrip,$(JUNO_BUILD_OPTIONS)))
+ifeq (,$(findstring nostrip,$(UNIGRID_BUILD_OPTIONS)))
   ldflags += -w -s
 endif
 ldflags += $(LDFLAGS)
 ldflags := $(strip $(ldflags))
 
 BUILD_FLAGS := -tags "$(build_tags)" -ldflags '$(ldflags)'
-ifeq (,$(findstring nostrip,$(JUNO_BUILD_OPTIONS)))
+ifeq (,$(findstring nostrip,$(UNIGRID_BUILD_OPTIONS)))
   BUILD_FLAGS += -trimpath
 endif
 
