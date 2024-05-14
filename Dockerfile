@@ -11,9 +11,6 @@ SHELL ["/bin/sh", "-ecuxo", "pipefail"]
 RUN apk add --no-cache ca-certificates build-base git
 WORKDIR /code
 
-# Copy the entire current directory to /code
-COPY . /code/
-
 # Display detailed list of all files and directories copied
 RUN ls -la /code
 
@@ -39,6 +36,9 @@ RUN set -eux; \
       wget -O /lib/libwasmvm_muslc.a ${DOWNLOAD_URL}; \
     fi; \
     go mod download
+
+# Copy the entire current directory to /code
+COPY . /code/
 
 # Build the project with static linking using the Makefile
 # Ensure that the binary is statically linked
