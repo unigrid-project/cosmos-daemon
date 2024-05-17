@@ -30,10 +30,15 @@ RUN set -eux; \
     ARCH=$(uname -m); \
     WASM_VERSION=$(go list -m all | grep github.com/CosmWasm/wasmvm | awk '{print $2}'); \
     if [ ! -z "${WASM_VERSION}" ]; then \
-      echo "Downloading libwasmvm_muslc for ARCH=${ARCH} and WASM_VERSION=${WASM_VERSION}"; \
-      DOWNLOAD_URL="https://github.com/CosmWasm/wasmvm/releases/download/${WASM_VERSION}/libwasmvm_muslc.${ARCH}.a"; \
+      case ${ARCH} in \
+        x86_64) ARCHIVE_NAME="libwasmvm_muslc.x86_64.a" ;; \
+        aarch64) ARCHIVE_NAME="libwasmvm_muslc.aarch64.a" ;; \
+        *) echo "Unsupported architecture: ${ARCH}" exit 1 ;; \
+      esac; \
+      echo "Downloading ${ARCHIVE_NAME} for WASM_VERSION=${WASM_VERSION}"; \
+      DOWNLOAD_URL="https://github.com/CosmWasm/wasmvm/releases/download/${WASM_VERSION}/${ARCHIVE_NAME}"; \
       echo "Download URL: ${DOWNLOAD_URL}"; \
-      wget -O /lib/libwasmvm_muslc.a ${DOWNLOAD_URL}; \
+      wget -O /lib/${ARCHIVE_NAME} ${DOWNLOAD_URL}; \
     fi; \
     go mod download
 
