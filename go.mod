@@ -18,11 +18,11 @@ require (
 	cosmossdk.io/log v1.3.1
 	cosmossdk.io/store v1.1.0
 	cosmossdk.io/tools/confix v0.1.1
-	cosmossdk.io/x/circuit v0.1.0
-	cosmossdk.io/x/evidence v0.1.0
-	cosmossdk.io/x/feegrant v0.1.0
+	cosmossdk.io/x/circuit v0.1.1
+	cosmossdk.io/x/evidence v0.1.1
+	cosmossdk.io/x/feegrant v0.1.1
 	cosmossdk.io/x/nft v0.1.0
-	cosmossdk.io/x/upgrade v0.1.1
+	cosmossdk.io/x/upgrade v0.1.2
 	github.com/CosmWasm/wasmd v0.51.0
 	github.com/bufbuild/buf v1.30.0
 	github.com/cometbft/cometbft v0.38.6
@@ -31,7 +31,7 @@ require (
 	github.com/cosmos/cosmos-sdk v0.50.6
 	github.com/cosmos/gogoproto v1.4.12
 	github.com/cosmos/ibc-go/modules/capability v1.0.0
-	github.com/cosmos/ibc-go/v8 v8.1.0
+	github.com/cosmos/ibc-go/v8 v8.2.1
 	github.com/golang/protobuf v1.5.4
 	github.com/gorilla/mux v1.8.1
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
@@ -41,8 +41,8 @@ require (
 	github.com/spf13/viper v1.18.2
 	github.com/stretchr/testify v1.9.0
 	github.com/unigrid-project/cosmos-common v0.0.8
-	github.com/unigrid-project/cosmos-gridnode v0.0.27
-	github.com/unigrid-project/cosmos-ugdmint v0.0.91
+	github.com/unigrid-project/cosmos-gridnode v0.0.28
+	github.com/unigrid-project/cosmos-ugdmint v0.0.92
 	github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting v0.0.63
 	golang.org/x/tools v0.20.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20240304212257-790db918fca8
