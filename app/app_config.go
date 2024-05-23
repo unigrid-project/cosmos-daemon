@@ -87,7 +87,6 @@ var (
 		stakingtypes.ModuleName,
 		slashingtypes.ModuleName,
 		govtypes.ModuleName,
-		ugdmintmoduletypes.ModuleName,
 		crisistypes.ModuleName,
 		ibcexported.ModuleName,
 		genutiltypes.ModuleName,
@@ -106,6 +105,7 @@ var (
 		consensustypes.ModuleName,
 		circuittypes.ModuleName,
 		// chain modules
+		ugdmintmoduletypes.ModuleName,
 		paxmoduletypes.ModuleName,
 		wasmtypes.ModuleName,
 		gridnodemoduletypes.ModuleName,
@@ -120,7 +120,6 @@ var (
 	// NOTE: capability module's beginblocker must come before any modules using capabilities (e.g. IBC)
 	beginBlockers = []string{
 		// cosmos sdk modules
-		ugdmintmoduletypes.ModuleName,
 		distrtypes.ModuleName,
 		slashingtypes.ModuleName,
 		evidencetypes.ModuleName,
@@ -135,10 +134,10 @@ var (
 		ibcfeetypes.ModuleName,
 		// chain modules
 		paxmoduletypes.ModuleName,
+		ugdmintmoduletypes.ModuleName,
 		wasmtypes.ModuleName,
 		gridnodemoduletypes.ModuleName,
 		ugdvestingmoduletypes.ModuleName,
-		ugdmintmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
