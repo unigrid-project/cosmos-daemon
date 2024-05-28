@@ -43,7 +43,7 @@ require (
 	github.com/unigrid-project/cosmos-common v0.0.8
 	github.com/unigrid-project/cosmos-gridnode v0.0.27
 	github.com/unigrid-project/cosmos-ugdmint v0.0.95
-	github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting v0.0.63
+	github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting v0.0.64
 	golang.org/x/tools v0.20.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20240304212257-790db918fca8
 	google.golang.org/grpc v1.63.2
