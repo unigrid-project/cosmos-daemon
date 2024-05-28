@@ -23,21 +23,6 @@ git push origin v0.0.1
 
 Replace `v0.0.1` with the appropriate version number for your new build.
 
-### Compiling the Daemon
-
-To compile the `paxd` daemon, use the following command:
-
-```bash
-ignite chain build
-```
-
-This command will compile the daemon with the latest updates and the specified version tag.
-
-After compiling you can check the version was correctly added.
-```bash
-paxd version
-```
-
 ### Dev server
 
 Bring up a local node with a test account containing tokens
@@ -73,4 +58,10 @@ docker run --rm -it -p 26657:26657 -p 26656:26656 -p 1317:1317 \
     --name paxd \
     --mount type=volume,source=paxd_data,target=/root \
     unigrid/paxd:latest /opt/run_paxd.sh
+```
+
+## Copy over the paxd daemon
+
+```bash
+docker cp paxd:/usr/bin/paxd /path/to/local/directory
 ```
