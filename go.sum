@@ -1110,10 +1110,10 @@ github.com/unigrid-project/cosmos-common v0.0.8 h1:u7b7NfwKHXbvXj3QGEKaghHrB1Toj
 github.com/unigrid-project/cosmos-common v0.0.8/go.mod h1:1yKYVwjFSztn3PpscSB02WKYUMkFiRpet2qlYB8OBio=
 github.com/unigrid-project/cosmos-gridnode v0.0.27 h1:iO/Kkpn0AOXHLrIoxqvmhGd+/W8A4KXKwSralJAjerg=
 github.com/unigrid-project/cosmos-gridnode v0.0.27/go.mod h1:/kP99llp7URddQH5sqEgJjmLIivtx+2vtI5APe2UkvM=
-github.com/unigrid-project/cosmos-ugdmint v0.0.95 h1:+Y0TcXjz04smqe2MKJL3elt0sg0HjmfXXPg2aec8zAc=
-github.com/unigrid-project/cosmos-ugdmint v0.0.95/go.mod h1:Ssz5iNbMcn0GXH50xOQnQyyiBtyaYR5SYaDngsIzhvg=
-github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting v0.0.68 h1:zAM28KeLbQAm0Q+SCEz001jBGupZTGvolWnJwlLaXPs=
-github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting v0.0.68/go.mod h1:biSXYHKV+/z+7ZQTTwqUW035gZUMgaS2SkFxAJ+sots=
+github.com/unigrid-project/cosmos-ugdmint v0.0.96 h1:i4kKAv5ZKRqNwnhP0NDMOUbA9kTY4KL5/5w9UY6l6TQ=
+github.com/unigrid-project/cosmos-ugdmint v0.0.96/go.mod h1:Ssz5iNbMcn0GXH50xOQnQyyiBtyaYR5SYaDngsIzhvg=
+github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting v0.0.69 h1:7p8LaS1SvOuWlZBMV2IBKpHZof4M2JNECCfMLNhQyeA=
+github.com/unigrid-project/cosmos-unigrid-hedgehog-vesting v0.0.69/go.mod h1:biSXYHKV+/z+7ZQTTwqUW035gZUMgaS2SkFxAJ+sots=
 github.com/urfave/cli v1.20.0/go.mod h1:70zkFmudgCuE/ngEzBv17Jvp/497gISqfk5gWijbERA=
 github.com/urfave/cli v1.22.1/go.mod h1:Gos4lmkARVdJ6EkW0WaNv/tZAAMe9V7XWyB60NtXRu0=
 github.com/vbatts/tar-split v0.11.5 h1:3bHCTIheBm1qFTcgh9oPu+nNBtX+XJIupG/vacinCts=
