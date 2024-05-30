@@ -30,10 +30,10 @@ import (
 	"pax/app"
 )
 
-const DefaultHedgehogUrl = "https://149.102.147.45:39886"
+//const DefaultHedgehogUrl = "https://149.102.147.45:39886"
 
 // testing localhost hedgehog
-//const DefaultHedgehogUrl = "https://127.0.0.1:39886"
+const DefaultHedgehogUrl = "https://127.0.0.1:40005"
 
 // NewRootCmd creates a new root command for paxd. It is called once in the main function.
 func NewRootCmd() *cobra.Command {
