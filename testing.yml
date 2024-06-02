@@ -11,10 +11,6 @@ accounts:
 client:
   openapi:
     path: docs/static/openapi.yml
-faucet:
-  name: bob
-  coins:
-  - 100000ugd
 validators:
 - name: validator
   bonded: 100000000ugd

@@ -17,3 +17,4 @@ output_graph.txt
 pax.log
 hedgehog.log
 ignite.log
+venv/
