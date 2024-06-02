@@ -6,7 +6,7 @@ accounts:
   cointype: 88888888
 - name: unigrid
   coins:
-  - 0uugd
+  - 200000000000000ugd
   mnemonic: vacuum toss steel skull skirt hip acoustic desert photo hotel boss leg fire shaft novel panther shield track hub cover bleak admit merry skate
 client:
   openapi:
