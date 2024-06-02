@@ -4,9 +4,7 @@
 # python environment should have the following packages installed
 # python3 -m venv venv
 # source venv/bin/activate
-# pip install requests
-# pip install termcolor
-# pip install hdwallet
+# pip install hdwallet bech32 hashlib binascii urllib3 termcolor requests
 # you can monitor what was added to hedgehog in postman or using curl
 # https://127.0.0.1:40005/gridspork/mint-storage
 # https://127.0.0.1:40005/gridspork/vesting-storage/
@@ -22,10 +20,14 @@ import hashlib
 import bech32
 import binascii
 import random
+import datetime
 from datetime import datetime, timezone, timedelta
 from mnemonic import Mnemonic
 from hdwallet import HDWallet
 from hdwallet.symbols import ATOM
+from ecdsa.curves import SECP256k1
+from ecdsa.keys import SigningKey
+from binascii import unhexlify, hexlify
 from termcolor import colored
 
 # Disable InsecureRequestWarning
@@ -133,19 +135,28 @@ def generate_address_and_keys():
     return address, private_key, public_key
 
 def run_test(test_num):
+    test_result = {
+        "test_num": test_num,
+        "status": "pass",
+        "steps": [],
+        "details": ""
+    }
     print(colored(f"Running test {test_num}/{num_tests}", "yellow"))
 
     wallet_addr, private_key, public_key = generate_address_and_keys()
     print(f"Generated wallet address: {wallet_addr}")
+    test_result["steps"].append(f"Generated wallet address: {wallet_addr}")
 
     # Step 5: Get the current block height
     print(colored("Step 5: Getting the current block height...", "yellow"))
     current_block_height = get_current_block_height()
+    test_result["steps"].append(f"Current Block Height: {current_block_height}")
 
     # Step 6: Generate a random amount for minting
     print(colored("Step 6: Generating a random amount for minting...", "yellow"))
     mint_amount = random.randint(1000000000, 100000000000)  # Example range for mint amount
     print(f"Mint Amount: {mint_amount}")
+    test_result["steps"].append(f"Mint Amount: {mint_amount}")
 
     # Step 7: Submit a mint transaction
     print(colored("Step 7: Submitting a mint transaction...", "yellow"))
@@ -158,6 +169,7 @@ def run_test(test_num):
     print(f"Executing Mint Transaction: curl -X PUT '{mint_url}' -H 'privateKey: {generated_private_key}' -H 'Content-Type: application/json' -d '{mint_amount}' -k")
     mint_response = requests.put(mint_url, headers=headers, data=str(mint_amount), verify=False)
     print(f"Mint Response Code: {mint_response.status_code}")
+    test_result["steps"].append(f"Mint Response Code: {mint_response.status_code}")
 
     # Step 8: Verify mint storage after a short wait
     print(colored("Step 8: Verifying mint storage after a short wait...", "yellow"))
@@ -165,16 +177,21 @@ def run_test(test_num):
     mint_storage_data = verify_mint_storage(rest_port)
     if not mint_storage_data:
         print(colored("Failed to verify mint storage. Skipping to next test.", "red"))
-        return {"test_num": test_num, "result": "fail", "reason": "Failed to verify mint storage"}
+        test_result["status"] = "fail"
+        test_result["details"] = "Failed to verify mint storage."
+        test_results.append(test_result)
+        return
 
     # Verify the mint data in Hedgehog
     mint_key = f"{wallet_addr}/{mint_block_height}"
     mint_data_correct = mint_storage_data['data']['mints'].get(mint_key) == mint_amount
     if mint_data_correct:
         print(colored(f"Mint data verification successful: {mint_key} = {mint_amount}", "green"))
+        test_result["steps"].append(f"Mint data verification successful: {mint_key} = {mint_amount}")
     else:
         print(colored(f"Mint data verification failed: expected {mint_key} = {mint_amount}, got {mint_storage_data['data']['mints'].get(mint_key)}", "red"))
-        return {"test_num": test_num, "result": "fail", "reason": "Mint data verification failed"}
+        test_result["status"] = "fail"
+        test_result["details"] = f"Mint data verification failed: expected {mint_key} = {mint_amount}, got {mint_storage_data['data']['mints'].get(mint_key)}"
 
     # Step 9: Verify balance after the block height is reached
     print(colored("Step 9: Verifying the balance after the block height is reached...", "yellow"))
@@ -182,7 +199,10 @@ def run_test(test_num):
     balance_data = None
     if not wait_for_block_height(mint_block_height + 1):
         print(colored("Timeout waiting for the mint block height. Skipping to next test.", "red"))
-        return {"test_num": test_num, "result": "fail", "reason": "Timeout waiting for mint block height"}
+        test_result["status"] = "fail"
+        test_result["details"] = "Timeout waiting for the mint block height."
+        test_results.append(test_result)
+        return
     balance_response = requests.get(balance_url)
     balance_data = balance_response.json()
     balance = balance_data['balances'][0]['amount'] if 'balances' in balance_data and balance_data['balances'] else '0'
@@ -190,13 +210,16 @@ def run_test(test_num):
     expected_balance = mint_amount
     if int(balance) == expected_balance:
         print(colored(f"Balance verification successful: {balance} uugd", "green"))
+        test_result["steps"].append(f"Balance verification successful: {balance} uugd")
     else:
         print(colored(f"Balance verification failed: expected {expected_balance}, got {balance}", "red"))
-        return {"test_num": test_num, "result": "fail", "reason": "Balance verification failed"}
+        test_result["status"] = "fail"
+        test_result["details"] = f"Balance verification failed: expected {expected_balance}, got {balance}"
 
     # Step 10: Get the new block height
     print(colored("Step 10: Getting the current block height...", "yellow"))
     current_block_height = get_current_block_height()
+    test_result["steps"].append(f"Current Block Height: {current_block_height}")
 
     # Step 11: Submit vesting data with the same random amount
     print(colored("Step 11: Submitting vesting data...", "yellow"))
@@ -219,6 +242,8 @@ def run_test(test_num):
     vesting_response = requests.put(vesting_url, headers=headers, json=vesting_data, verify=False)
     print(f"Vesting Response Code: {vesting_response.status_code}")
     print(f"Vesting Response: {vesting_response.text}")
+    test_result["steps"].append(f"Vesting Response Code: {vesting_response.status_code}")
+    test_result["steps"].append(f"Vesting Response: {vesting_response.text}")
 
     # Step 12: Verify vesting storage after a short wait
     print(colored("Step 12: Verifying vesting storage after a short wait...", "yellow"))
@@ -226,7 +251,10 @@ def run_test(test_num):
     vesting_storage_data = verify_vesting_storage(rest_port)
     if not vesting_storage_data:
         print(colored("Failed to verify vesting storage. Skipping to next test.", "red"))
-        return {"test_num": test_num, "result": "fail", "reason": "Failed to verify vesting storage"}
+        test_result["status"] = "fail"
+        test_result["details"] = "Failed to verify vesting storage."
+        test_results.append(test_result)
+        return
 
     # Verify the vesting data in Hedgehog
     vesting_data_correct = (
@@ -240,27 +268,39 @@ def run_test(test_num):
     )
     if vesting_data_correct:
         print(colored(f"Vesting data verification successful: {json.dumps(vesting_data, indent=2)}", "green"))
+        test_result["steps"].append(f"Vesting data verification successful: {json.dumps(vesting_data, indent=2)}")
     else:
         print(colored(f"Vesting data verification failed. Expected: {json.dumps(vesting_data, indent=2)}, Got: {json.dumps(vesting_storage_data['data']['vestingAddresses'][f'Address(wif={wallet_addr})'], indent=2)}", "red"))
-        return {"test_num": test_num, "result": "fail", "reason": "Vesting data verification failed"}
+        test_result["status"] = "fail"
+        test_result["details"] = f"Vesting data verification failed. Expected: {json.dumps(vesting_data, indent=2)}, Got: {json.dumps(vesting_storage_data['data']['vestingAddresses'][f'Address(wif={wallet_addr})'], indent=2)}"
 
     # Step 13: Verify the vesting schedule on the chain
     print(colored("Step 13: Verifying the vesting schedule on the chain...", "yellow"))
-    if not wait_for_block_height(new_block_height + 1):
-        print(colored("Timeout waiting for the vesting block height. Skipping to next test.", "red"))
-        return {"test_num": test_num, "result": "fail", "reason": "Timeout waiting for vesting block height"}
-    vesting_account_data = verify_account_vesting(wallet_addr)
-    vesting_periods = vesting_account_data['account'].get('vesting_periods', [])
-    total_vesting_amount = sum(int(period['amount'][0]['amount']) for period in vesting_periods)
-    total_parts = len(vesting_periods)
+    verification_attempts = 0
+    while verification_attempts < 3:
+        if not wait_for_block_height(new_block_height + 1 + verification_attempts):
+            verification_attempts += 1
+            continue
+        vesting_account_data = verify_account_vesting(wallet_addr)
+        vesting_periods = vesting_account_data['account'].get('vesting_periods', [])
+        total_vesting_amount = sum(int(period['amount'][0]['amount']) for period in vesting_periods)
+        total_parts = len(vesting_periods)
 
-    expected_parts = (vesting_data['cliff'] + (vesting_data['parts'] - 1) + 1) if vesting_data['cliff'] > 0 else (vesting_data['parts'] + 1)  # cliff periods + remaining parts + TGE, or parts + TGE if no cliff
-    if total_vesting_amount == vesting_data['amount'] and total_parts == expected_parts:
-        print(colored(f"Vesting periods verification successful: Total Amount = {total_vesting_amount}, Parts = {total_parts}", "green"))
-        return {"test_num": test_num, "result": "pass"}
-    else:
+        expected_parts = (vesting_data['cliff'] + (vesting_data['parts'] - 1) + 1) if vesting_data['cliff'] > 0 else (vesting_data['parts'] + 1)  # cliff periods + remaining parts + TGE, or parts + TGE if no cliff
+        if total_vesting_amount == vesting_data['amount'] and total_parts == expected_parts:
+            print(colored(f"Vesting periods verification successful: Total Amount = {total_vesting_amount}, Parts = {total_parts}", "green"))
+            test_result["steps"].append(f"Vesting periods verification successful: Total Amount = {total_vesting_amount}, Parts = {total_parts}")
+            break
+        else:
+            verification_attempts += 1
+            time.sleep(5)  # Wait for 5 seconds before rechecking
+
+    if verification_attempts == 3:
         print(colored(f"Vesting periods verification failed: Expected Amount = {vesting_data['amount']}, Got = {total_vesting_amount}; Expected Parts = {expected_parts}, Got = {total_parts}", "red"))
-        return {"test_num": test_num, "result": "fail", "reason": "Vesting periods verification failed"}
+        test_result["status"] = "fail"
+        test_result["details"] = f"Vesting periods verification failed: Expected Amount = {vesting_data['amount']}, Got = {total_vesting_amount}; Expected Parts = {expected_parts}, Got = {total_parts}"
+
+    test_results.append(test_result)
 
 if len(sys.argv) < 3:
     print("Usage: python test_suite.py <path_to_hedgehog_bin> <num_tests>")
@@ -310,20 +350,18 @@ execute_command(ignite_command, log_file="ignite.log")
 if not wait_for_ignite_chain(timeout=120):
     sys.exit(colored("Failed to start Ignite chain. Exiting.", "red"))
 
-results = []
+test_results = []
 
 for i in range(num_tests):
-    result = run_test(i + 1)
-    results.append(result)
+    run_test(i + 1)
 
 print(colored("Step 14: Killing any running Hedgehog and Ignite processes after all tests...", "yellow"))
 kill_processes("hedgehog-0.0.8")
 kill_processes("ignite")
 
-# Output the summary of test results
-print(colored("\nTest Summary:", "cyan"))
-for result in results:
-    if result["result"] == "pass":
-        print(colored(f"Test {result['test_num']}: PASS", "green"))
-    else:
-        print(colored(f"Test {result['test_num']}: FAIL - {result['reason']}", "red"))
+# Output test results
+for result in test_results:
+    status = colored("PASS", "green") if result["status"] == "pass" else colored("FAIL", "red")
+    print(f"Test {result['test_num']}: {status}")
+    if result["status"] == "fail":
+        print(f"Details: {result['details']}")
