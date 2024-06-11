@@ -25,9 +25,6 @@ from datetime import datetime, timezone, timedelta
 from mnemonic import Mnemonic
 from hdwallet import HDWallet
 from hdwallet.symbols import ATOM
-from ecdsa.curves import SECP256k1
-from ecdsa.keys import SigningKey
-from binascii import unhexlify, hexlify
 from termcolor import colored
 
 # Disable InsecureRequestWarning
@@ -286,7 +283,11 @@ def run_test(test_num):
         total_vesting_amount = sum(int(period['amount'][0]['amount']) for period in vesting_periods)
         total_parts = len(vesting_periods)
 
-        expected_parts = (vesting_data['cliff'] + (vesting_data['parts'] - 1) + 1) if vesting_data['cliff'] > 0 else (vesting_data['parts'] + 1)  # cliff periods + remaining parts + TGE, or parts + TGE if no cliff
+        if vesting_data['cliff'] > 0:
+            expected_parts = vesting_data['cliff'] + (vesting_data['parts'] - 1) + 1  # cliff periods + remaining parts + TGE
+        else:
+            expected_parts = vesting_data['parts']  # parts if no cliff
+
         if total_vesting_amount == vesting_data['amount'] and total_parts == expected_parts:
             print(colored(f"Vesting periods verification successful: Total Amount = {total_vesting_amount}, Parts = {total_parts}", "green"))
             test_result["steps"].append(f"Vesting periods verification successful: Total Amount = {total_vesting_amount}, Parts = {total_parts}")
@@ -355,13 +356,18 @@ test_results = []
 for i in range(num_tests):
     run_test(i + 1)
 
-print(colored("Step 14: Killing any running Hedgehog and Ignite processes after all tests...", "yellow"))
-kill_processes("hedgehog-0.0.8")
-kill_processes("ignite")
-
 # Output test results
 for result in test_results:
     status = colored("PASS", "green") if result["status"] == "pass" else colored("FAIL", "red")
     print(f"Test {result['test_num']}: {status}")
+
+    if result["status"] == "pass":
+        print(colored("Step 14: Killing any running Hedgehog and Ignite processes after all tests...", "yellow"))
+        kill_processes("hedgehog-0.0.8")
+        kill_processes("ignite")
     if result["status"] == "fail":
         print(f"Details: {result['details']}")
+        print("Closing daemon after five minutes to check failed transactions.")
+        time.sleep(350)
+        kill_processes("hedgehog-0.0.8")
+        kill_processes("ignite")
