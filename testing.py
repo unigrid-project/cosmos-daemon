@@ -160,10 +160,10 @@ def run_test(test_num):
     mint_block_height = int(current_block_height) + 24
     mint_url = f"https://127.0.0.1:{rest_port}/gridspork/mint-storage/{wallet_addr}/{mint_block_height}"
     headers = {
-        "privateKey": generated_private_key,
+        "privateKey": generated_private_key_1,  # Using first generated private key
         "Content-Type": "application/json"
     }
-    print(f"Executing Mint Transaction: curl -X PUT '{mint_url}' -H 'privateKey: {generated_private_key}' -H 'Content-Type: application/json' -d '{mint_amount}' -k")
+    print(f"Executing Mint Transaction: curl -X PUT '{mint_url}' -H 'privateKey: {generated_private_key_1}' -H 'Content-Type: application/json' -d '{mint_amount}' -k")
     mint_response = requests.put(mint_url, headers=headers, data=str(mint_amount), verify=False)
     print(f"Mint Response Code: {mint_response.status_code}")
     test_result["steps"].append(f"Mint Response Code: {mint_response.status_code}")
@@ -235,7 +235,7 @@ def run_test(test_num):
         "start": start_time
     }
     vesting_url = f"https://127.0.0.1:{rest_port}/gridspork/vesting-storage/{wallet_addr}"
-    print(f"Executing Vesting Transaction: curl -X PUT '{vesting_url}' -H 'privateKey: {generated_private_key}' -H 'Content-Type: application/json' -d '{json.dumps(vesting_data)}' -k")
+    print(f"Executing Vesting Transaction: curl -X PUT '{vesting_url}' -H 'privateKey: {generated_private_key_2}' -H 'Content-Type: application/json' -d '{json.dumps(vesting_data)}' -k")
     vesting_response = requests.put(vesting_url, headers=headers, json=vesting_data, verify=False)
     print(f"Vesting Response Code: {vesting_response.status_code}")
     print(f"Vesting Response: {vesting_response.text}")
@@ -311,11 +311,16 @@ hedgehog_bin = sys.argv[1]
 num_tests = int(sys.argv[2])
 rest_port = 40005  # Hardcoded Hedgehog URL
 
-# Generate Hedgehog keys
-key_gen_output = execute_command(f'{hedgehog_bin} util key-generate')
-lines = key_gen_output.splitlines()
-generated_private_key = next(line.split(': ')[1] for line in lines if "Private Key" in line)
-generated_public_key = next(line.split(': ')[1] for line in lines if "Public Key" in line)
+# Generate Hedgehog keys (twice)
+key_gen_output_1 = execute_command(f'{hedgehog_bin} util key-generate')
+lines_1 = key_gen_output_1.splitlines()
+generated_private_key_1 = next(line.split(': ')[1] for line in lines_1 if "Private Key" in line)
+generated_public_key_1 = next(line.split(': ')[1] for line in lines_1 if "Public Key" in line)
+
+key_gen_output_2 = execute_command(f'{hedgehog_bin} util key-generate')
+lines_2 = key_gen_output_2.splitlines()
+generated_private_key_2 = next(line.split(': ')[1] for line in lines_2 if "Private Key" in line)
+generated_public_key_2 = next(line.split(': ')[1] for line in lines_2 if "Public Key" in line)
 
 # Step 1: Kill any running Hedgehog and Ignite processes
 print(colored("Step 1: Killing any running Hedgehog and Ignite processes...", "yellow"))
@@ -327,7 +332,7 @@ print(colored("Step 2: Removing existing Unigrid local data...", "yellow"))
 execute_command('rm -rf ~/.local/share/unigrid')
 
 print(colored("Starting the Hedgehog daemon...", "yellow"))
-hedgehog_command = f"nohup {hedgehog_bin} daemon --resthost=0.0.0.0 --restport={rest_port} --netport=40002 --no-seeds --network-keys={generated_public_key} -vvvvvv > hedgehog.log 2>&1 &"
+hedgehog_command = f"nohup {hedgehog_bin} daemon --resthost=0.0.0.0 --restport={rest_port} --netport=40002 --no-seeds --network-keys={generated_public_key_1},{generated_public_key_2} -vvvvvv > hedgehog.log 2>&1 &"
 execute_command(hedgehog_command)
 time.sleep(5)  # Wait for the Hedgehog daemon to start
 
