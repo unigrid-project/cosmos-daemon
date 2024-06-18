@@ -235,7 +235,7 @@ func isConnectedToHedgehog(serverUrl string) bool {
 	minVersion := strings.TrimSuffix(versionInfo.MinimumVersion.Version, "-SNAPSHOT")
 	currVersion := strings.TrimSuffix(versionInfo.CurrentVersion.Version, "-SNAPSHOT")
 	if strings.Contains(currVersion, "-BASTARD") {
-		fmt.Println("Current version contains -BASTARD suffix, rejecting version")
+		fmt.Println("Current hedgehog version contains an unauthorized build, rejecting version")
 		return false
 	}
 	currVersion = strings.TrimSuffix(currVersion, "-BASTARD")
