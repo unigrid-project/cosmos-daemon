@@ -238,7 +238,6 @@ func isConnectedToHedgehog(serverUrl string) bool {
 		fmt.Println("Current hedgehog version contains an unauthorized build, rejecting version")
 		return false
 	}
-	currVersion = strings.TrimSuffix(currVersion, "-BASTARD")
 
 	if currVersion != minVersion {
 		fmt.Printf("Current version %s does not match minimum version %s\n", currVersion, minVersion)
