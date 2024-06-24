@@ -9,6 +9,10 @@ SHELL ["/bin/sh", "-ecuxo", "pipefail"]
 
 # Install necessary build dependencies
 RUN apk add --no-cache ca-certificates build-base git
+
+# Install gox for cross-compilation
+RUN go install github.com/mitchellh/gox@latest
+
 WORKDIR /code
 
 # Display detailed list of all files and directories copied

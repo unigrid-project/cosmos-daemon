@@ -39,23 +39,29 @@ Remove the volume to reset data.
 docker volume rm -f paxd_data
 
 # pass password (one time) as env variable for setup, so we don't need to keep typing it
+# HEDGEHOG_URL change this if you are running hedgehog on a different port 
+# or would like to point it to a different location 
+# testnet hedgehog is https://149.102.147.45:39886
 # add some addresses that you have private keys for (locally) to give them genesis funds
 docker run --rm -it \
     --name paxd \
     -p 26657:26657 -p 26656:26656 -p 1317:1317 \
     -e PASSWORD=xxxxxxxx \
+    -e HEDGEHOG_URL=https://127.0.0.1:40005 \
     --mount type=volume,source=paxd_data,target=/root \
     unigrid/paxd:latest /opt/setup_and_run.sh unigrid1pkptre7fdkl6gfrzlesjjvhxhlc3r4gmmk8rs6
 
 # only perform setup
 docker run --rm -it \
     -e PASSWORD=xxxxxxxx \
+    -e HEDGEHOG_URL=https://127.0.0.1:40005 \
     --mount type=volume,source=paxd_data,target=/root \
     unigrid/paxd:latest /opt/setup_paxd.sh unigrid1pkptre7fdkl6gfrzlesjjvhxhlc3r4gmmk8rs6
 
 # This will start both paxd and rest-server, both are logged
 docker run --rm -it -p 26657:26657 -p 26656:26656 -p 1317:1317 \
     --name paxd \
+    -e HEDGEHOG_URL=https://127.0.0.1:40005 \
     --mount type=volume,source=paxd_data,target=/root \
     unigrid/paxd:latest /opt/run_paxd.sh
 ```
