@@ -71,3 +71,4 @@ docker run --rm -it -p 26657:26657 -p 26656:26656 -p 1317:1317 \
 ```bash
 docker cp paxd:/usr/bin/paxd /path/to/local/directory
 ```
+

@@ -1,14 +1,3 @@
-# to use this script, run the following command:
-# python testing.py <path_to_hedgehog_bin> <num_tests>
-# this script requires ignite cli to be installed
-# python environment should have the following packages installed
-# python3 -m venv venv
-# source venv/bin/activate
-# pip install hdwallet bech32 hashlib binascii urllib3 termcolor requests
-# you can monitor what was added to hedgehog in postman or using curl
-# https://127.0.0.1:40005/gridspork/mint-storage
-# https://127.0.0.1:40005/gridspork/vesting-storage/
-
 import os
 import sys
 import subprocess
@@ -100,6 +89,11 @@ def verify_vesting_storage(rest_port):
 def verify_account_vesting(account_address):
     print(colored(f"Verifying account vesting: http://127.0.0.1:1317/cosmos/auth/v1beta1/accounts/{account_address}", "light_magenta"))
     response = requests.get(f"http://127.0.0.1:1317/cosmos/auth/v1beta1/accounts/{account_address}")
+    return response.json()
+
+def get_spendable_balances(account_address):
+    url = f"http://127.0.0.1:1317/cosmos/bank/v1beta1/spendable_balances/{account_address}"
+    response = requests.get(url)
     return response.json()
 
 def generate_address_and_keys():
@@ -212,6 +206,19 @@ def run_test(test_num):
         print(colored(f"Balance verification failed: expected {expected_balance}, got {balance}", "red"))
         test_result["status"] = "fail"
         test_result["details"] = f"Balance verification failed: expected {expected_balance}, got {balance}"
+
+    # Step 9.1: Verify spendable balances
+    print(colored("Step 9.1: Verifying spendable balances after the block height is reached...", "yellow"))
+    spendable_balances_data = get_spendable_balances(wallet_addr)
+    spendable_balance = spendable_balances_data['balances'][0]['amount'] if 'balances' in spendable_balances_data and spendable_balances_data['balances'] else '0'
+
+    if int(spendable_balance) == expected_balance:
+        print(colored(f"Spendable balance verification successful: {spendable_balance} uugd", "green"))
+        test_result["steps"].append(f"Spendable balance verification successful: {spendable_balance} uugd")
+    else:
+        print(colored(f"Spendable balance verification failed: expected {expected_balance}, got {spendable_balance}", "red"))
+        test_result["status"] = "fail"
+        test_result["details"] = f"Spendable balance verification failed: expected {expected_balance}, got {spendable_balance}"
 
     # Step 10: Get the new block height
     print(colored("Step 10: Getting the current block height...", "yellow"))
@@ -332,7 +339,8 @@ print(colored("Step 2: Removing existing Unigrid local data...", "yellow"))
 execute_command('rm -rf ~/.local/share/unigrid')
 
 print(colored("Starting the Hedgehog daemon...", "yellow"))
-hedgehog_command = f"nohup {hedgehog_bin} daemon --resthost=0.0.0.0 --restport={rest_port} --netport=40002 --no-seeds --network-keys={generated_public_key_1},{generated_public_key_2} -vvvvvv > hedgehog.log 2>&1 &"
+# hedgehog_command = f"nohup {hedgehog_bin} daemon --resthost=0.0.0.0 --restport={rest_port} --netport=40002 --no-seeds --network-keys={generated_public_key_1},{generated_public_key_2} -vvvvvv > hedgehog.log 2>&1 &"
+hedgehog_command = f"nohup {hedgehog_bin} daemon --resthost=0.0.0.0 --restport={rest_port} --netport=40002 --no-seeds --network-keys={generated_public_key_1} -vvvvvv > hedgehog.log 2>&1 &"
 execute_command(hedgehog_command)
 time.sleep(5)  # Wait for the Hedgehog daemon to start
 
