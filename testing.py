@@ -1,3 +1,14 @@
+# to use this script, run the following command:
+# python testing.py <path_to_hedgehog_bin> <num_tests>
+# this script requires ignite cli to be installed
+# python environment should have the following packages installed
+# python3 -m venv venv
+# source venv/bin/activate
+# pip install hdwallet bech32 hashlib binascii urllib3 termcolor requests
+# you can monitor what was added to hedgehog in postman or using curl
+# https://127.0.0.1:40005/gridspork/mint-storage
+# https://127.0.0.1:40005/gridspork/vesting-storage/
+
 import os
 import sys
 import subprocess
