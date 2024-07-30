@@ -4,10 +4,11 @@
 # python environment should have the following packages installed
 # python3 -m venv venv
 # source venv/bin/activate
-# pip install hdwallet bech32 hashlib binascii urllib3 termcolor requests
+# pip install hdwallet bech32 hashlib binascii urllib3 termcolor requests cryptography
 # you can monitor what was added to hedgehog in postman or using curl
 # https://127.0.0.1:40005/gridspork/mint-storage
 # https://127.0.0.1:40005/gridspork/vesting-storage/
+
 
 import os
 import sys
@@ -20,12 +21,16 @@ import hashlib
 import bech32
 import binascii
 import random
-import datetime
 from datetime import datetime, timezone, timedelta
 from mnemonic import Mnemonic
 from hdwallet import HDWallet
 from hdwallet.symbols import ATOM
 from termcolor import colored
+from cryptography.hazmat.primitives.asymmetric import ec
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric.utils import encode_dss_signature
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.backends import default_backend
 
 # Disable InsecureRequestWarning
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -112,13 +117,15 @@ def generate_address_and_keys():
     seed_phrase = mnemo.generate(strength=256)
     seed = mnemo.to_seed(seed_phrase)
     print(f"Seed: {seed}")
+    
     # Verify seed is a valid hexadecimal string
     try:
         seed_hex = binascii.hexlify(seed).decode()
-    except binascii.Error:
-        print("Seed is not a valid hexadecimal string")
+    except (TypeError, binascii.Error) as e:
+        print(f"Error: {e}")
         return None
-    hdwallet = HDWallet(symbol=ATOM)
+    
+    hdwallet = HDWallet(symbol="ATOM")
     hdwallet.from_seed(seed_hex)
     hdwallet.from_path("m/44'/118'/0'/0/0")
 
@@ -135,6 +142,23 @@ def generate_address_and_keys():
     address = bech32.bech32_encode("unigrid", converted_bits)
 
     return address, private_key, public_key
+
+def generate_signatures(data, private_key_1, private_key_2):
+    signature_1 = execute_command(f"{hedgehog_bin} util key-sign --data={data} --key={private_key_1}")
+    signature_2 = execute_command(f"{hedgehog_bin} util key-sign --data={data} --key={private_key_2}")
+    print(colored(f"Random Data: {data}", "green"))
+    print(colored(f"Signature One: {signature_1}", "yellow"))
+    print(colored(f"Signature Two: {signature_2}", "yellow"))
+    return signature_1.strip(), signature_2.strip()
+
+def string_to_hex(input_string):
+    # Convert the string to bytes
+    byte_data = input_string.encode('utf-8')
+    
+    # Convert the bytes to a hexadecimal string
+    hex_data = binascii.hexlify(byte_data).decode('utf-8')
+    
+    return hex_data
 
 def run_test(test_num):
     test_result = {
@@ -160,21 +184,37 @@ def run_test(test_num):
     print(f"Mint Amount: {mint_amount}")
     test_result["steps"].append(f"Mint Amount: {mint_amount}")
 
-    # Step 7: Submit a mint transaction
-    print(colored("Step 7: Submitting a mint transaction...", "yellow"))
+    # Step 7: Generate signatures for mint transaction
+    # Get the current date and time
+    current_datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    # Combine the input string with the current date and time
+    input_string = f"random-data {current_datetime}"
+    hex_data = string_to_hex(input_string)
+    print(f"Original String: {input_string}")
+    print(f"Hexadecimal Representation: {hex_data}")
+    signature_1, signature_2 = generate_signatures(hex_data, generated_private_key_1, generated_private_key_2)
+    signatures = [signature_1, signature_2]
+
+    # Step 8: Submit a mint transaction
+    print(colored("Step 8: Submitting a mint transaction...", "yellow"))
     mint_block_height = int(current_block_height) + 24
     mint_url = f"https://127.0.0.1:{rest_port}/gridspork/mint-storage/{wallet_addr}/{mint_block_height}"
-    headers = {
-        "privateKey": generated_private_key_1,  # Using first generated private key
-        "Content-Type": "application/json"
+    mint_payload = {
+        "amount": mint_amount,
+        "signatures": signatures,
+        "data": hex_data
     }
-    print(f"Executing Mint Transaction: curl -X PUT '{mint_url}' -H 'privateKey: {generated_private_key_1}' -H 'Content-Type: application/json' -d '{mint_amount}' -k")
-    mint_response = requests.put(mint_url, headers=headers, data=str(mint_amount), verify=False)
+    headers = {
+        "Content-Type": "application/json",
+        "privateKey": generated_private_key_1,
+    }
+    print(f"Executing Mint Transaction: {mint_payload}")
+    mint_response = requests.put(mint_url, headers=headers, json=mint_payload, verify=False)
     print(f"Mint Response Code: {mint_response.status_code}")
     test_result["steps"].append(f"Mint Response Code: {mint_response.status_code}")
 
-    # Step 8: Verify mint storage after a short wait
-    print(colored("Step 8: Verifying mint storage after a short wait...", "yellow"))
+    # Step 9: Verify mint storage after a short wait
+    print(colored("Step 9: Verifying mint storage after a short wait...", "yellow"))
     time.sleep(5)  # Short wait before checking mint storage
     mint_storage_data = verify_mint_storage(rest_port)
     if not mint_storage_data:
@@ -195,8 +235,8 @@ def run_test(test_num):
         test_result["status"] = "fail"
         test_result["details"] = f"Mint data verification failed: expected {mint_key} = {mint_amount}, got {mint_storage_data['data']['mints'].get(mint_key)}"
 
-    # Step 9: Verify balance after the block height is reached
-    print(colored("Step 9: Verifying the balance after the block height is reached...", "yellow"))
+    # Step 10: Verify balance after the block height is reached
+    print(colored("Step 10: Verifying the balance after the block height is reached...", "yellow"))
     balance_url = f"http://127.0.0.1:1317/cosmos/bank/v1beta1/balances/{wallet_addr}"
     balance_data = None
     if not wait_for_block_height(mint_block_height + 1):
@@ -218,8 +258,8 @@ def run_test(test_num):
         test_result["status"] = "fail"
         test_result["details"] = f"Balance verification failed: expected {expected_balance}, got {balance}"
 
-    # Step 9.1: Verify spendable balances
-    print(colored("Step 9.1: Verifying spendable balances after the block height is reached...", "yellow"))
+    # Step 11: Verify spendable balances
+    print(colored("Step 11: Verifying spendable balances after the block height is reached...", "yellow"))
     spendable_balances_data = get_spendable_balances(wallet_addr)
     spendable_balance = spendable_balances_data['balances'][0]['amount'] if 'balances' in spendable_balances_data and spendable_balances_data['balances'] else '0'
 
@@ -231,37 +271,43 @@ def run_test(test_num):
         test_result["status"] = "fail"
         test_result["details"] = f"Spendable balance verification failed: expected {expected_balance}, got {spendable_balance}"
 
-    # Step 10: Get the new block height
-    print(colored("Step 10: Getting the current block height...", "yellow"))
+    # Step 12: Get the new block height
+    print(colored("Step 12: Getting the current block height...", "yellow"))
     current_block_height = get_current_block_height()
     test_result["steps"].append(f"Current Block Height: {current_block_height}")
 
-    # Step 11: Submit vesting data with the same random amount
-    print(colored("Step 11: Submitting vesting data...", "yellow"))
+    # Step 13: Generate signatures for vesting transaction
+    signature_1, signature_2 = generate_signatures(hex_data, generated_private_key_1, generated_private_key_2)
+    signatures = [signature_1, signature_2]
+
+    # Step 14: Submit vesting data with the same random amount
+    print(colored("Step 14: Submitting vesting data...", "yellow"))
     new_block_height = int(current_block_height) + 25
     start_time = (datetime.now(timezone.utc) + timedelta(minutes=1)).strftime('%Y-%m-%dT%H:%M:%SZ')
     cliff = random.randint(0, 12)  # Random cliff between 0 and 12
     parts = random.randint(6, 36)  # Random parts between 6 and 36
     percent = random.randint(0, 20)  # Random percent between 0 and 20
-    vesting_data = {
+    vesting_payload = {
         "amount": int(mint_amount),
         "block": new_block_height,
         "cliff": cliff,
         "duration": "PT5M",
         "parts": parts,
         "percent": percent,
-        "start": start_time
+        "start": start_time,
+        "signatures": signatures,
+        "data": hex_data
     }
     vesting_url = f"https://127.0.0.1:{rest_port}/gridspork/vesting-storage/{wallet_addr}"
-    print(f"Executing Vesting Transaction: curl -X PUT '{vesting_url}' -H 'privateKey: {generated_private_key_2}' -H 'Content-Type: application/json' -d '{json.dumps(vesting_data)}' -k")
-    vesting_response = requests.put(vesting_url, headers=headers, json=vesting_data, verify=False)
+    print(f"Executing Vesting Transaction: {vesting_payload}")
+    vesting_response = requests.put(vesting_url, headers=headers, json=vesting_payload, verify=False)
     print(f"Vesting Response Code: {vesting_response.status_code}")
     print(f"Vesting Response: {vesting_response.text}")
     test_result["steps"].append(f"Vesting Response Code: {vesting_response.status_code}")
     test_result["steps"].append(f"Vesting Response: {vesting_response.text}")
 
-    # Step 12: Verify vesting storage after a short wait
-    print(colored("Step 12: Verifying vesting storage after a short wait...", "yellow"))
+    # Step 15: Verify vesting storage after a short wait
+    print(colored("Step 15: Verifying vesting storage after a short wait...", "yellow"))
     time.sleep(5)  # Short wait before checking vesting storage
     vesting_storage_data = verify_vesting_storage(rest_port)
     if not vesting_storage_data:
@@ -273,24 +319,24 @@ def run_test(test_num):
 
     # Verify the vesting data in Hedgehog
     vesting_data_correct = (
-        vesting_storage_data['data']['vestingAddresses'][f"Address(wif={wallet_addr})"]['amount'] == vesting_data['amount'] and
-        vesting_storage_data['data']['vestingAddresses'][f"Address(wif={wallet_addr})"]['block'] == vesting_data['block'] and
-        vesting_storage_data['data']['vestingAddresses'][f"Address(wif={wallet_addr})"]['cliff'] == vesting_data['cliff'] and
-        vesting_storage_data['data']['vestingAddresses'][f"Address(wif={wallet_addr})"]['duration'] == vesting_data['duration'] and
-        vesting_storage_data['data']['vestingAddresses'][f"Address(wif={wallet_addr})"]['parts'] == vesting_data['parts'] and
-        vesting_storage_data['data']['vestingAddresses'][f"Address(wif={wallet_addr})"]['percent'] == vesting_data['percent'] and
-        vesting_storage_data['data']['vestingAddresses'][f"Address(wif={wallet_addr})"]['start'] == vesting_data['start']
+        vesting_storage_data['data']['vestingAddresses'][f"Address(wif={wallet_addr})"]['amount'] == vesting_payload['amount'] and
+        vesting_storage_data['data']['vestingAddresses'][f"Address(wif={wallet_addr})"]['block'] == vesting_payload['block'] and
+        vesting_storage_data['data']['vestingAddresses'][f"Address(wif={wallet_addr})"]['cliff'] == vesting_payload['cliff'] and
+        vesting_storage_data['data']['vestingAddresses'][f"Address(wif={wallet_addr})"]['duration'] == vesting_payload['duration'] and
+        vesting_storage_data['data']['vestingAddresses'][f"Address(wif={wallet_addr})"]['parts'] == vesting_payload['parts'] and
+        vesting_storage_data['data']['vestingAddresses'][f"Address(wif={wallet_addr})"]['percent'] == vesting_payload['percent'] and
+        vesting_storage_data['data']['vestingAddresses'][f"Address(wif={wallet_addr})"]['start'] == vesting_payload['start']
     )
     if vesting_data_correct:
-        print(colored(f"Vesting data verification successful: {json.dumps(vesting_data, indent=2)}", "green"))
-        test_result["steps"].append(f"Vesting data verification successful: {json.dumps(vesting_data, indent=2)}")
+        print(colored(f"Vesting data verification successful: {json.dumps(vesting_payload, indent=2)}", "green"))
+        test_result["steps"].append(f"Vesting data verification successful: {json.dumps(vesting_payload, indent=2)}")
     else:
-        print(colored(f"Vesting data verification failed. Expected: {json.dumps(vesting_data, indent=2)}, Got: {json.dumps(vesting_storage_data['data']['vestingAddresses'][f'Address(wif={wallet_addr})'], indent=2)}", "red"))
+        print(colored(f"Vesting data verification failed. Expected: {json.dumps(vesting_payload, indent=2)}, Got: {json.dumps(vesting_storage_data['data']['vestingAddresses'][f'Address(wif={wallet_addr})'], indent=2)}", "red"))
         test_result["status"] = "fail"
-        test_result["details"] = f"Vesting data verification failed. Expected: {json.dumps(vesting_data, indent=2)}, Got: {json.dumps(vesting_storage_data['data']['vestingAddresses'][f'Address(wif={wallet_addr})'], indent=2)}"
+        test_result["details"] = f"Vesting data verification failed. Expected: {json.dumps(vesting_payload, indent=2)}, Got: {json.dumps(vesting_storage_data['data']['vestingAddresses'][f'Address(wif={wallet_addr})'], indent=2)}"
 
-    # Step 13: Verify the vesting schedule on the chain
-    print(colored("Step 13: Verifying the vesting schedule on the chain...", "yellow"))
+    # Step 16: Verify the vesting schedule on the chain
+    print(colored("Step 16: Verifying the vesting schedule on the chain...", "yellow"))
     verification_attempts = 0
     while verification_attempts < 3:
         if not wait_for_block_height(new_block_height + 1 + verification_attempts):
@@ -301,12 +347,12 @@ def run_test(test_num):
         total_vesting_amount = sum(int(period['amount'][0]['amount']) for period in vesting_periods)
         total_parts = len(vesting_periods)
 
-        if vesting_data['cliff'] > 0:
-            expected_parts = vesting_data['cliff'] + (vesting_data['parts'] - 1) + 1  # cliff periods + remaining parts + TGE
+        if vesting_payload['cliff'] > 0:
+            expected_parts = vesting_payload['cliff'] + (vesting_payload['parts'] - 1) + 1  # cliff periods + remaining parts + TGE
         else:
-            expected_parts = vesting_data['parts']  # parts if no cliff
+            expected_parts = vesting_payload['parts']  # parts if no cliff
 
-        if total_vesting_amount == vesting_data['amount'] and total_parts == expected_parts:
+        if total_vesting_amount == vesting_payload['amount'] and total_parts == expected_parts:
             print(colored(f"Vesting periods verification successful: Total Amount = {total_vesting_amount}, Parts = {total_parts}", "green"))
             test_result["steps"].append(f"Vesting periods verification successful: Total Amount = {total_vesting_amount}, Parts = {total_parts}")
             break
@@ -315,9 +361,9 @@ def run_test(test_num):
             time.sleep(5)  # Wait for 5 seconds before rechecking
 
     if verification_attempts == 3:
-        print(colored(f"Vesting periods verification failed: Expected Amount = {vesting_data['amount']}, Got = {total_vesting_amount}; Expected Parts = {expected_parts}, Got = {total_parts}", "red"))
+        print(colored(f"Vesting periods verification failed: Expected Amount = {vesting_payload['amount']}, Got = {total_vesting_amount}; Expected Parts = {expected_parts}, Got = {total_parts}", "red"))
         test_result["status"] = "fail"
-        test_result["details"] = f"Vesting periods verification failed: Expected Amount = {vesting_data['amount']}, Got = {total_vesting_amount}; Expected Parts = {expected_parts}, Got = {total_parts}"
+        test_result["details"] = f"Vesting periods verification failed: Expected Amount = {vesting_payload['amount']}, Got = {total_vesting_amount}; Expected Parts = {expected_parts}, Got = {total_parts}"
 
     test_results.append(test_result)
 
@@ -342,7 +388,7 @@ generated_public_key_2 = next(line.split(': ')[1] for line in lines_2 if "Public
 
 # Step 1: Kill any running Hedgehog and Ignite processes
 print(colored("Step 1: Killing any running Hedgehog and Ignite processes...", "yellow"))
-kill_processes("hedgehog-0.0.8")
+kill_processes("hedgehog")
 kill_processes("ignite")
 
 # Step 2: Remove existing Unigrid local data
@@ -350,8 +396,7 @@ print(colored("Step 2: Removing existing Unigrid local data...", "yellow"))
 execute_command('rm -rf ~/.local/share/unigrid')
 
 print(colored("Starting the Hedgehog daemon...", "yellow"))
-# hedgehog_command = f"nohup {hedgehog_bin} daemon --resthost=0.0.0.0 --restport={rest_port} --netport=40002 --no-seeds --network-keys={generated_public_key_1},{generated_public_key_2} -vvvvvv > hedgehog.log 2>&1 &"
-hedgehog_command = f"nohup {hedgehog_bin} daemon --resthost=0.0.0.0 --restport={rest_port} --netport=40002 --no-seeds --network-keys={generated_public_key_1} -vvvvvv > hedgehog.log 2>&1 &"
+hedgehog_command = f"nohup {hedgehog_bin} daemon --resthost=0.0.0.0 --restport={rest_port} --netport=40002 --no-seeds --network-keys={generated_public_key_1},{generated_public_key_2} -vvvvvv > hedgehog.log 2>&1 &"
 execute_command(hedgehog_command)
 time.sleep(5)  # Wait for the Hedgehog daemon to start
 
