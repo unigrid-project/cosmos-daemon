@@ -6,7 +6,7 @@ BINDIR ?= $(GOPATH)/bin
 APP = ./app
 
 # export VERSION := $(shell echo $(shell git describe --tags --always --match "v*") | sed 's/^v//')
-export VERSION := v0.0.16
+# export VERSION := v0.0.16
 
 export COMMIT := $(shell git log -1 --format='%H')
 
@@ -41,11 +41,11 @@ comma := ,
 build_tags_comma_sep := $(subst $(whitespace),$(comma),$(build_tags))
 
 # process linker flags
-ldflags = -X github.com/unigrid-project/pax/cmd/paxd/version.Name=pax \
-          -X github.com/unigrid-project/pax/cmd/paxd/version.AppName=paxd \
-          -X github.com/unigrid-project/pax/cmd/paxd/version.Version=$(VERSION) \
-          -X github.com/unigrid-project/pax/cmd/paxd/version.Commit=$(COMMIT) \
-          -X "github.com/unigrid-project/pax/cmd/paxd/version.BuildTags=$(build_tags_comma_sep)"
+ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=pax \
+          -X github.com/cosmos/cosmos-sdk/version.AppName=paxd \
+          -X github.com/cosmos/cosmos-sdk/version.Version=$(VERSION) \
+          -X github.com/cosmos/cosmos-sdk/version.Commit=$(COMMIT) \
+          -X "github.com/cosmos/cosmos-sdk/version.BuildTags=$(build_tags_comma_sep)"
 
 ifeq ($(LINK_STATICALLY),true)
   ldflags += -linkmode=external -extldflags "-Wl,-z,muldefs -static"

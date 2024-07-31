@@ -2,7 +2,6 @@ package app
 
 import (
 	"fmt"
-	"strings"
 
 	storetypes "cosmossdk.io/store/types"
 	"github.com/CosmWasm/wasmd/x/wasm"
@@ -34,6 +33,7 @@ func AllCapabilities() []string {
 		"cosmwasm_1_2",
 		"cosmwasm_1_3",
 		"cosmwasm_1_4",
+		"cosmwasm_2_0",
 	}
 }
 
@@ -58,7 +58,6 @@ func (app *App) registerWasmModules(
 
 	// The last arguments can contain custom message handlers, and custom query handlers,
 	// if we want to allow any custom callbacks
-	availableCapabilities := strings.Join(AllCapabilities(), ",")
 	app.WasmKeeper = wasmkeeper.NewKeeper(
 		app.AppCodec(),
 		runtime.NewKVStoreService(app.GetKey(wasmtypes.StoreKey)),
@@ -75,7 +74,7 @@ func (app *App) registerWasmModules(
 		app.GRPCQueryRouter(),
 		DefaultNodeHome,
 		wasmConfig,
-		availableCapabilities,
+		AllCapabilities(),
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 		wasmOpts...,
 	)

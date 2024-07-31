@@ -119,8 +119,9 @@ var (
 	// NOTE: staking module is required if HistoricalEntries param > 0
 	// NOTE: capability module's beginblocker must come before any modules using capabilities (e.g. IBC)
 	beginBlockers = []string{
-		// cosmos sdk modules
+		// ugd mint module
 		ugdmintmoduletypes.ModuleName,
+		// cosmos sdk modules
 		distrtypes.ModuleName,
 		slashingtypes.ModuleName,
 		evidencetypes.ModuleName,
@@ -138,7 +139,6 @@ var (
 		wasmtypes.ModuleName,
 		gridnodemoduletypes.ModuleName,
 		ugdvestingmoduletypes.ModuleName,
-		ugdmintmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
